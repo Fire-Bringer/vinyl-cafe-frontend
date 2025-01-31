@@ -1,86 +1,158 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useState, useRef } from 'react';
+import '@/styles/hero.css'
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-function Hero() {
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const myElement = useRef(null);
+const Hero = () => {
+  const containerRef = useRef(null);
+  const colRefs = useRef([]);
+  const item1Refs = useRef([]);
+  const item2Refs = useRef([]);
+  const item3Refs = useRef([]);
+  const item4Refs = useRef([]);
+  const item5Refs = useRef([]);
+  const titleRef = useRef([]);
+
+  const addColRef = (el) => {
+    if (el && !colRefs.current.includes(el)) {
+      colRefs.current.push(el);
+    }
+  };
+
+  const addItem1Refs = (el) => {
+    if (el && !item1Refs.current.includes(el)) {
+      item1Refs.current.push(el);
+    }
+  };
+  const addItem2Refs = (el) => {
+    if (el && !item2Refs.current.includes(el)) {
+      item2Refs.current.push(el);
+    }
+  };
+  const addItem3Refs = (el) => {
+    if (el && !item3Refs.current.includes(el)) {
+      item3Refs.current.push(el);
+    }
+  };
+  const addItem4Refs = (el) => {
+    if (el && !item4Refs.current.includes(el)) {
+      item4Refs.current.push(el);
+    }
+  };
+  const addItem5Refs = (el) => {
+    if (el && !item5Refs.current.includes(el)) {
+      item5Refs.current.push(el);
+    }
+  };
+
 
   useEffect(() => {
-    if (!hasAnimated && myElement.current) {
-      gsap.context(() => { // Use gsap.context for easier cleanup
-        gsap.fromTo(myElement.current, {
-          opacity: 0,
-          y: 50,
-        }, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'power2.out',
-          onComplete: () => setHasAnimated(true), //Important: Set the state after animation
-        });
-      }, myElement.current); //Context scope for cleanup related to myElement
-    }
+    let tl = gsap.timeline({ delay: 0 });
 
-    return () => {
-      gsap.killTweensOf(myElement.current); // Clean up tweens on unmount
-    };
 
-  }, [hasAnimated]); // Important: Include hasAnimated in the dependency array
+    tl.to(colRefs.current, {
+      top: "0",
+      duration: 3,
+      ease: "power4.inOut",
+    });
+
+    tl.to(item1Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=2");
+
+    tl.to(item2Refs.current, {
+      top: "0",
+      stagger: -0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
+
+    tl.to(item3Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
+
+    tl.to(item4Refs.current, {
+      top: "0",
+      stagger: -0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
+
+    tl.to(item5Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
+
+    tl.to(containerRef.current, {
+      scale: 6,
+      duration: 4,
+      ease: "power4.inOut"
+    }, "-=2");
+
+    tl.to(titleRef.current, {
+      opacity: 1,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
+
+  }, []);
+
+
 
   return (
-    /*
-    <div ref={myElement} style={{ opacity: 0, position: 'relative', top: 50 }}>
-      <h1>Welcome!</h1>
-      <p>This animation will only play on the first load.</p>
-    </div>
-    */
-
     // Original HTML
     <section className='hero' id='Home'>
 
-      <div className='hero-container'>
-        <div className='col c-1'>
-          <div className='item'>
+      <div className='hero-container' ref={containerRef}>
+        <div className='col c-1' ref={addColRef}>
+          <div className='item' ref={addItem1Refs}>
             <Image
-              src='/images/intro/anri-p.webp'
+              src='/intro/anri-p.webp'
               alt='Anri album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem1Refs}>
             <Image
-              src='/images/intro/blu-p.webp'
+              src='/intro/blu-p.webp'
               alt='Blu album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem1Refs}>
             <Image
-              src='/images/intro/brother-p.webp'
+              src='/intro/brother-p.webp'
               alt='Little Brother album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem1Refs}>
             <Image
-              src='/images/intro/camp-lo-p.webp'
+              src='/intro/camp-lo-p.webp'
               alt='Camp Lo album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem1Refs}>
             <Image
-              src='/images/intro/dan-p.webp'
+              src='/intro/dan-p.webp'
               alt='Steely Dan album cover'
               width={1920}
               height={1920}
@@ -88,46 +160,46 @@ function Hero() {
             />
           </div>
         </div>
-        <div className='col c-2'>
-          <div className='item'>
+        <div className='col c-2' ref={addColRef}>
+          <div className='item' ref={addItem2Refs}>
             <Image
-              src='/images/intro/deltron-p.webp'
+              src='/intro/deltron-p.webp'
               alt='Deltron album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem2Refs}>
             <Image
-              src='/images/intro/dilla-p.webp'
+              src='/intro/dilla-p.webp'
               alt='J Dilla album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem2Refs}>
             <Image
-              src='/images/intro/doom-p.webp'
+              src='/intro/doom-p.webp'
               alt='MF Doom album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem2Refs}>
             <Image
-              src='/images/intro/glasper-p.webp'
+              src='/intro/glasper-p.webp'
               alt='Robert Glasper album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem2Refs}>
             <Image
-              src='/images/intro/heron-p.webp'
+              src='/intro/heron-p.webp'
               alt='Gill Scott Heron album cover'
               width={1920}
               height={1920}
@@ -135,46 +207,46 @@ function Hero() {
             />
           </div>
         </div>
-        <div className='col c-3'>
-          <div className='item'>
+        <div className='col c-3' ref={addColRef}>
+          <div className='item' ref={addItem3Refs}>
             <Image
-              src='/images/intro/hiero-p.webp'
+              src='/intro/hiero-p.webp'
               alt='Hieroglyphics album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem3Refs}>
             <Image
-              src='/images/intro/jeru-p.webp'
+              src='/intro/jeru-p.webp'
               alt='Jeru tha Damaja album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item main-image'>
+          <div className='item main-image' ref={addItem3Refs}>
             <Image
-              src='/images/hero/vinyl_cafe5.webp'
+              src='/hero/vinyl_cafe1.webp'
               alt='Shop hero image'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem3Refs}>
             <Image
-              src='/images/intro/lauryn-p.webp'
+              src='/intro/lauryn-p.webp'
               alt='Lauryn Hill album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem3Refs}>
             <Image
-              src='/images/intro/madlib-p.webp'
+              src='/intro/madlib-p.webp'
               alt='Madlib album cover'
               width={1920}
               height={1920}
@@ -182,46 +254,46 @@ function Hero() {
             />
           </div>
         </div>
-        <div className='col c-4'>
-          <div className='item'>
+        <div className='col c-4' ref={addColRef}>
+          <div className='item' ref={addItem4Refs}>
             <Image
-              src='/images/intro/marvin-p.webp'
+              src='/intro/marvin-p.webp'
               alt='Marvin Gaye album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem4Refs}>
             <Image
-              src='/images/intro/maze-p.webp'
+              src='/intro/maze-p.webp'
               alt='Maze album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem4Refs}>
             <Image
-              src='/images/intro/mos-p.webp'
+              src='/intro/mos-p.webp'
               alt='Mos Def album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem4Refs}>
             <Image
-              src='/images/intro/outkast-p.webp'
+              src='/intro/outkast-p.webp'
               alt='Outkast album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem4Refs}>
             <Image
-              src='/images/intro/pete-p.webp'
+              src='/intro/pete-p.webp'
               alt='Pete Rock album cover'
               width={1920}
               height={1920}
@@ -229,46 +301,46 @@ function Hero() {
             />
           </div>
         </div>
-        <div className='col c-5'>
-          <div className='item'>
+        <div className='col c-5' ref={addColRef}>
+          <div className='item' ref={addItem5Refs}>
             <Image
-              src='/images/intro/quasi-p.webp'
+              src='/intro/quasi-p.webp'
               alt='Quasimoto album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem5Refs}>
             <Image
-              src='/images/intro/ryo-p.webp'
+              src='/intro/ryo-p.webp'
               alt='Ryo Fukui album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem5Refs}>
             <Image
-              src='/images/intro/sade-p.webp'
+              src='/intro/sade-p.webp'
               alt='Sade album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem5Refs}>
             <Image
-              src='/images/intro/souls-p.webp'
+              src='/intro/souls-p.webp'
               alt='Souls of Mischief album cover'
               width={1920}
               height={1920}
               className='intro-img'
             />
           </div>
-          <div className='item'>
+          <div className='item' ref={addItem5Refs}>
             <Image
-              src='/images/intro/taeko-p.webp'
+              src='/intro/taeko-p.webp'
               alt='Taeko Onuki album cover'
               width={1920}
               height={1920}
@@ -280,7 +352,7 @@ function Hero() {
 
       <div className='shop-title'>
         <div className='icon' id='icon-prev'></div>
-        <div className='title'>
+        <div className='title' ref={titleRef}>
           <h5>COFFEE & BAR</h5>
           <h1>Vinyl Cafe</h1>
           <h6>Good Music, Good Vibes, Good Times</h6>
@@ -297,35 +369,35 @@ function Hero() {
       <div className='hero-footer'>
         <div className='preview'>
           <Image
-            src='/images/hero/vinyl_cafe1.webp'
+            src='/hero/vinyl_cafe1.webp'
             alt='First hero image cover'
             width={1920}
             height={1920}
             className='intro-img hero-img'
           />
           <Image
-            src='/images/hero/vinyl_cafe2.webp'
+            src='/hero/vinyl_cafe2.webp'
             alt='Second hero image cover'
             width={1920}
             height={1920}
             className='intro-img hero-img'
           />
           <Image
-            src='/images/hero/vinyl_cafe3.webp'
+            src='/hero/vinyl_cafe3.webp'
             alt='Third hero image cover'
             width={1920}
             height={1920}
             className='intro-img hero-img'
           />
           <Image
-            src='/images/hero/vinyl_cafe4.webp'
+            src='/hero/vinyl_cafe4.webp'
             alt='Fourth hero image cover'
             width={1920}
             height={1920}
             className='intro-img hero-img'
           />
           <Image
-            src='/images/hero/vinyl_cafe5.webp'
+            src='/hero/vinyl_cafe5.webp'
             alt='Fifth hero image cover'
             width={1920}
             height={1920}
