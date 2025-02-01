@@ -5,6 +5,8 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 const Hero = () => {
+
+  // DOM Element Reference Definitions
   const containerRef = useRef(null);
   const colRefs = useRef([]);
   const item1Refs = useRef([]);
@@ -14,6 +16,7 @@ const Hero = () => {
   const item5Refs = useRef([]);
   const titleRef = useRef([]);
 
+  // Array Definitions for Grouped Dom Elements
   const addColRef = (el) => {
     if (el && !colRefs.current.includes(el)) {
       colRefs.current.push(el);
@@ -47,16 +50,18 @@ const Hero = () => {
   };
 
 
+  // Animation Definition
   useEffect(() => {
     let tl = gsap.timeline({ delay: 0 });
 
-
+    // Moves all columns to the top from the bottom
     tl.to(colRefs.current, {
       top: "0",
       duration: 3,
       ease: "power4.inOut",
     });
 
+    // Moves all images within the first column to the top
     tl.to(item1Refs.current, {
       top: "0",
       stagger: 0.25,
@@ -64,6 +69,7 @@ const Hero = () => {
       ease: "power4.inOut"
     }, "-=2");
 
+    // Moves all images within the second column
     tl.to(item2Refs.current, {
       top: "0",
       stagger: -0.25,
@@ -71,6 +77,7 @@ const Hero = () => {
       ease: "power4.inOut"
     }, "-=4");
 
+    // Third column
     tl.to(item3Refs.current, {
       top: "0",
       stagger: 0.25,
@@ -78,6 +85,7 @@ const Hero = () => {
       ease: "power4.inOut"
     }, "-=4");
 
+    // Fourth column
     tl.to(item4Refs.current, {
       top: "0",
       stagger: -0.25,
@@ -85,6 +93,7 @@ const Hero = () => {
       ease: "power4.inOut"
     }, "-=4");
 
+    // Fifth column
     tl.to(item5Refs.current, {
       top: "0",
       stagger: 0.25,
@@ -92,12 +101,14 @@ const Hero = () => {
       ease: "power4.inOut"
     }, "-=4");
 
+    // Zoom animation to reveal main hero image
     tl.to(containerRef.current, {
       scale: 6,
       duration: 4,
       ease: "power4.inOut"
     }, "-=2");
 
+    // Animation to make the hero text appear
     tl.to(titleRef.current, {
       opacity: 1,
       duration: 1,
@@ -109,7 +120,7 @@ const Hero = () => {
 
 
   return (
-    // Original HTML
+   
     <section className='hero' id='Home'>
 
       <div className='hero-container' ref={containerRef}>
