@@ -2,7 +2,10 @@ import Hero from '@/components/Hero/Hero';
 
 function Homepage() {
   return (
-    <Hero/>
+    <div>
+
+      <Hero/>
+    </div>
   );
 };
 

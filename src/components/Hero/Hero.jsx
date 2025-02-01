@@ -3,6 +3,7 @@ import Image from 'next/image';
 import '@/styles/hero.css'
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import Navbar from '@/components/Nav/Nav';
 
 const Hero = () => {
 
@@ -120,8 +121,9 @@ const Hero = () => {
 
 
   return (
-
     <section className='hero' id='Home'>
+
+      <Navbar/>
 
       <div className='hero-container' ref={containerRef}>
         <div className='col c-1' ref={addColRef}>
