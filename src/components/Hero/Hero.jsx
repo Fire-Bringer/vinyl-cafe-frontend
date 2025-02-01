@@ -52,7 +52,7 @@ const Hero = () => {
 
   // Animation Definition
   useEffect(() => {
-    let tl = gsap.timeline({ delay: 0 });
+    const tl = gsap.timeline({ delay: 0 });
 
     // Moves all columns to the top from the bottom
     tl.to(colRefs.current, {
@@ -120,7 +120,7 @@ const Hero = () => {
 
 
   return (
-   
+
     <section className='hero' id='Home'>
 
       <div className='hero-container' ref={containerRef}>
