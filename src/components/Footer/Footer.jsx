@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <div className="w-full relative bg-secondary">
+    <footer className="w-full relative bg-secondary">
       <div className="flex flex-col pt-16 mx-[10vw]">
         <div className="footer-links flex justify-center lg:justify-between border-y-2 border-y-primary">
           <h6 className="text-primary text-lg font-medium font-body leading-7 p-4 hidden lg:block">
@@ -65,7 +65,7 @@ const Footer = () => {
 
       </div>
 
-    </div>
+    </footer>
   );
 };
 

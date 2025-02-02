@@ -25,7 +25,7 @@ const Navbar = () => {
   }, []); // Ensures the animation only runs once
 
   return (
-    <div className="navbar w-full h-[90px] bg-secondary flex justify-between z-50 absolute top-0 left-0" ref={navRef}>
+    <nav className="navbar w-full h-[90px] bg-secondary flex justify-between z-50 absolute top-0 left-0" ref={navRef}>
       <img
         src='/icons/vinyl-icon.svg'
         alt='Vinyl Icon'
@@ -38,7 +38,7 @@ const Navbar = () => {
         width={40}
         className="mr-6"
       />
-    </div>
+    </nav>
   );
 };
 
