@@ -1,14 +1,6 @@
 import type { Metadata } from "next";
 import { Caprasimo, Kiwi_Maru } from "next/font/google";
 import "./globals.css";
-// For Sole ScrollTrigger Registration
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Preempt Check for SSR
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 // Font Configurations
 const caprasimo = Caprasimo({
