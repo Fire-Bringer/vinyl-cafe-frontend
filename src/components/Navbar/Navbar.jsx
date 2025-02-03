@@ -15,27 +15,6 @@ const Navbar = () => {
 
   // Animation definition
   useEffect(() => {
-    let ctx = gsap.context(() => { // Create GSAP context *inside* useEffect
-      if (navRef.current) { // Check if ref is valid
-        ScrollTrigger.create({
-          trigger: navRef.current,
-          start: "top -=90", // Gets rid of the pin-spacer gap
-          pin: true,
-          scrub: true,
-        });
-
-        ScrollTrigger.addEventListener("scroll", () => {
-          if (ScrollTrigger.isScrolling()) {
-            navRef.current.style.backgroundColor = "rgba(84, 21, 25, 0.9)";
-            navRef.current.style.transition = "background-color 0.3s ease";
-          } else {
-            navRef.current.style.backgroundColor = "transparent";
-            navRef.current.style.transition = "background-color 0.3s ease";
-          }
-        });
-
-      }
-    }, navRef); // Context attached to the ref
 
     // Sets the navbar to invisible at start
     gsap.set(navRef.current, {
@@ -50,13 +29,35 @@ const Navbar = () => {
       delay: 7,
     });
 
+    let ctx = gsap.context(() => { // Create GSAP context *inside* useEffect
+
+      if (navRef.current) { // Check if ref is valid
+
+        gsap.set(navRef.current, { backgroundColor: 'transparent'}); // Presets navbar background color
+
+        gsap.to(navRef.current, {
+          backgroundColor: '#541519', // Sets to new color on scroll
+          duration: 0.5,
+          scrollTrigger: {
+            trigger: navRef.current,
+            start: "top top",
+            end: "top -10", // Set the animation to end as soon as it leaves top of screen
+            toggleActions: "play none none reverse", // onEnter , onLeave, onEnterBack, onLeaveBack
+            markers: false,
+          }
+        });
+
+      };
+
+    }, navRef); // Context attached to the ref
+
     return () => {
       ctx.revert(); // Clean up with context revert
     };
   }, []); // Ensures the animation only runs once
 
   return (
-    <nav className="navbar w-full h-[90px] bg-secondary flex justify-between z-50 fixed top-0 left-0" ref={navRef}>
+    <nav className="navbar w-full h-[90px] flex justify-between z-50 fixed top-0 left-0 border-b-2 border-b-[#423940]" ref={navRef}>
       <img
         src='/icons/vinyl-icon.svg'
         alt='Vinyl Icon'
