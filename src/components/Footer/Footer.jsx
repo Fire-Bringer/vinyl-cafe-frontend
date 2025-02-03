@@ -1,13 +1,13 @@
 const Footer = () => {
   return (
     <footer className="w-full relative bg-secondary">
-      <div className="flex flex-col pt-16 mx-[10vw]">
+      <div className="w-4/5 mx-auto pt-16">
         <div className="footer-links flex justify-center lg:justify-between border-y-2 border-y-primary">
           <h6 className="text-primary text-lg font-medium font-body leading-7 p-4 hidden lg:block">
             Contact
           </h6>
 
-          <h6 className="text-primary text-lg font-medium font-body leading-10 lg:leading-7 p-4 w-2/3 flex flex-col lg:flex-row items-center justify-around">
+          <h6 className="text-primary text-lg font-medium font-body leading-10 lg:leading-7 xl:w-1/2 w-2/3 flex flex-col lg:flex-row items-center justify-around">
             <a href="#">Home</a>
             <a href="#">Latest</a>
             <a href="#">About</a>
@@ -35,21 +35,21 @@ const Footer = () => {
 
           </div>
 
-          <div className="flex justify-center md:gap-8 lg:gap-0">
+          <div className="flex justify-center gap-8">
 
-            <div className="self-center p-4">
+            <div className="self-center">
               <img
                 src="icons/ig-icon.svg"
                 alt="Vinyl Icon"
-                className="w-20"
+                className="w-full object-contain"
                 />
             </div>
 
-            <div className="self-center p-4">
+            <div className="self-center">
               <img
                 src="icons/yt-icon.svg"
                 alt="Vinyl Icon"
-                className="w-20"
+                className="w-full object-contain"
                 />
             </div>
 
