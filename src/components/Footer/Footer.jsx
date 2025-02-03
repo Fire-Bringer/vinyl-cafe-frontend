@@ -3,7 +3,7 @@ const Footer = () => {
     <footer className="w-full relative bg-secondary">
       <div className="w-4/5 mx-auto pt-16">
         <div className="footer-links flex justify-center lg:justify-between border-y-2 border-y-primary">
-          <h6 className="text-primary text-lg font-medium font-body leading-7 p-4 hidden lg:block">
+          <h6 className="text-primary text-lg font-medium font-body leading-7 p-4 hidden lg:block xl:w-1/2 w-1/3">
             Contact
           </h6>
 
@@ -29,13 +29,13 @@ const Footer = () => {
 
             <div className="lg:row-start-2 lg:col-start-2 text-primary text-xs font-normal font-body leading-relaxed">TEL: 777-777-7777</div>
 
-            <div className="lg:row-start-3 lg:col-start-1 text-primary text-xs font-normal font-body leading-relaxed">7-77-77 Dopeland Kanazawa </div>
+            <div className="lg:row-start-3 lg:col-start-1 text-primary text-xs font-normal font-body leading-relaxed">7-77-77 Kanazawa </div>
 
-            <div className="lg:row-start-3 lg:col-start-2 text-primary text-xs font-normal font-body leading-relaxed">EMAIL: cafe@vinyl.com7-777-7777</div>
+            <div className="lg:row-start-3 lg:col-start-2 text-primary text-xs font-normal font-body leading-relaxed">EMAIL: cafe@vinyl.com</div>
 
           </div>
 
-          <div className="flex justify-center gap-8">
+          <div className="flex justify-center gap-8 lg:w-4/10">
 
             <div className="self-center">
               <img
