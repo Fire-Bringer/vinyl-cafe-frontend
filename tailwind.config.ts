@@ -20,8 +20,8 @@ export default {
           DEFAULT: '#541519',
         },
         'background': {
-          DEFAULT: 'DCC8AB',
-          600: 'C0A989',
+          DEFAULT: '#DCC8AB',
+          600: '#C0A989',
         },
       },
     },

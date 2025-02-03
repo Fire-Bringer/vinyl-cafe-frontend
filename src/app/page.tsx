@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar/Navbar';
 import Hero from '@/components/Hero/Hero';
 import Tags from '@/components/Tags/Tags';
+import Latest from '@/components/Latest/Latest';
 import Footer from '@/components/Footer/Footer';
 
 function Homepage() {
@@ -9,6 +10,7 @@ function Homepage() {
       <Navbar/>
       <Hero/>
       <Tags/>
+      <Latest/>
       <Footer/>
     </div>
   );
