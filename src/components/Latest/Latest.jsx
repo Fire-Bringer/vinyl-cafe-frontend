@@ -6,13 +6,13 @@ const Latest = () => {
 
         <h2 className="font-display text-4xl">Latest</h2>
 
-        <video src="#" className="border w-4/5 h-10"></video>
+        <video src="#" className="mt-4 border-2 border-secondary w-4/5 rounded-[20px]"></video>
 
-        <h3 className="font-body text-xl font-medium">Event Title</h3>
+        <h3 className="mt-4 font-body text-xl font-medium">Event Title</h3>
 
-        <h6 className="font-body text-lg font-thin">Date</h6>
+        <h6 className="mt-2 font-body text-lg font-thin">Date</h6>
 
-        <h4 className="font-body text-base font-normal ">Event Performers</h4>
+        <h4 className="mt-2 font-body text-base font-normal ">Event Performers</h4>
 
       </div>
 
