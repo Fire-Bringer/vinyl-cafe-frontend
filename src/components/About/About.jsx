@@ -1,4 +1,6 @@
 import '@/styles/about.css';
+import IgIcon from '@/components/SVGs/Ig-Icon';
+import YtIcon from '@/components/SVGs/Yt-Icon';
 
 const About = () => {
   return (
@@ -17,19 +19,11 @@ const About = () => {
           <div className="mt-8 border-y-2 border-secondary flex justify-center gap-10 md:w-1/2 lg:w-2/5 md:self-center lg:self-start">
 
             <a href="#">
-              <img
-                src="/icons/ig-icon.svg"
-                alt="Instagram icon"
-                className="about-ig py-2 md:w-10"
-              />
+              <IgIcon className="about-ig py-2 md:w-10" />
             </a>
 
             <a href="#">
-              <img
-                src="/icons/yt-icon.svg"
-                alt="Youtube icon"
-                className="about-yt py-2 md:w-10"
-              />
+              <YtIcon className="about-yt py-2 md:w-10" />
             </a>
 
           </div>
