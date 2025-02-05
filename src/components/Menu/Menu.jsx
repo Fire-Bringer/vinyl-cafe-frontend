@@ -9,7 +9,7 @@ const Menu = () => {
       <h2 className="font-display text-4xl">Menu</h2>
 
       {/* Image Grid */}
-      <div className="grid grid-cols-3 grid-rows-2 mt-4">
+      <div className="grid grid-cols-3 grid-rows-2 w-full md:w-4/5 xl:w-1/3 mt-4">
 
         <Image
           src="/menu/best1.webp"
@@ -66,7 +66,7 @@ const Menu = () => {
       </div>
 
       {/* Description */}
-      <p className="font-body text-base max-w-80 mt-4">Menu description with a good number of words which will fill up this text box. It is my hope the this lorem will do its job properly. </p>
+      <p className="font-body text-base w-4/5 md:w-3/5 xl:w-1/4 mt-4">Menu description with a good number of words which will fill up this text box. It is my hope the this lorem will do its job properly. </p>
 
       {/* Links */}
       <div className="flex gap-2 mt-4">
