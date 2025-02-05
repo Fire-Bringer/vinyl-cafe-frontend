@@ -1,5 +1,5 @@
 const RightArrow = (props) => (
-  <svg width="80" height="80" viewBox="0 0 80 80" fill="#DCC8AB" {...props}>
+  <svg width="80" height="80" viewBox="0 0 80 80" fill="currentColor" {...props}>
   <g id="icon/arrow-right-circle" clipPath="url(#clip0_3101_421)">
   <g id="Vector" filter="url(#filter0_d_3101_421)">
   <path d="M40 73.3333C58.4095 73.3333 73.3334 58.4095 73.3334 40C73.3334 21.5905 58.4095 6.66663 40 6.66663C21.5905 6.66663 6.66669 21.5905 6.66669 40C6.66669 58.4095 21.5905 73.3333 40 73.3333Z" stroke="#541519" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" shapeRendering="crispEdges"/>
