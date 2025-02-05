@@ -5,6 +5,7 @@ import Latest from '@/components/Latest/Latest';
 import Break from '@/components/Break/Break';
 import About from '@/components/About/About';
 import Footer from '@/components/Footer/Footer';
+import Events from '@/components/Events/Events';
 
 function Homepage() {
   return (
@@ -15,6 +16,7 @@ function Homepage() {
       <Latest/>
       <Break/>
       <About/>
+      <Events/>
       <Footer/>
     </div>
   );
