@@ -12,7 +12,7 @@ const Events = () => {
       </div>
 
       {/* Event Header & Sliders */}
-      <div className="w-4/5 flex justify-between text-primary -mt-80">
+      <div className="w-4/5 flex justify-between text-primary -mt-80 md:-mt-72">
 
 
         <h2 className="font-display text-center text-4xl self-center">Events</h2>
@@ -29,10 +29,10 @@ const Events = () => {
       </div>
 
       {/* Content Container */}
-      <div className="flex flex-col items-center justify-center gap-8 w-full">
+      <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-2 w-full">
 
         {/* Event Flyer */}
-        <div className="w-3/5 md:w-1/2">
+        <div className="w-3/5 md:w-1/3 xl:w-1/4">
           <Image
             src="/avalanche-ig.jpg"
             alt="Event flyer"
@@ -43,10 +43,10 @@ const Events = () => {
         </div>
 
         {/* Event Details */}
-        <div className="bg-background-600 w-4/5 h-[40vh] font-body flex flex-col items-center justify-center rounded-[20px]">
+        <div className="bg-background-600 w-4/5 md:w-1/2 xl:w-1/3 h-[40vh] font-body flex flex-col items-center justify-center rounded-[20px]">
 
           {/* Details Container */}
-          <div className="w-4/5 md:w-1/2">
+          <div className="w-4/5">
 
             <div className="event-date flex gap-2">
               <h3 className="text-xl">9/4</h3>
