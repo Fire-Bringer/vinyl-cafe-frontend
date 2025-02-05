@@ -43,7 +43,7 @@ const Events = () => {
         </div>
 
         {/* Event Details */}
-        <div className="bg-background-600 w-4/5 md:w-1/2 xl:w-1/3 h-[40vh] font-body flex flex-col items-center justify-center rounded-[20px]">
+        <div className="bg-background-600 w-full md:w-1/2 xl:w-1/3 h-[40vh] font-body flex flex-col items-center justify-center md:rounded-[20px]">
 
           {/* Details Container */}
           <div className="w-4/5">
