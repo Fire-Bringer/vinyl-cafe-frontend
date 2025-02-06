@@ -7,12 +7,12 @@ const Events = () => {
     <section id="Events" className="min-h-[100vh] flex flex-col items-center">
 
       {/* Event Backdrop */}
-      <div className="-z-10 mt-4 relative w-full h-[40vh] bg-[url(/hero/vinyl_cafe5.webp)] bg-cover bg-center">
+      <div className="-z-10 mt-4 relative w-full h-[40vh] lg:h-[50vh] xl:h-[60vh] bg-[url(/hero/vinyl_cafe5.webp)] bg-cover bg-center">
         <div className="absolute inset-0 bg-gradient-to-r from-[#00000080] to-[#54151980]"></div>
       </div>
 
       {/* Event Header & Sliders */}
-      <div className="w-4/5 flex justify-between text-primary -mt-80 md:-mt-72">
+      <div className="w-4/5 lg:w-[65%] xl:w-1/2 flex justify-between text-primary -mt-80 md:-mt-72 lg:-mt-96 xl:-mt-[30rem]">
 
 
         <h2 className="font-display text-center text-4xl self-center">Events</h2>
@@ -29,7 +29,7 @@ const Events = () => {
       </div>
 
       {/* Content Container */}
-      <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-2 w-full">
+      <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-2 w-full">
 
         {/* Event Flyer */}
         <div className="w-3/5 md:w-1/3 xl:w-1/4">
@@ -43,10 +43,10 @@ const Events = () => {
         </div>
 
         {/* Event Details */}
-        <div className="bg-background-600 w-full md:w-1/2 xl:w-1/3 h-[40vh] font-body flex flex-col items-center justify-center md:rounded-[20px]">
+        <div className="bg-background-600 w-full md:w-1/2 xl:w-1/4 h-auto font-body flex flex-col items-center justify-center md:rounded-[20px] p-8">
 
           {/* Details Container */}
-          <div className="w-4/5">
+          <div className="w-4/5 md:w-full">
 
             <div className="event-date flex gap-2">
               <h3 className="text-xl">9/4</h3>
@@ -57,7 +57,7 @@ const Events = () => {
 
             <h5 className="mt-2 text-xs">OPEN 16:00-22:00</h5>
 
-            <p className="mt-4 text-base">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+            <p className="mt-4 text-base">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.<br /> <br />Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 
           </div>
 

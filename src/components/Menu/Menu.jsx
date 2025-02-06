@@ -9,58 +9,67 @@ const Menu = () => {
       <h2 className="font-display text-4xl">Menu</h2>
 
       {/* Image Grid */}
-      <div className="grid grid-cols-3 grid-rows-2 w-full md:w-4/5 xl:w-1/3 mt-4">
+      <div className="grid grid-cols-3 grid-rows-2 w-full md:w-4/5 xl:w-1/2 mt-4">
 
-        <Image
-          src="/menu/best1.webp"
-          alt="Menu item image 1"
-          width={900}
-          height={900}
-          className="col-start-1 row-start-1"
-        />
+        <div>
+          <Image
+            src="/menu/best1.webp"
+            alt="Menu item image 1"
+            width={900}
+            height={900}
+            className="col-start-1 row-start-1"
+          />
+        </div>
 
-        <Image
-          src="/menu/best2.webp"
-          alt="Menu item image 2"
-          width={900}
-          height={900}
-          className="col-start-2 row-start-1"
-        />
+        <div>
+          <Image
+            src="/menu/best2.webp"
+            alt="Menu item image 2"
+            width={900}
+            height={900}
+            className="col-start-2 row-start-1"
+          />
+        </div>
 
-        <Image
-          src="/menu/best4.webp"
-          alt="Menu item image 4"
-          width={900}
-          height={900}
-          className="col-start-3 row-start-1"
-        />
+        <div>
+          <Image
+            src="/menu/best4.webp"
+            alt="Menu item image 4"
+            width={900}
+            height={900}
+            className="col-start-3 row-start-1"
+          />
+        </div>
 
+        <div>
+          <Image
+            src="/menu/best5.webp"
+            alt="Menu item image 5"
+            width={900}
+            height={900}
+            className="col-start-1 row-start-2"
+          />
+        </div>
 
-        <Image
-          src="/menu/best5.webp"
-          alt="Menu item image 5"
-          width={900}
-          height={900}
-          className="col-start-1 row-start-2"
-        />
+        <div>
+          <Image
+            src="/menu/coffee_logo.webp"
+            alt="Coffee image"
+            width={900}
+            height={900}
+            className="col-start-2 row-start-2"
+          />
+        </div>
 
-
-        <Image
-          src="/menu/coffee_logo.webp"
-          alt="Coffee image"
-          width={900}
-          height={900}
-          className="col-start-2 row-start-2"
-        />
-
-
-        <Image
-          src="/menu/dessert.webp"
-          alt="Dessert image"
-          width={900}
-          height={900}
-          className="col-start-3 row-start-2"
-        />
+        <div>
+          <Image
+            src="/menu/dessert.webp"
+            alt="Dessert image"
+            width={900}
+            height={900}
+            className="col-start-3 row-start-2"
+          />
+        </div>
 
 
       </div>
