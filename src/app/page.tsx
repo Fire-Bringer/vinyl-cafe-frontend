@@ -6,6 +6,7 @@ import Break from '@/components/Break/Break';
 import About from '@/components/About/About';
 import Events from '@/components/Events/Events';
 import Menu from '@/components/Menu/Menu';
+import Gallery from '@/components/Gallery/Gallery';
 import Footer from '@/components/Footer/Footer';
 
 function Homepage() {
@@ -19,6 +20,7 @@ function Homepage() {
       <About/>
       <Events/>
       <Menu/>
+      <Gallery/>
       <Footer/>
     </div>
   );

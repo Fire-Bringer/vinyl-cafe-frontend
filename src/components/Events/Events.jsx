@@ -4,18 +4,21 @@ import RightArrow from '@/components/SVGs/Right-arrow';
 
 const Events = () => {
   return (
-    <section id="Events" className="min-h-[100vh] flex flex-col items-center">
+    <section id="Events" className="min-h-[50vh] flex flex-col items-center">
 
       {/* Event Backdrop */}
       <div className="-z-10 mt-4 relative w-full h-[40vh] lg:h-[50vh] xl:h-[60vh] bg-[url(/hero/vinyl_cafe5.webp)] bg-cover bg-center">
         <div className="absolute inset-0 bg-gradient-to-r from-[#00000080] to-[#54151980]"></div>
       </div>
 
+      {/* Dark Background */}
+      <div className="bg-background-600 w-full h-[20vh] hidden md:block" />
+
       {/* Event Header & Sliders */}
-      <div className="w-4/5 lg:w-[65%] xl:w-1/2 flex justify-between text-primary -mt-80 md:-mt-72 lg:-mt-96 xl:-mt-[30rem]">
+      <div className="w-4/5 lg:w-[65%] xl:w-1/2 flex justify-between text-primary -mt-80 md:-mt-[30rem] lg:-mt-96 xl:-mt-[30rem]">
 
 
-        <h2 className="font-display text-center text-4xl self-center">Events</h2>
+        <h2 className="font-display text-center text-4xl self-center t-shadower">Events</h2>
 
         <div className="flex justify-center gap-8">
           <LeftArrow
@@ -38,12 +41,12 @@ const Events = () => {
             alt="Event flyer"
             width={1080}
             height={1350}
-            className="w-full object-contain rounded-[20px]"
+            className="w-full object-contain rounded-[20px] shadower"
           />
         </div>
 
         {/* Event Details */}
-        <div className="bg-background-600 w-full md:w-1/2 xl:w-1/4 h-auto font-body flex flex-col items-center justify-center md:rounded-[20px] p-8">
+        <div className="bg-background-600 md:bg-background shadower w-full md:w-1/2 xl:w-1/4 h-auto font-body flex flex-col items-center justify-center md:rounded-[20px] p-8">
 
           {/* Details Container */}
           <div className="w-4/5 md:w-full">
