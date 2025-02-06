@@ -7,6 +7,7 @@ import About from '@/components/About/About';
 import Events from '@/components/Events/Events';
 import Menu from '@/components/Menu/Menu';
 import Gallery from '@/components/Gallery/Gallery';
+import Access from '@/components/Access/Access';
 import Footer from '@/components/Footer/Footer';
 
 function Homepage() {
@@ -21,6 +22,7 @@ function Homepage() {
       <Events/>
       <Menu/>
       <Gallery/>
+      <Access/>
       <Footer/>
     </div>
   );
