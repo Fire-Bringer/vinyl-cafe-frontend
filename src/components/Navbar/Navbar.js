@@ -12,8 +12,15 @@ import BurgerIcon from "../SVGs/Burger-icon";
 
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const menuLinks = [
+// Preempt Check for SSR
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// Array definition for nav links
+const navLinks = [
   { path: "#Home", label: "Home" },
   { path: "#Latest", label: "Latest" },
   { path: "#About", label: "About" },
@@ -23,9 +30,12 @@ const menuLinks = [
   { path: "#Access", label: "Access" },
 ];
 
+
 const Menu = () => {
   const container = useRef();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navRef = useRef(null);
 
   const tl = useRef();
 
@@ -33,6 +43,7 @@ const Menu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // Nav animation setup
   useGSAP(
     () => {
       gsap.set(".menu-link-item-holder", { y: 75 });
@@ -55,19 +66,65 @@ const Menu = () => {
   );
 
   useEffect(() => {
+
+    // Trigger to open and close navbar
     if (isMenuOpen) {
       tl.current.play();
     } else {
       tl.current.reverse();
     }
+
   }, [isMenuOpen]);
+
+  // Animation definition
+  useEffect(() => {
+
+    // Sets the navbar to invisible at start
+    gsap.set(navRef.current, {
+      opacity: 0,
+    });
+
+    // Sets animation to reveal navbar after intro animation
+    gsap.to(navRef.current, {
+      opacity: 1,
+      duration: 1,
+      ease: 'power3.out',
+      delay: 7,
+    });
+
+    let ctx = gsap.context(() => { // Create GSAP context *inside* useEffect
+
+      if (navRef.current) { // Check if ref is valid
+
+        gsap.set(navRef.current, { backgroundColor: 'transparent'}); // Presets navbar background color
+
+        gsap.to(navRef.current, {
+          backgroundColor: '#541519', // Sets to new color on scroll
+          duration: 0.5,
+          scrollTrigger: {
+            trigger: navRef.current,
+            start: "top top",
+            end: "top -10", // Set the animation to end as soon as it leaves top of screen
+            toggleActions: "play none none reverse", // onEnter , onLeave, onEnterBack, onLeaveBack
+            markers: false,
+          }
+        });
+
+      };
+
+    }, navRef); // Context attached to the ref
+
+    return () => {
+      ctx.revert(); // Clean up with context revert
+    };
+  }, []); // Ensures the animation only runs once
 
   return (
     <div className="menu-container" ref={container}>
       {/* menu-bar */}
-      <div className="menu-bar bg-secondary h-[90px]">
+      <div className="menu-bar h-[90px] border-b-2 border-b-[#423940]" ref={navRef}>
         <div className="menu-logo">
-          <Link href="/" className="text-primary"><VinylIcon fill="#541519" stroke="#D6D533"/></Link>
+          <Link href="/" className="text-primary"><VinylIcon fill="transparent" stroke="#D6D533"/></Link>
         </div>
         <div className="menu-open" onClick={toggleMenu}>
           <p><BurgerIcon/></p>
@@ -82,7 +139,7 @@ const Menu = () => {
             <Link href="/"><VinylIcon fill="#DCC8AB" stroke="#541519"/></Link>
           </div>
           <div className="menu-close">
-            <p onClick={toggleMenu}>Close</p>
+            <p onClick={toggleMenu} className="font-body text-secondary">Close</p>
           </div>
         </div>
 
@@ -92,7 +149,7 @@ const Menu = () => {
         </div>
         <div className="menu-copy">
           <div className="menu-links">
-            {menuLinks.map((link, index) => (
+            {navLinks.map((link, index) => (
               <div key={index} className="menu-link-item">
                 <div className="menu-link-item-holder" onClick={toggleMenu}>
                   <Link className="menu-link" href={link.path}>
@@ -107,13 +164,13 @@ const Menu = () => {
               <a href="#"><IgIcon/></a>
               <a href="#"><YtIcon/></a>
             </div>
-            <div className="menu-info-col">
+            <div className="menu-info-col font-body">
               <p>cafe@vinyl.com</p>
               <p>777-7777-7777</p>
             </div>
           </div>
         </div>
-        <div className="menu-preview">
+        <div className="menu-preview font-body">
           <p>Keep it Real</p>
         </div>
       </div>

@@ -1,5 +1,4 @@
-//import Navbar from '@/components/Navbar/Navbar';
-import Navbar2 from '@/components/Navbar/Navbar.js';
+import Navbar from '@/components/Navbar/Navbar.js';
 import Hero from '@/components/Hero/Hero';
 import Tags from '@/components/Tags/Tags';
 import Latest from '@/components/Latest/Latest';
@@ -14,8 +13,7 @@ import Footer from '@/components/Footer/Footer';
 function Homepage() {
   return (
     <div>
-      {/* <Navbar/> */}
-      <Navbar2/>
+      <Navbar/>
       <Hero/>
       <Tags/>
       <Latest/>
