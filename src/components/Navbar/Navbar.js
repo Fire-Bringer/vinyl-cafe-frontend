@@ -13,21 +13,22 @@ import BurgerIcon from "../SVGs/Burger-icon";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 // Preempt Check for SSR
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger,ScrollToPlugin);
 }
 
 // Array definition for nav links
 const navLinks = [
-  { path: "#Home", label: "Home" },
-  { path: "#Latest", label: "Latest" },
-  { path: "#About", label: "About" },
-  { path: "#Events", label: "Events" },
-  { path: "#Menu", label: "Menu" },
-  { path: "#Gallery", label: "Gallery" },
-  { path: "#Access", label: "Access" },
+  { path: "#Home", label: "Home", targetId: "Home" },
+  { path: "#Latest", label: "Latest", targetId: "Latest" },
+  { path: "#About", label: "About", targetId: "About" },
+  { path: "#Events", label: "Events", targetId: "Events" },
+  { path: "#Menu", label: "Menu", targetId: "Menu" },
+  { path: "#Gallery", label: "Gallery", targetId: "Gallery" },
+  { path: "#Access", label: "Access", targetId: "Access" },
 ];
 
 
@@ -41,6 +42,24 @@ const Menu = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Handle to set offset on y access to navigate above the targeted section IDs
+  const handleNavLinkClick = (targetId, offset = 0) => {
+    toggleMenu();
+
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      const targetY = targetElement.offsetTop + offset; // Calculate adjusted y position
+
+      gsap.to(window, {
+        duration: 1,
+        scrollTo: { y: targetY, autoKill: false },
+        ease: "power2.inOut",
+      });
+    } else {
+      console.error(`Element with id "${targetId}" not found!`); // For debugging
+    }
   };
 
   // Nav animation setup
@@ -151,7 +170,7 @@ const Menu = () => {
           <div className="menu-links">
             {navLinks.map((link, index) => (
               <div key={index} className="menu-link-item">
-                <div className="menu-link-item-holder" onClick={toggleMenu}>
+                <div className="menu-link-item-holder" onClick={() => handleNavLinkClick(link.targetId, -100)}> {/* Example: 100px above */}
                   <Link className="menu-link" href={link.path}>
                     {link.label}
                   </Link>
