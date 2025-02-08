@@ -3,6 +3,7 @@ import Image from 'next/image';
 import '@/styles/hero.css'
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { RiArrowLeftLongLine, RiArrowRightLongLine } from '@remixicon/react';
 
 const Hero = () => {
 
@@ -107,6 +108,19 @@ const Hero = () => {
       duration: 4,
       ease: "power4.inOut"
     }, "-=2");
+
+    tl.to(".slide-num p, .preview img", {
+      top: 0,
+      stagger: 0.075,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
+
+    tl.to(".icon svg, .icon-2 svg", {
+      scale: 1,
+      stagger: 0.05,
+      ease: "power3.out",
+    }, "-=1");
 
     // Animation to make the hero text appear
     tl.to(titleRef.current, {
@@ -361,7 +375,7 @@ const Hero = () => {
       </div>
 
       <div className='shop-title'>
-        <div className='icon' id='icon-prev'></div>
+        <div className='icon' id='icon-prev'><RiArrowLeftLongLine/></div>
         <div className='title' ref={titleRef}>
           <h5>COFFEE & BAR</h5>
           <h1>Vinyl Cafe</h1>
@@ -373,7 +387,7 @@ const Hero = () => {
             <dd>Thur Closed</dd>
           </dl>
         </div>
-        <div className='icon-2' id='icon-next'></div>
+        <div className='icon-2' id='icon-next'><RiArrowRightLongLine/></div>
       </div>
 
       <div className='hero-footer'>
