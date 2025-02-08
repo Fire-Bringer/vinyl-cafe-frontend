@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import '@/styles/hero.css'
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { RiArrowLeftLongLine, RiArrowRightLongLine } from '@remixicon/react';
 
@@ -15,7 +15,23 @@ const Hero = () => {
   const item3Refs = useRef([]);
   const item4Refs = useRef([]);
   const item5Refs = useRef([]);
-  const titleRef = useRef([]);
+  const titleRef = useRef(null);
+
+  // NEW TEST
+  const mainImgRef = useRef(null);
+  const previewImgsRefs = useRef([]);
+  const slideNumRef = useRef(null);
+  const prevIconRef = useRef(null);  // Ref for previous icon
+  const nextIconRef = useRef(null);  // Ref for next icon
+  const [mainImageSrc, setMainImageSrc] = useState('/hero/vinyl_cafe1.webp'); // State for main image src
+
+  const previewImages = [ // Store image data separately
+    { src: '/hero/vinyl_cafe1.webp', alt: 'First hero image cover' },
+    { src: '/hero/vinyl_cafe2.webp', alt: 'Second hero image cover' },
+    { src: '/hero/vinyl_cafe3.webp', alt: 'Third hero image cover' },
+    { src: '/hero/vinyl_cafe4.webp', alt: 'Fourth hero image cover' },
+    { src: '/hero/vinyl_cafe5.webp', alt: 'Fifth hero image cover' },
+];
 
   // Array Definitions for Grouped Dom Elements
   const addColRef = (el) => {
@@ -23,7 +39,6 @@ const Hero = () => {
       colRefs.current.push(el);
     }
   };
-
   const addItem1Refs = (el) => {
     if (el && !item1Refs.current.includes(el)) {
       item1Refs.current.push(el);
@@ -50,6 +65,12 @@ const Hero = () => {
     }
   };
 
+  // NEW TEST
+  const addPreviewImgRef = (el) => {
+    if (el && !previewImgsRefs.current.includes(el)) {
+      previewImgsRefs.current.push(el);
+    }
+  };
 
   // Animation Definition
   useEffect(() => {
@@ -131,7 +152,45 @@ const Hero = () => {
 
   }, []); // Ensures the animation only runs once
 
+  // NEW TEST
+  useEffect(() => {
+    const previewImgs = previewImages; // Use the image data array
+    const mainImg = mainImgRef.current;
+    const prevIcon = prevIconRef.current; // Get from ref
+    const nextIcon = nextIconRef.current; // Get from ref
+    const slideNum = slideNumRef.current;
 
+    if (!mainImg || !previewImgs || !prevIcon || !nextIcon || !slideNum) {
+      return; // Ensure elements are available
+    }
+
+    let currentIndex = 0;
+
+    function updateImage(index) {
+      gsap.to(mainImg, {
+        duration: 1,
+        opacity: 0,
+        onComplete: () => {
+          setMainImageSrc(previewImgs[index].src); // Update the state!
+          gsap.to(mainImg, { duration: 1, opacity: 1 });
+        },
+      });
+      slideNum.innerHTML = `${index + 1} &mdash; ${previewImgs.length}`;
+    }
+
+    prevIcon.addEventListener('click', () => {
+      currentIndex = currentIndex > 0 ? currentIndex - 1 : previewImgs.length - 1;
+      updateImage(currentIndex);
+    });
+
+    nextIcon.addEventListener('click', () => {
+      currentIndex = currentIndex < previewImgs.length - 1 ? currentIndex + 1 : 0;
+      updateImage(currentIndex);
+    });
+
+    // Set up initial image and number
+    updateImage(0); // Show the first image initially.
+  }, []);
 
   return (
     <section className='hero' id='Home'>
@@ -252,11 +311,12 @@ const Hero = () => {
           </div>
           <div className='item main-image' ref={addItem3Refs}>
             <Image
-              src='/hero/vinyl_cafe1.webp'
+              src={mainImageSrc}
               alt='Shop hero image'
               width={1920}
               height={1920}
               className='intro-img'
+              ref={mainImgRef}
             />
           </div>
           <div className='item' ref={addItem3Refs}>
@@ -375,7 +435,7 @@ const Hero = () => {
       </div>
 
       <div className='shop-title'>
-        <div className='icon' id='icon-prev'><RiArrowLeftLongLine/></div>
+        <div className='icon' ref={prevIconRef}><RiArrowLeftLongLine/></div>
         <div className='title' ref={titleRef}>
           <h5>COFFEE & BAR</h5>
           <h1>Vinyl Cafe</h1>
@@ -387,7 +447,7 @@ const Hero = () => {
             <dd>Thur Closed</dd>
           </dl>
         </div>
-        <div className='icon-2' id='icon-next'><RiArrowRightLongLine/></div>
+        <div className='icon-2' ref={nextIconRef}><RiArrowRightLongLine/></div>
       </div>
 
       <div className='hero-footer'>
@@ -398,6 +458,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            ref={addPreviewImgRef}
           />
           <Image
             src='/hero/vinyl_cafe2.webp'
@@ -405,6 +466,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            ref={addPreviewImgRef}
           />
           <Image
             src='/hero/vinyl_cafe3.webp'
@@ -412,6 +474,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            ref={addPreviewImgRef}
           />
           <Image
             src='/hero/vinyl_cafe4.webp'
@@ -419,6 +482,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            ref={addPreviewImgRef}
           />
           <Image
             src='/hero/vinyl_cafe5.webp'
@@ -426,10 +490,11 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            ref={addPreviewImgRef}
           />
         </div>
 
-        <div className='slide-num'><p>1 &mdash; 5</p></div>
+        <div className='slide-num' ref={slideNumRef}><p>1 &mdash; 5</p></div>
       </div>
 
     </section>
