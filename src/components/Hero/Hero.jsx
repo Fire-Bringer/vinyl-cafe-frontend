@@ -130,7 +130,14 @@ const Hero = () => {
       ease: "power4.inOut"
     }, "-=2");
 
-    tl.to(".slide-num p, .preview img", {
+    tl.to(slideNumRef.current, {
+      top: 0,
+      stagger: 0.075,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
+
+    tl.to(previewImgsRefs.current, {
       top: 0,
       stagger: 0.075,
       duration: 1,
@@ -168,11 +175,11 @@ const Hero = () => {
 
     function updateImage(index) {
       gsap.to(mainImg, {
-        duration: 1,
+        duration: 0.5,
         opacity: 0,
         onComplete: () => {
           setMainImageSrc(previewImgs[index].src); // Update the state!
-          gsap.to(mainImg, { duration: 1, opacity: 1 });
+          gsap.to(mainImg, { duration: 0.5, opacity: 1 });
         },
       });
       slideNum.innerHTML = `${index + 1} &mdash; ${previewImgs.length}`;
@@ -190,6 +197,7 @@ const Hero = () => {
 
     // Set up initial image and number
     updateImage(0); // Show the first image initially.
+    
   }, []);
 
   return (
@@ -494,7 +502,7 @@ const Hero = () => {
           />
         </div>
 
-        <div className='slide-num' ref={slideNumRef}><p>1 &mdash; 5</p></div>
+        <div className='slide-num'><p ref={slideNumRef}>1 &mdash; 5</p></div>
       </div>
 
     </section>
