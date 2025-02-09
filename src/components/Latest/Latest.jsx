@@ -1,8 +1,8 @@
 const Latest = () => {
   return (
-    <section id='Latest' className="h-[80vh] bg-background flex justify-center items-center">
+    <section id='Latest' className="bg-background flex justify-center items-center py-20">
 
-      <div className="h-4/5 w-full md:w-4/5 max-w-3xl bg-background-600 flex flex-col items-center justify-center md:rounded-[20px]">
+      <div className="h-auto w-full md:w-4/5 max-w-3xl bg-background-600 flex flex-col items-center justify-center md:rounded-[20px] py-4">
 
         <h2 className="font-display text-4xl">Latest</h2>
 

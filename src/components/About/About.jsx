@@ -4,7 +4,7 @@ import YtIcon from '@/components/SVGs/Yt-Icon';
 
 const About = () => {
   return (
-    <section id="About" className="h-[80vh] flex flex-col lg:flex-row items-center justify-center">
+    <section id="About" className="flex flex-col lg:flex-row items-center justify-center py-32">
 
       <div className="w-4/5 h-[90%] flex flex-col lg:flex-row justify-center items-center">
 
@@ -32,7 +32,7 @@ const About = () => {
 
         <div className="about-video flex justify-center items-center w-full">
 
-          <video src="#" className="mt-8 rounded-[20px] w-full md:w-4/5 border-2 border-secondary"></video>
+          <video src="#" className="mt-8 rounded-[20px] w-[35rem] mg border-2 border-secondary"></video>
 
         </div>
 

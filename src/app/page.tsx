@@ -6,6 +6,7 @@ import Break from '@/components/Break/Break';
 import About from '@/components/About/About';
 import Events from '@/components/Events/Events';
 import Menu from '@/components/Menu/Menu';
+import Break2 from '@/components/Break/Break2';
 import Gallery from '@/components/Gallery/Gallery';
 import Access from '@/components/Access/Access';
 import Footer from '@/components/Footer/Footer';
@@ -21,6 +22,7 @@ function Homepage() {
       <About/>
       <Events/>
       <Menu/>
+      <Break2/>
       <Gallery/>
       <Access/>
       <Footer/>

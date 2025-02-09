@@ -1,6 +1,6 @@
 const Access = () => {
   return (
-    <section id="Access" className="flex flex-col place-items-center mt-20">
+    <section id="Access" className="flex flex-col justify-center items-center py-20">
 
       <h2 className="font-display text-4xl">Access</h2>
 

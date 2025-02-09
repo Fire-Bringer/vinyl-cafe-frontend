@@ -141,7 +141,7 @@ const Menu = () => {
   return (
     <div className="menu-container" ref={container}>
       {/* menu-bar */}
-      <div className="menu-bar h-[90px] border-b-2 border-b-[#423940]" ref={navRef}>
+      <div className="menu-bar h-[90px] border-b-2 border-b-[#423940] nav-shadower" ref={navRef}>
         <div className="menu-logo">
           <Link href="/" className="text-primary"><VinylIcon fill="transparent" stroke="#D6D533"/></Link>
         </div>
