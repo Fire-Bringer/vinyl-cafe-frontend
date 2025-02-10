@@ -186,18 +186,20 @@ const Hero = () => {
     }
 
     prevIcon.addEventListener('click', () => {
+      console.log('prevIcon test');
       currentIndex = currentIndex > 0 ? currentIndex - 1 : previewImgs.length - 1;
       updateImage(currentIndex);
     });
 
     nextIcon.addEventListener('click', () => {
+      console.log('nextIcon test');
       currentIndex = currentIndex < previewImgs.length - 1 ? currentIndex + 1 : 0;
       updateImage(currentIndex);
     });
 
     // Set up initial image and number
     updateImage(0); // Show the first image initially.
-    
+
   }, []);
 
   return (
