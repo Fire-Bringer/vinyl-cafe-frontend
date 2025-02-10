@@ -1,3 +1,5 @@
+import { RiInstagramLine, RiYoutubeLine } from '@remixicon/react';
+
 const Footer = () => {
   return (
     <footer className="w-full relative bg-secondary">
@@ -37,20 +39,12 @@ const Footer = () => {
 
           <div className="flex justify-center gap-8 lg:w-4/10">
 
-            <div className="self-center">
-              <img
-                src="icons/ig-icon.svg"
-                alt="Vinyl Icon"
-                className="w-full object-contain"
-                />
+            <div className="self-center text-primary">
+              <RiInstagramLine width={48} height={48} />
             </div>
 
-            <div className="self-center">
-              <img
-                src="icons/yt-icon.svg"
-                alt="Vinyl Icon"
-                className="w-full object-contain"
-                />
+            <div className="self-center text-primary">
+              <RiYoutubeLine width={48} height={48} />
             </div>
 
           </div>

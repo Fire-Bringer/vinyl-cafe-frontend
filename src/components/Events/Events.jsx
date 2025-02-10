@@ -1,6 +1,5 @@
 import Image from "next/image";
-import LeftArrow from '@/components/SVGs/Left-arrow';
-import RightArrow from '@/components/SVGs/Right-arrow';
+import { RiArrowLeftLine, RiArrowRightLine } from '@remixicon/react';
 
 const Events = () => {
   return (
@@ -15,7 +14,7 @@ const Events = () => {
       <div className="bg-background-600 w-full h-[20rem] hidden md:block" />
 
       {/* Main Container */}
-      <div className="-mt-80 md:-mt-[40rem] 2xl:-mt-[50rem] mb-20 flex flex-col justify-center items-center">
+      <div className="-mt-72 md:-mt-[40rem] mb-20 flex flex-col justify-center items-center">
 
         {/* Event Header & Sliders */}
         <div className="w-4/5 md:w-full flex justify-between text-primary">
@@ -23,18 +22,18 @@ const Events = () => {
           <h2 className="font-display text-center text-4xl self-center t-shadower">Events</h2>
 
           <div className="flex justify-center gap-8">
-            <LeftArrow
-              className="w-12"
-              />
-            <RightArrow
-              className="w-12"
-              />
+            <button className="p-2 rounded-full text-secondary bg-primary border shadower">
+              <RiArrowLeftLine width="20" height="20" />
+            </button>
+            <button className="p-2 rounded-full text-secondary bg-primary shadower">
+              <RiArrowRightLine width="20" height="20" />
+            </button>
           </div>
 
         </div>
 
         {/* Content Container */}
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-2 lg:gap-4 w-full">
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-2 lg:gap-4 w-full mt-4">
 
           {/* Event Flyer */}
           <div className="w-[18rem] lg:w-[25rem]">
