@@ -32,7 +32,10 @@ const About = () => {
 
         <div className="about-video flex justify-center items-center w-full">
 
-          <video src="#" className="mt-8 rounded-[20px] w-[35rem] mg border-2 border-secondary"></video>
+          <video controls muted autoPlay loop className="mt-8 rounded-[20px] w-[35rem]">
+            <source src='/demo-30.mp4' type='video/mp4'></source>
+            Your browser does not support the video tag.
+          </video>
 
         </div>
 
