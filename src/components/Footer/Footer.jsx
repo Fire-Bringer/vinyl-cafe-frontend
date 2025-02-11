@@ -10,13 +10,13 @@ const Footer = () => {
           </h6>
 
           <h6 className="text-primary text-lg font-medium font-body leading-10 lg:leading-7 xl:w-1/2 w-2/3 flex flex-col lg:flex-row items-center justify-around">
-            <a href="#">Home</a>
-            <a href="#">Latest</a>
-            <a href="#">About</a>
-            <a href="#">Events</a>
-            <a href="#">Menu</a>
-            <a href="#">Gallery</a>
-            <a href="#">Access</a>
+            <a href="#Home">Home</a>
+            <a href="#Latest">Latest</a>
+            <a href="#About">About</a>
+            <a href="#Events">Events</a>
+            <a href="#Menu">Menu</a>
+            <a href="#Gallery">Gallery</a>
+            <a href="#Access">Access</a>
           </h6>
         </div>
 
