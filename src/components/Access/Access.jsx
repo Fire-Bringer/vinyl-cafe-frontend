@@ -1,4 +1,28 @@
+'use client';
+import Contact from '@/components/Contact/Contact';
+import { useRef, useEffect, useState } from "react";
+import gsap from "gsap";
+
 const Access = () => {
+  const modalContactRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal open/close
+
+  const openModal = () => {
+    setIsModalOpen(true); // Set state first
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Set state first
+  };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      gsap.to(modalContactRef.current, { scale: 1, opacity: 1, duration: 0.5, pointerEvents: "auto" }); // Enable pointer events when open
+    } else {
+      gsap.to(modalContactRef.current, { scale: 0, opacity: 0, duration: 0.5, pointerEvents: "none", onComplete: () => {}}); // Disable pointer events when closed
+    }
+  }, [isModalOpen]); // Run effect when isModalOpen changes
+
   return (
     <section id="Access" className="flex flex-col justify-center items-center py-20">
 
@@ -12,7 +36,29 @@ const Access = () => {
 
       <h5>TEL: 777-777-777</h5>
 
-      <button className="border-2 border-secondary py-4 px-10 rounded-[20px] bg-secondary text-primary font-body text-lg shadower mt-6 mb-20">Contact</button>
+      <button
+        className="border-2 border-secondary py-4 px-10 rounded-[20px] bg-secondary text-primary font-body text-lg shadower mt-6 mb-20"
+        onClick={() => openModal()}
+      >
+        Contact
+      </button>
+
+      {/* Modal */}
+      <div
+        ref={modalContactRef}
+        className={`fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center transition-opacity duration-500 ${isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} // Use state for classes
+        onClick={(e) => { // Close only if click is directly on the backdrop
+          if (e.target === modalContactRef.current) {
+            closeModal();
+          }
+        }}
+      >
+        <Contact
+          onClose={closeModal} // Pass the closeModal function as a prop
+          onClick={(e) => e.stopPropagation()} // Keep this!
+          className="bg-background-600 rounded-[20px] p-4 max-w-[80%] lg:max-w-[60%] xl:max-w-[50%] 2xl:max-w-[30%] max-h-[80%] overflow-hidden"
+        />
+      </div>
 
     </section>
   )
