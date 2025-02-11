@@ -6,7 +6,9 @@ const Latest = () => {
 
         <h2 className="font-display text-4xl">Latest</h2>
 
-        <video src="#" className="mt-4 border-2 border-secondary w-4/5 rounded-[20px]"></video>
+        <div src="#" className="mt-4 w-4/5 aspect-video">
+          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/-406S2Rp_20?si=Bo7vTEz6Wqpq5Dvf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
 
         <h3 className="mt-4 font-body text-xl font-medium">Event Title</h3>
 
