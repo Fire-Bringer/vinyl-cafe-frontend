@@ -3,7 +3,7 @@ import FileIcon from "../SVGs/File-icon";
 
 const Menu = () => {
   return (
-    <section id="Menu" className="flex flex-col justify-center items-center py-20">
+    <section id="Menu" className="flex flex-col justify-center items-center pb-16">
 
       {/* Menu Heading */}
       <h2 className="font-display text-4xl">Menu</h2>

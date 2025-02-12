@@ -17,14 +17,24 @@ const Access = () => {
 
   useEffect(() => {
     if (isModalOpen) {
-      gsap.to(modalContactRef.current, { scale: 1, opacity: 1, duration: 0.5, pointerEvents: "auto" }); // Enable pointer events when open
+        gsap.to(modalContactRef.current, { scale: 1, opacity: 1, duration: 0.5, pointerEvents: "auto" });
     } else {
-      gsap.to(modalContactRef.current, { scale: 0, opacity: 0, duration: 0.5, pointerEvents: "none", onComplete: () => {}}); // Disable pointer events when closed
+        // Only animate when isModalOpen becomes false *after* it has been true
+        if (modalContactRef.current && modalContactRef.current.style.scale !== "0") {  // Check if it has been opened
+            gsap.to(modalContactRef.current, { scale: 0, opacity: 0, duration: 0.5, pointerEvents: "none"});
+        } else {
+            // For the very first render, just set the styles directly (no animation)
+            if (modalContactRef.current) {
+                modalContactRef.current.style.scale = 0;
+                modalContactRef.current.style.opacity = 0;
+                modalContactRef.current.style.pointerEvents = "none";
+            }
+        }
     }
-  }, [isModalOpen]); // Run effect when isModalOpen changes
+  }, [isModalOpen]);
 
   return (
-    <section id="Access" className="flex flex-col justify-center items-center py-20">
+    <section id="Access" className="flex flex-col justify-center items-center pt-16">
 
       <h2 className="font-display text-4xl">Access</h2>
 
@@ -46,18 +56,20 @@ const Access = () => {
       {/* Modal */}
       <div
         ref={modalContactRef}
-        className={`fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center transition-opacity duration-500 ${isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} // Use state for classes
+        className={`fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center transition-opacity duration-500 ${isModalOpen ? 'flex' : 'hidden'}`} // Use state for classes
         onClick={(e) => { // Close only if click is directly on the backdrop
           if (e.target === modalContactRef.current) {
             closeModal();
           }
         }}
       >
-        <Contact
-          onClose={closeModal} // Pass the closeModal function as a prop
-          onClick={(e) => e.stopPropagation()} // Keep this!
-          className="bg-background-600 rounded-[20px] p-4 max-w-[80%] lg:max-w-[60%] xl:max-w-[50%] 2xl:max-w-[30%] max-h-[80%] overflow-hidden"
-        />
+        {isModalOpen && (
+          <Contact
+            onClose={closeModal} // Pass the closeModal function as a prop
+            onClick={(e) => e.stopPropagation()} // Keep this!
+            className="bg-background-600 rounded-[20px] p-4 max-w-[80%] lg:max-w-[60%] xl:max-w-[50%] 2xl:max-w-[30%] max-h-[80%] overflow-hidden"
+          />
+        )}
       </div>
 
     </section>
