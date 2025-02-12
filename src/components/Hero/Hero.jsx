@@ -25,8 +25,6 @@ const Hero = () => {
   const nextIconRef = useRef(null);  // Ref for next icon
   const [mainImageSrc, setMainImageSrc] = useState('/hero/vinyl_cafe1.webp'); // State for main image src
 
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-
   const previewImages = [ // Store image data separately
     { src: '/hero/vinyl_cafe1.webp', alt: 'First hero image cover' },
     { src: '/hero/vinyl_cafe2.webp', alt: 'Second hero image cover' },
@@ -67,42 +65,6 @@ const Hero = () => {
     }
   };
 
-  // Image loader
-    useEffect(() => {
-    const allImages = [
-      ...item1Refs.current.flatMap(div => Array.from(div.querySelectorAll('img'))),
-      ...item2Refs.current.flatMap(div => Array.from(div.querySelectorAll('img'))),
-      ...item3Refs.current.flatMap(div => Array.from(div.querySelectorAll('img'))),
-      ...item4Refs.current.flatMap(div => Array.from(div.querySelectorAll('img'))),
-      ...item5Refs.current.flatMap(div => Array.from(div.querySelectorAll('img'))),
-      mainImgRef.current.querySelector('img'), // Get the img from mainImgRef
-      ...previewImgsRefs.current.map(image => image.querySelector('img'))
-    ].filter(img => img !== null); // Filter out any null values
-
-    let imagesToLoad = allImages.length;
-    let loadedCount = 0;
-
-    const handleImageLoad = () => {
-      loadedCount++;
-      if (loadedCount === imagesToLoad) {
-        setImagesLoaded(true);
-      }
-    };
-
-    allImages.forEach(img => {
-       if (img && img.complete) { // check if already loaded
-        loadedCount++;
-      } else if (img) {
-        img.addEventListener('load', handleImageLoad);
-        img.addEventListener('error', handleImageLoad);
-      }
-    });
-
-    if (imagesToLoad === loadedCount) {
-      setImagesLoaded(true);
-    }
-  }, []);
-
   // NEW TEST
   const addPreviewImgRef = (el) => {
     if (el && !previewImgsRefs.current.includes(el)) {
@@ -112,93 +74,90 @@ const Hero = () => {
 
   // Animation Definition
   useEffect(() => {
+    const tl = gsap.timeline({ delay: 0 });
 
-    if (imagesLoaded) { // Only run animation if images are loaded
+    // Moves all columns to the top from the bottom
+    tl.to(colRefs.current, {
+      top: "0",
+      duration: 3,
+      ease: "power4.inOut",
+    });
 
-      const tl = gsap.timeline({ delay: 0 });
+    // Moves all images within the first column to the top
+    tl.to(item1Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=2");
 
-      // Moves all columns to the top from the bottom
-      tl.to(colRefs.current, {
-        top: "0",
-        duration: 3,
-        ease: "power4.inOut",
-      });
+    // Moves all images within the second column
+    tl.to(item2Refs.current, {
+      top: "0",
+      stagger: -0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
 
-      // Moves all images within the first column to the top
-      tl.to(item1Refs.current, {
-        top: "0",
-        stagger: 0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=2");
+    // Third column
+    tl.to(item3Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
 
-      // Moves all images within the second column
-      tl.to(item2Refs.current, {
-        top: "0",
-        stagger: -0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=4");
+    // Fourth column
+    tl.to(item4Refs.current, {
+      top: "0",
+      stagger: -0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
 
-      // Third column
-      tl.to(item3Refs.current, {
-        top: "0",
-        stagger: 0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=4");
+    // Fifth column
+    tl.to(item5Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
 
-      // Fourth column
-      tl.to(item4Refs.current, {
-        top: "0",
-        stagger: -0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=4");
+    // Zoom animation to reveal main hero image
+    tl.to(containerRef.current, {
+      scale: 6,
+      duration: 4,
+      ease: "power4.inOut"
+    }, "-=2");
 
-      // Fifth column
-      tl.to(item5Refs.current, {
-        top: "0",
-        stagger: 0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=4");
+    tl.to(slideNumRef.current, {
+      top: 0,
+      stagger: 0.075,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
 
-      // Zoom animation to reveal main hero image
-      tl.to(containerRef.current, {
-        scale: 6,
-        duration: 4,
-        ease: "power4.inOut"
-      }, "-=2");
+    tl.to(previewImgsRefs.current, {
+      top: 0,
+      stagger: 0.075,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
 
-      tl.to(slideNumRef.current, {
-        top: 0,
-        stagger: 0.075,
-        duration: 1,
-        ease: "power3.out",
-      }, "-=1.5");
+    tl.to(".icon svg, .icon-2 svg", {
+      scale: 1,
+      stagger: 0.05,
+      ease: "power3.out",
+    }, "-=1");
 
-      tl.to(previewImgsRefs.current, {
-        top: 0,
-        stagger: 0.075,
-        duration: 1,
-        ease: "power3.out",
-      }, "-=1.5");
+    // Animation to make the hero text appear
+    tl.to(titleRef.current, {
+      opacity: 1,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
 
-      tl.to(".icon svg, .icon-2 svg", {
-        scale: 1,
-        stagger: 0.05,
-        ease: "power3.out",
-      }, "-=1");
-
-      // Animation to make the hero text appear
-      tl.to(titleRef.current, {
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out",
-      }, "-=1.5");
-    }
-  }, [imagesLoaded]); // Add imagesLoaded as a dependency
+  }, []); // Ensures the animation only runs once
 
   // NEW TEST
   useEffect(() => {
@@ -368,7 +327,6 @@ const Hero = () => {
               height={1920}
               className='intro-img'
               ref={mainImgRef}
-              onLoadingComplete={() => {}} // dummy prop to suppress warning
             />
           </div>
           <div className='item' ref={addItem3Refs}>
