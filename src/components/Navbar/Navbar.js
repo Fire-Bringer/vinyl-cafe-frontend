@@ -183,7 +183,7 @@ const Menu = () => {
               <a href="#"><IgIcon/></a>
               <a href="#"><YtIcon/></a>
             </div>
-            <div className="menu-info-col font-body">
+            <div className="menu-info-col font-body ml-4">
               <p>cafe@vinyl.com</p>
               <p>777-7777-7777</p>
             </div>
