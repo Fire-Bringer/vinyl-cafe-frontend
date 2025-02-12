@@ -64,8 +64,6 @@ const Hero = () => {
       item5Refs.current.push(el);
     }
   };
-
-  // NEW TEST
   const addPreviewImgRef = (el) => {
     if (el && !previewImgsRefs.current.includes(el)) {
       previewImgsRefs.current.push(el);
@@ -74,90 +72,89 @@ const Hero = () => {
 
   // Animation Definition
   useEffect(() => {
-    setTimeout(() => {
-      const tl = gsap.timeline({ delay: 0 });
+    const tl = gsap.timeline({ delay: 0 });
 
-      // Moves all columns to the top from the bottom
-      tl.to(colRefs.current, {
-        top: "0",
-        duration: 3,
-        ease: "power4.inOut",
-      });
+    // Moves all columns to the top from the bottom
+    tl.to(colRefs.current, {
+      top: "0",
+      duration: 3,
+      ease: "power4.inOut",
+    });
 
-      // Moves all images within the first column to the top
-      tl.to(item1Refs.current, {
-        top: "0",
-        stagger: 0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=2");
+    // Moves all images within the first column to the top
+    tl.to(item1Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=2");
 
-      // Moves all images within the second column
-      tl.to(item2Refs.current, {
-        top: "0",
-        stagger: -0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=4");
+    // Moves all images within the second column
+    tl.to(item2Refs.current, {
+      top: "0",
+      stagger: -0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
 
-      // Third column
-      tl.to(item3Refs.current, {
-        top: "0",
-        stagger: 0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=4");
+    // Third column
+    tl.to(item3Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
 
-      // Fourth column
-      tl.to(item4Refs.current, {
-        top: "0",
-        stagger: -0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=4");
+    // Fourth column
+    tl.to(item4Refs.current, {
+      top: "0",
+      stagger: -0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
 
-      // Fifth column
-      tl.to(item5Refs.current, {
-        top: "0",
-        stagger: 0.25,
-        duration: 3,
-        ease: "power4.inOut"
-      }, "-=4");
+    // Fifth column
+    tl.to(item5Refs.current, {
+      top: "0",
+      stagger: 0.25,
+      duration: 3,
+      ease: "power4.inOut"
+    }, "-=4");
 
-      // Zoom animation to reveal main hero image
-      tl.to(containerRef.current, {
-        scale: 6,
-        duration: 4,
-        ease: "power4.inOut"
-      }, "-=2");
+    // Zoom animation to reveal main hero image
+    tl.to(containerRef.current, {
+      scale: 6,
+      duration: 4,
+      ease: "power4.inOut"
+    }, "-=2");
 
-      tl.to(slideNumRef.current, {
-        top: 0,
-        stagger: 0.075,
-        duration: 1,
-        ease: "power3.out",
-      }, "-=1.5");
+    tl.to(slideNumRef.current, {
+      top: 0,
+      stagger: 0.075,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
 
-      tl.to(previewImgsRefs.current, {
-        top: 0,
-        stagger: 0.075,
-        duration: 1,
-        ease: "power3.out",
-      }, "-=1.5");
+    tl.to(previewImgsRefs.current, {
+      top: 0,
+      stagger: 0.075,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
 
-      tl.to(".icon svg, .icon-2 svg", {
-        scale: 1,
-        stagger: 0.05,
-        ease: "power3.out",
-      }, "-=1");
+    tl.to(".icon svg, .icon-2 svg", {
+      scale: 1,
+      stagger: 0.05,
+      ease: "power3.out",
+    }, "-=1");
 
-      // Animation to make the hero text appear
-      tl.to(titleRef.current, {
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out",
-      }, "-=1.5");
-    }, 10000);
+    // Animation to make the hero text appear
+    tl.to(titleRef.current, {
+      opacity: 1,
+      duration: 1,
+      ease: "power3.out",
+    }, "-=1.5");
+
   }, []); // Ensures the animation only runs once
 
   // NEW TEST
@@ -200,8 +197,6 @@ const Hero = () => {
 
     // Set up initial image and number
     updateImage(0); // Show the first image initially.
-
-    mainImg.style.opacity = 1
 
   }, []);
 
