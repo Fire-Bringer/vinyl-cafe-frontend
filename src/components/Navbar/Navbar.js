@@ -108,7 +108,7 @@ const Menu = () => {
       opacity: 1,
       duration: 1,
       ease: 'power3.out',
-      delay: 12,
+      delay: 17,
     });
 
     let ctx = gsap.context(() => { // Create GSAP context *inside* useEffect
