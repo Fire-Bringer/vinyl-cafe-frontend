@@ -67,7 +67,7 @@ const Access = () => {
           <Contact
             onClose={closeModal} // Pass the closeModal function as a prop
             onClick={(e) => e.stopPropagation()} // Keep this!
-            className="bg-background-600 rounded-[20px] p-4 max-w-[80%] lg:max-w-[60%] xl:max-w-[50%] 2xl:max-w-[30%] max-h-[80%] overflow-hidden"
+            className="bg-background-600 rounded-[20px] p-4 overflow-hidden"
           />
         )}
       </div>

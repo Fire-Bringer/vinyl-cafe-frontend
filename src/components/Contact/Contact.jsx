@@ -1,6 +1,6 @@
 const Contact = ({ onClose }) => {
   return (
-    <div className="font-body relative z-10 pt-20">
+    <div className="font-body relative z-10 pt-20 w-4/5">
 
       <h1 className="font-display text-4xl text-center text-primary t-shadower">Contact</h1>
 

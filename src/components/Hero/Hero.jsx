@@ -455,7 +455,7 @@ const Hero = () => {
             <dd>Thur Closed</dd>
           </dl>
         </div>
-        <div className='icon-2' ref={nextIconRef}><RiArrowRightLongLine/></div>
+        <div className='icon-2 t-shadower' ref={nextIconRef}><RiArrowRightLongLine/></div>
       </div>
 
       <div className='hero-footer'>
