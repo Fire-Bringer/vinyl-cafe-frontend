@@ -16,14 +16,15 @@ const Hero = () => {
   const item4Refs = useRef([]);
   const item5Refs = useRef([]);
   const titleRef = useRef(null);
-
-  // NEW TEST
   const mainImgRef = useRef(null);
   const previewImgsRefs = useRef([]);
   const slideNumRef = useRef(null);
   const prevIconRef = useRef(null);  // Ref for previous icon
   const nextIconRef = useRef(null);  // Ref for next icon
   const [mainImageSrc, setMainImageSrc] = useState('/hero/vinyl_cafe1.webp'); // State for main image src
+  const [imagesLoaded, setImagesLoaded] = useState(0);
+  const totalImages = 20;
+
 
   const previewImages = [ // Store image data separately
     { src: '/hero/vinyl_cafe1.webp', alt: 'First hero image cover' },
@@ -70,94 +71,104 @@ const Hero = () => {
     }
   };
 
+  const handleImageLoad = () => {
+    setImagesLoaded((prev) => prev + 1);
+    console.log(imagesLoaded);
+  };
+
   // Animation Definition
   useEffect(() => {
-    const tl = gsap.timeline({ delay: 0 });
+    if (imagesLoaded === totalImages) {
 
-    // Moves all columns to the top from the bottom
-    tl.to(colRefs.current, {
-      top: "0",
-      duration: 3,
-      ease: "power4.inOut",
-    });
+      console.log('Trigger');
 
-    // Moves all images within the first column to the top
-    tl.to(item1Refs.current, {
-      top: "0",
-      stagger: 0.25,
-      duration: 3,
-      ease: "power4.inOut"
-    }, "-=2");
+      const tl = gsap.timeline({ delay: 0 });
 
-    // Moves all images within the second column
-    tl.to(item2Refs.current, {
-      top: "0",
-      stagger: -0.25,
-      duration: 3,
-      ease: "power4.inOut"
-    }, "-=4");
+      // Moves all columns to the top from the bottom
+      tl.to(colRefs.current, {
+        top: "0",
+        duration: 3,
+        ease: "power4.inOut",
+      });
 
-    // Third column
-    tl.to(item3Refs.current, {
-      top: "0",
-      stagger: 0.25,
-      duration: 3,
-      ease: "power4.inOut"
-    }, "-=4");
+      // Moves all images within the first column to the top
+      tl.to(item1Refs.current, {
+        top: "0",
+        stagger: 0.25,
+        duration: 3,
+        ease: "power4.inOut"
+      }, "-=2");
 
-    // Fourth column
-    tl.to(item4Refs.current, {
-      top: "0",
-      stagger: -0.25,
-      duration: 3,
-      ease: "power4.inOut"
-    }, "-=4");
+      // Moves all images within the second column
+      tl.to(item2Refs.current, {
+        top: "0",
+        stagger: -0.25,
+        duration: 3,
+        ease: "power4.inOut"
+      }, "-=4");
 
-    // Fifth column
-    tl.to(item5Refs.current, {
-      top: "0",
-      stagger: 0.25,
-      duration: 3,
-      ease: "power4.inOut"
-    }, "-=4");
+      // Third column
+      tl.to(item3Refs.current, {
+        top: "0",
+        stagger: 0.25,
+        duration: 3,
+        ease: "power4.inOut"
+      }, "-=4");
 
-    // Zoom animation to reveal main hero image
-    tl.to(containerRef.current, {
-      scale: 6,
-      duration: 4,
-      ease: "power4.inOut"
-    }, "-=2");
+      // Fourth column
+      tl.to(item4Refs.current, {
+        top: "0",
+        stagger: -0.25,
+        duration: 3,
+        ease: "power4.inOut"
+      }, "-=4");
 
-    tl.to(slideNumRef.current, {
-      top: 0,
-      stagger: 0.075,
-      duration: 1,
-      ease: "power3.out",
-    }, "-=1.5");
+      // Fifth column
+      tl.to(item5Refs.current, {
+        top: "0",
+        stagger: 0.25,
+        duration: 3,
+        ease: "power4.inOut"
+      }, "-=4");
 
-    tl.to(previewImgsRefs.current, {
-      top: 0,
-      stagger: 0.075,
-      duration: 1,
-      ease: "power3.out",
-    }, "-=1.5");
+      // Zoom animation to reveal main hero image
+      tl.to(containerRef.current, {
+        scale: 6,
+        duration: 4,
+        ease: "power4.inOut"
+      }, "-=2");
 
-    tl.to(".icon svg, .icon-2 svg", {
-      scale: 1,
-      stagger: 0.05,
-      ease: "power3.out",
-    }, "-=1");
+      tl.to(slideNumRef.current, {
+        top: 0,
+        stagger: 0.075,
+        duration: 1,
+        ease: "power3.out",
+      }, "-=1.5");
 
-    // Animation to make the hero text appear
-    tl.to(titleRef.current, {
-      opacity: 1,
-      duration: 1,
-      ease: "power3.out",
-    }, "-=1.5");
+      tl.to(previewImgsRefs.current, {
+        top: 0,
+        stagger: 0.075,
+        duration: 1,
+        ease: "power3.out",
+      }, "-=1.5");
 
-  }, []); // Ensures the animation only runs once
+      tl.to(".icon svg, .icon-2 svg", {
+        scale: 1,
+        stagger: 0.05,
+        ease: "power3.out",
+      }, "-=1");
 
-  // NEW TEST
+      // Animation to make the hero text appear
+      tl.to(titleRef.current, {
+        opacity: 1,
+        duration: 1,
+        ease: "power3.out",
+      }, "-=1.5");
+    }
+
+  }, [imagesLoaded, totalImages]); // Ensures the animation only runs once
+
+  // Slider animation
   useEffect(() => {
     const previewImgs = previewImages; // Use the image data array
     const mainImg = mainImgRef.current;
@@ -212,6 +223,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem1Refs}>
@@ -221,6 +233,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem1Refs}>
@@ -230,6 +243,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem1Refs}>
@@ -239,6 +253,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem1Refs}>
@@ -248,6 +263,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
         </div>
@@ -259,6 +275,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem2Refs}>
@@ -268,6 +285,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem2Refs}>
@@ -277,6 +295,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem2Refs}>
@@ -286,6 +305,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem2Refs}>
@@ -295,6 +315,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
         </div>
@@ -306,6 +327,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem3Refs}>
@@ -315,6 +337,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item main-image' ref={addItem3Refs}>
@@ -324,6 +347,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
               ref={mainImgRef}
             />
           </div>
@@ -334,6 +358,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem3Refs}>
@@ -343,6 +368,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
         </div>
@@ -354,6 +380,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem4Refs}>
@@ -363,6 +390,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem4Refs}>
@@ -372,6 +400,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem4Refs}>
@@ -381,6 +410,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem4Refs}>
@@ -390,6 +420,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
         </div>
@@ -401,6 +432,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem5Refs}>
@@ -410,6 +442,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem5Refs}>
@@ -419,6 +452,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem5Refs}>
@@ -428,6 +462,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
           <div className='item' ref={addItem5Refs}>
@@ -437,6 +472,7 @@ const Hero = () => {
               width={1920}
               height={1920}
               className='intro-img'
+              onLoadingComplete={handleImageLoad}
             />
           </div>
         </div>
@@ -466,6 +502,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            onLoadingComplete={handleImageLoad}
             ref={addPreviewImgRef}
           />
           <Image
@@ -474,6 +511,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            onLoadingComplete={handleImageLoad}
             ref={addPreviewImgRef}
           />
           <Image
@@ -482,6 +520,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            onLoadingComplete={handleImageLoad}
             ref={addPreviewImgRef}
           />
           <Image
@@ -490,6 +529,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            onLoadingComplete={handleImageLoad}
             ref={addPreviewImgRef}
           />
           <Image
@@ -498,6 +538,7 @@ const Hero = () => {
             width={1920}
             height={1920}
             className='intro-img hero-img'
+            onLoadingComplete={handleImageLoad}
             ref={addPreviewImgRef}
           />
         </div>
