@@ -224,6 +224,7 @@ const Hero = () => {
               height={1920}
               className='intro-img'
               onLoadingComplete={handleImageLoad}
+              priority
             />
           </div>
           <div className='item' ref={addItem1Refs}>
@@ -244,6 +245,7 @@ const Hero = () => {
               height={1920}
               className='intro-img'
               onLoadingComplete={handleImageLoad}
+              priority
             />
           </div>
           <div className='item' ref={addItem1Refs}>
@@ -316,6 +318,7 @@ const Hero = () => {
               height={1920}
               className='intro-img'
               onLoadingComplete={handleImageLoad}
+              priority
             />
           </div>
         </div>
