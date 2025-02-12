@@ -157,7 +157,7 @@ const Hero = () => {
         duration: 1,
         ease: "power3.out",
       }, "-=1.5");
-    }, 2000);
+    }, 5000);
   }, []); // Ensures the animation only runs once
 
   // NEW TEST
