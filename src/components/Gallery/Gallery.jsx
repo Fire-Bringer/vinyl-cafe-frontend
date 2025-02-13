@@ -60,7 +60,7 @@ const Gallery = () => {
       {modalImage && (
         <div
           ref={modalRef} // Assign the ref here
-          className="fixed top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center opacity-0 pointer-events-none" // Initially hidden
+          className="fixed top-0 left-0 w-full h-full bg-secondary/50 z-50 flex items-center justify-center opacity-0 pointer-events-none" // Initially hidden
           onClick={closeModal} // Close on backdrop click
         >
           <div className="bg-background rounded-[20px] p-4 max-w-[80%] lg:max-w-[60%] xl:max-w-[50%] 2xl:max-w-[30%] max-h-[80%] overflow-hidden" onClick={(e) => e.stopPropagation()}> {/* Prevent backdrop close on image click */}
