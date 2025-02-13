@@ -16,7 +16,7 @@ const About = () => {
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.<br /><br />Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
           </p>
 
-          <div className="mt-8 border-y-2 border-secondary flex justify-center gap-10 w-1/2 md:w-1/3 lg:w-2/5 self-center lg:self-start mb-16 md:mb-0">
+          <div className="mt-8 border-y-2 border-secondary flex justify-center gap-10 w-1/2 md:w-1/3 lg:w-2/5 self-center lg:self-start mb-10 md:mb-0">
 
             <a href="#">
               <IgIcon className="about-ig py-2 md:w-10" />

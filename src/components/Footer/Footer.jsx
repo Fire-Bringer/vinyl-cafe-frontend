@@ -9,7 +9,7 @@ const Footer = () => {
             Contact
           </h6>
 
-          <h6 className="text-primary text-lg font-medium font-body leading-10 lg:leading-7 xl:w-1/2 w-2/3 flex flex-col lg:flex-row items-center justify-around">
+          <h6 className="text-primary text-lg font-medium font-body leading-10 lg:leading-7 xl:w-1/2 w-2/3 flex flex-col lg:flex-row items-center justify-around py-4">
             <a href="#Home">Home</a>
             <a href="#Latest">Latest</a>
             <a href="#About">About</a>
