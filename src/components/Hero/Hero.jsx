@@ -15,15 +15,21 @@ const Hero = () => {
   const item3Refs = useRef([])
   const item4Refs = useRef([])
   const item5Refs = useRef([])
+
   const titleRef = useRef(null)
-  const mainImgRef = useRef(null)
   const previewImgsRefs = useRef([])
   const slideNumRef = useRef(null)
   const prevIconRef = useRef(null)
   const nextIconRef = useRef(null)
-  const [mainImageSrc, setMainImageSrc] = useState("/hero/vinyl_cafe1.webp")
+
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const [loadedImagesCount, setLoadedImagesCount] = useState(0)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [nextImageIndex, setNextImageIndex] = useState(1)
+  const currentImageRef = useRef(null)
+  const nextImageRef = useRef(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
   const totalImages = 26 // Total number of images to load (25 album covers + 1 main image)
 
   const previewImages = [
@@ -34,11 +40,6 @@ const Hero = () => {
     { src: "/hero/vinyl_cafe5.webp", alt: "Fifth hero image cover" },
   ]
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [nextImageIndex, setNextImageIndex] = useState(1)
-  const currentImageRef = useRef(null)
-  const nextImageRef = useRef(null)
-  const [isTransitioning, setIsTransitioning] = useState(false)
 
   // Array Definitions for Grouped Dom Elements
   const addColRef = (el) => {
@@ -230,44 +231,50 @@ const Hero = () => {
       return
     }
 
-    function updateImage(newIndex) {
+    // Inside your updateImage function:
+
+    function updateImage(newIndex, direction = "next") {
       if (isTransitioning) return
       setIsTransitioning(true)
 
-      const nextImageIdx = (newIndex + 1) % previewImages.length
+      // Calculate the correct next index immediately
+      const nextImageIdx =
+        direction === "prev"
+          ? (newIndex - 1 + previewImages.length) % previewImages.length
+          :(newIndex + 1) % previewImages.length
+
+      // Update both state values right away to ensure proper rendering
+      setCurrentImageIndex(newIndex)
       setNextImageIndex(nextImageIdx)
 
-      // Preload the next image before transition
-      nextImg.src = previewImages[newIndex].src
+      // Set initial state for animation - ensure both images are visible with proper opacity
+      gsap.set(currentImg, { opacity: 1, scale: 1, display: 'block' })
+      gsap.set(nextImg, { opacity: 0, scale: 0.95, display: 'block' })
 
       // Create a smoother animation timeline
       const tl = gsap.timeline({
         defaults: { ease: "power2.inOut" },
         onComplete: () => {
-          setCurrentImageIndex(newIndex)
+          // Only reset transition flag when animation completes
           setIsTransitioning(false)
-
-          // Prepare for next transition
-          if (currentImg) currentImg.src = previewImages[newIndex].src
-          if (nextImg) nextImg.src = previewImages[nextImageIdx].src
         }
       })
 
-      // Fade out current image with slight scale
+      // Animation sequence remains the same
       tl.to(currentImg, {
         opacity: 0,
         scale: 1.05,
-        duration: 1
+        duration: 0.8,
+        ease: "power1.inOut"
       })
-
-      // Fade in next image while scaling from slightly smaller
       .to(nextImg, {
         opacity: 1,
         scale: 1,
-        duration: 1
-      }, "-=0.5") // Overlap the animations
+        duration: 0.8,
+        ease: "power1.inOut"
+      }, "-=0.8") // Full overlap for smooth crossfade
 
-      // Update slide number with a subtle animation
+      // Rest of the animation
       .to(slideNum, {
         opacity: 0,
         y: -5,
@@ -281,33 +288,22 @@ const Hero = () => {
         y: 0,
         duration: 0.3
       })
-
-      // Reset for next transition
-      .set(currentImg, { opacity: 1, scale: 1 })
-      .set(nextImg, { opacity: 0, scale: 0.95 })
     }
 
     // Define click handlers that we can remove later
     const handlePrevClick = () => {
       const newIndex = (currentImageIndex - 1 + previewImages.length) % previewImages.length
-      updateImage(newIndex)
+      updateImage(newIndex, "prev")
     }
 
     const handleNextClick = () => {
       const newIndex = (currentImageIndex + 1) % previewImages.length
-      updateImage(newIndex)
+      updateImage(newIndex, "next")
     }
 
     // Add event listeners with proper references
     prevIcon.addEventListener("click", handlePrevClick)
     nextIcon.addEventListener("click", handleNextClick)
-
-    // Only initialize once when images are loaded
-    if (currentImg && nextImg && imagesLoaded) {
-      gsap.set(currentImg, { opacity: 1, scale: 1 })
-      gsap.set(nextImg, { opacity: 0, scale: 0.95 })
-      slideNum.innerHTML = `1 &mdash; ${previewImages.length}`
-    }
 
     // Cleanup event listeners
     return () => {
@@ -497,25 +493,25 @@ const Hero = () => {
             <div className="main-image-container">
               <NextImage
                 src={previewImages[currentImageIndex].src}
-                alt="Current shop hero image"
+                alt={previewImages[currentImageIndex].alt}
                 width={1920}
-                height={1000}
-                quality={90}  // Add quality parameter (default is 75)
-                className="intro-img"
+                height={1080}
+                quality={100}
+                className="intro-img current-img"
                 ref={currentImageRef}
                 priority
                 onLoad={handleImageLoad}
               />
               <NextImage
                 src={previewImages[nextImageIndex].src}
-                alt="Next shop hero image"
-                width={300}
-                height={300}
-                className="intro-img"
+                alt={previewImages[nextImageIndex].alt}
+                width={1920}
+                height={1080}
+                quality={100}
+                className="intro-img next-img"
                 ref={nextImageRef}
                 priority
                 onLoad={handleImageLoad}
-                style={{ opacity: 0 }}
               />
             </div>
           </div>
@@ -647,7 +643,7 @@ const Hero = () => {
       </div>
 
       <div className="shop-title">
-        <div className="icon" ref={prevIconRef}>
+        <div className="icon t-shadower" ref={prevIconRef}>
           <RiArrowLeftLongLine />
         </div>
         <div className="title" ref={titleRef}>
