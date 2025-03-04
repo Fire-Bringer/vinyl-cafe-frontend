@@ -186,6 +186,7 @@ dd{
   overflow: hidden;
 }
 
+.intro-img.prev-img,
 .intro-img.current-img,
 .intro-img.next-img {
   position: absolute;
@@ -195,11 +196,6 @@ dd{
   height: 100%;
   object-fit: cover;
 }
-
-.intro-img.next-img {
-  opacity: 0; /* Initially hidden */
-}
-
 
 @media (max-width: 900px) {
   .slide-num {

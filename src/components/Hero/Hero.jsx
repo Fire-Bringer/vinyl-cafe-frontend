@@ -26,8 +26,10 @@ const Hero = () => {
   const [loadedImagesCount, setLoadedImagesCount] = useState(0)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [nextImageIndex, setNextImageIndex] = useState(1)
+  const [prevImageIndex, setPrevImageIndex] = useState(4)
   const currentImageRef = useRef(null)
   const nextImageRef = useRef(null)
+  const prevImageRef = useRef(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   const totalImages = 26 // Total number of images to load (25 album covers + 1 main image)
@@ -223,59 +225,110 @@ const Hero = () => {
 
     const currentImg = currentImageRef.current
     const nextImg = nextImageRef.current
+    const prevImg = prevImageRef.current
     const prevIcon = prevIconRef.current
     const nextIcon = nextIconRef.current
     const slideNum = slideNumRef.current
 
-    if (!currentImg || !nextImg || !previewImages || !prevIcon || !nextIcon || !slideNum) {
+    if (!currentImg || !nextImg || !prevImg || !previewImages || !prevIcon || !nextIcon || !slideNum) {
       return
     }
 
+    gsap.set(prevImg, { opacity: 0, scale: 0.95, x: -10, display: 'block' })
+    gsap.set(currentImg, { opacity: 1, scale: 1, x: 0, display: 'block' })
+    gsap.set(nextImg, { opacity: 0, scale: 0.95, x: 10, display: 'block' })
+
     // Inside your updateImage function:
+
+    console.log("prevImageIndex", prevImageIndex)
+    console.log("currentImageIndex", currentImageIndex)
+    console.log("nextImageIndex", nextImageIndex)
 
     function updateImage(newIndex, direction = "next") {
       if (isTransitioning) return
       setIsTransitioning(true)
 
-      // Calculate the correct next index immediately
-      const nextImageIdx =
-        direction === "prev"
-          ? (newIndex - 1 + previewImages.length) % previewImages.length
-          :(newIndex + 1) % previewImages.length
+      // Get DOM references
+      const currentImg = currentImageRef.current
+      const nextImg = nextImageRef.current
+      const prevImg = prevImageRef.current
+      const slideNum = slideNumRef.current
 
-      // Update both state values right away to ensure proper rendering
-      setCurrentImageIndex(newIndex)
-      setNextImageIndex(nextImageIdx)
+      if (!currentImg || !nextImg || !prevImg || !slideNum) return
 
-      // Set initial state for animation - ensure both images are visible with proper opacity
-      gsap.set(currentImg, { opacity: 1, scale: 1, display: 'block' })
-      gsap.set(nextImg, { opacity: 0, scale: 0.95, display: 'block' })
+      // Calculate the correct indices
+      const prevImageIdx = (newIndex - 1 + previewImages.length) % previewImages.length
+      const nextImageIdx = (newIndex + 1) % previewImages.length
 
-      // Create a smoother animation timeline
+      // Set up initial positions based on direction
+      if (direction === "next") {
+        // For next transition, position the new image to enter from right
+        gsap.set(nextImg, {
+          opacity: 0,
+          scale: 0.95,
+          x: 30,
+          display: 'block',
+          src: previewImages[newIndex].src
+        })
+      } else {
+        // For prev transition, position the new image to enter from left
+        gsap.set(prevImg, {
+          opacity: 0,
+          scale: 0.95,
+          x: -30,
+          display: 'block',
+          src: previewImages[newIndex].src
+        })
+      }
+
+      // Create animation timeline
       const tl = gsap.timeline({
         defaults: { ease: "power2.inOut" },
         onComplete: () => {
-          // Only reset transition flag when animation completes
+          // Update state after animation completes
+          setPrevImageIndex(prevImageIdx)
+          setCurrentImageIndex(newIndex)
+          setNextImageIndex(nextImageIdx)
           setIsTransitioning(false)
+
+          // Reset positions for next animation
+          gsap.set(currentImg, { opacity: 1, scale: 1, x: 0 })
+          gsap.set(prevImg, { opacity: 0, scale: 0.95, x: -30 })
+          gsap.set(nextImg, { opacity: 0, scale: 0.95, x: 30 })
         }
       })
 
-      // Animation sequence remains the same
-      tl.to(currentImg, {
-        opacity: 0,
-        scale: 1.05,
-        duration: 0.8,
-        ease: "power1.inOut"
-      })
-      .to(nextImg, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        ease: "power1.inOut"
-      }, "-=0.8") // Full overlap for smooth crossfade
+      // Animate current image out
+      if (direction === "next") {
+        tl.to(currentImg, {
+          opacity: 0,
+          scale: 0.95,
+          x: -30, // Move current image to the left as it exits
+          duration: 0.8
+        })
+        .to(nextImg, {
+          opacity: 1,
+          scale: 1,
+          x: 0, // Move next image to center
+          duration: 0.8
+        }, "-=0.8") // Full overlap for smooth crossfade
+      } else {
+        tl.to(currentImg, {
+          opacity: 0,
+          scale: 0.95,
+          x: 30, // Move current image to the right as it exits
+          duration: 0.8
+        })
+        .to(prevImg, {
+          opacity: 1,
+          scale: 1,
+          x: 0, // Move prev image to center
+          duration: 0.8
+        }, "-=0.8") // Full overlap for smooth crossfade
+      }
 
-      // Rest of the animation
-      .to(slideNum, {
+      // Update slide number
+      tl.to(slideNum, {
         opacity: 0,
         y: -5,
         duration: 0.3,
@@ -310,7 +363,7 @@ const Hero = () => {
       prevIcon?.removeEventListener("click", handlePrevClick)
       nextIcon?.removeEventListener("click", handleNextClick)
     }
-  }, [imagesLoaded, previewImages.length, currentImageIndex, isTransitioning])
+  }, [imagesLoaded, previewImages.length, prevImageIndex, currentImageIndex, nextImageIndex, isTransitioning])
 
   // Preload all images
   useEffect(() => {
@@ -510,6 +563,17 @@ const Hero = () => {
                 quality={100}
                 className="intro-img next-img"
                 ref={nextImageRef}
+                priority
+                onLoad={handleImageLoad}
+              />
+              <NextImage
+                src={previewImages[prevImageIndex].src}
+                alt={previewImages[prevImageIndex].alt}
+                width={1920}
+                height={1080}
+                quality={100}
+                className="intro-img prev-img"
+                ref={prevImageRef}
                 priority
                 onLoad={handleImageLoad}
               />
