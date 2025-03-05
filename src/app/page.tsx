@@ -12,29 +12,43 @@ import Gallery from '@/components/Gallery/Gallery';
 import Access from '@/components/Access/Access';
 import Footer from '@/components/Footer/Footer';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function Homepage() {
+  const [showContent, setShowContent] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to top on mount
-  }, []); // Empty dependency array ensures this runs only once after the initial render
+
+    // Delay loading of other components until Hero animation completes
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 7000); // Match this with your Hero animation duration (7 seconds based on navbar delay)
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div>
       <Navbar/>
       <Hero/>
-      <Tags/>
-      <Latest/>
-      <Break/>
-      <About/>
-      <Events/>
-      <Menu/>
-      <Break2/>
-      <Gallery/>
-      <Access/>
-      <Footer/>
+
+      {showContent && (
+        <>
+          <Tags/>
+          <Latest/>
+          <Break/>
+          <About/>
+          <Events/>
+          <Menu/>
+          <Break2/>
+          <Gallery/>
+          <Access/>
+          <Footer/>
+        </>
+      )}
     </div>
   );
-};
+}
 
 export default Homepage;
