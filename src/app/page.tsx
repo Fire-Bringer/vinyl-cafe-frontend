@@ -1,18 +1,19 @@
 'use client';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar/Navbar.js';
 import Hero from '@/components/Hero/Hero';
-import Tags from '@/components/Tags/Tags';
-import Latest from '@/components/Latest/Latest';
-import Break from '@/components/Break/Break';
-import About from '@/components/About/About';
-import Events from '@/components/Events/Events';
-import Menu from '@/components/Menu/Menu';
-import Break2 from '@/components/Break/Break2';
-import Gallery from '@/components/Gallery/Gallery';
-import Access from '@/components/Access/Access';
-import Footer from '@/components/Footer/Footer';
 
-import { useEffect, useState } from 'react';
+// Lazy loaded components
+const Tags = lazy(() => import('@/components/Tags/Tags'));
+const Latest = lazy(() => import('@/components/Latest/Latest'));
+const Break = lazy(() => import('@/components/Break/Break'));
+const About = lazy(() => import('@/components/About/About'));
+const Events = lazy(() => import('@/components/Events/Events'));
+const Menu = lazy(() => import('@/components/Menu/Menu'));
+const Break2 = lazy(() => import('@/components/Break/Break2'));
+const Gallery = lazy(() => import('@/components/Gallery/Gallery'));
+const Access = lazy(() => import('@/components/Access/Access'));
+const Footer = lazy(() => import('@/components/Footer/Footer'));
 
 function Homepage() {
   const [showContent, setShowContent] = useState(false);
@@ -34,7 +35,11 @@ function Homepage() {
       <Hero/>
 
       {showContent && (
-        <>
+        <Suspense fallback={
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+          </div>
+        }>
           <Tags/>
           <Latest/>
           <Break/>
@@ -45,7 +50,7 @@ function Homepage() {
           <Gallery/>
           <Access/>
           <Footer/>
-        </>
+        </Suspense>
       )}
     </div>
   );
