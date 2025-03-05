@@ -42,7 +42,6 @@ const Hero = () => {
     { src: "/hero/vinyl_cafe5.webp", alt: "Fifth hero image cover" },
   ]
 
-
   // Array Definitions for Grouped Dom Elements
   const addColRef = (el) => {
     if (el && !colRefs.current.includes(el)) {
@@ -90,6 +89,46 @@ const Hero = () => {
       return newCount
     })
   }, [totalImages])
+
+  // Preload all images before rendering
+  useEffect(() => {
+    // Create an array of all image sources
+    const allImageSources = [
+      "/intro/anri-p.webp",
+      "/intro/blu-p.webp",
+      "/intro/brother-p.webp",
+      "/intro/camp-lo-p.webp",
+      "/intro/dan-p.webp",
+      "/intro/deltron-p.webp",
+      "/intro/dilla-p.webp",
+      "/intro/doom-p.webp",
+      "/intro/glasper-p.webp",
+      "/intro/heron-p.webp",
+      "/intro/hiero-p.webp",
+      "/intro/jeru-p.webp",
+      "/intro/lauryn-p.webp",
+      "/intro/madlib-p.webp",
+      "/intro/marvin-p.webp",
+      "/intro/maze-p.webp",
+      "/intro/mos-p.webp",
+      "/intro/outkast-p.webp",
+      "/intro/pete-p.webp",
+      "/intro/quasi-p.webp",
+      "/intro/ryo-p.webp",
+      "/intro/sade-p.webp",
+      "/intro/souls-p.webp",
+      "/intro/taeko-p.webp",
+      ...previewImages.map((img) => img.src),
+    ]
+
+    // Preload all images using the global Image constructor
+    allImageSources.forEach((src) => {
+      const img = new window.Image()
+      img.src = src
+      img.onload = handleImageLoad
+      img.onerror = handleImageLoad // Count errors as loaded to prevent hanging
+    })
+  }, [handleImageLoad, previewImages])
 
   // Animation Definition - Only runs after all images are loaded
   useEffect(() => {
@@ -238,12 +277,6 @@ const Hero = () => {
     gsap.set(currentImg, { opacity: 1, scale: 1, x: 0, display: 'block' })
     gsap.set(nextImg, { opacity: 0, scale: 0.95, x: 10, display: 'block' })
 
-    // Inside your updateImage function:
-
-    console.log("prevImageIndex", prevImageIndex)
-    console.log("currentImageIndex", currentImageIndex)
-    console.log("nextImageIndex", nextImageIndex)
-
     function updateImage(newIndex, direction = "next") {
       if (isTransitioning) return
       setIsTransitioning(true)
@@ -360,387 +393,323 @@ const Hero = () => {
     }
   }, [imagesLoaded, previewImages.length, prevImageIndex, currentImageIndex, nextImageIndex, isTransitioning])
 
-  // Preload all images
-  useEffect(() => {
-    // Create an array of all image sources
-    const allImageSources = [
-      "/intro/anri-p.webp",
-      "/intro/blu-p.webp",
-      "/intro/brother-p.webp",
-      "/intro/camp-lo-p.webp",
-      "/intro/dan-p.webp",
-      "/intro/deltron-p.webp",
-      "/intro/dilla-p.webp",
-      "/intro/doom-p.webp",
-      "/intro/glasper-p.webp",
-      "/intro/heron-p.webp",
-      "/intro/hiero-p.webp",
-      "/intro/jeru-p.webp",
-      "/intro/lauryn-p.webp",
-      "/intro/madlib-p.webp",
-      "/intro/marvin-p.webp",
-      "/intro/maze-p.webp",
-      "/intro/mos-p.webp",
-      "/intro/outkast-p.webp",
-      "/intro/pete-p.webp",
-      "/intro/quasi-p.webp",
-      "/intro/ryo-p.webp",
-      "/intro/sade-p.webp",
-      "/intro/souls-p.webp",
-      "/intro/taeko-p.webp",
-      ...previewImages.map((img) => img.src),
-    ]
-
-    // Preload all images using the global Image constructor
-    allImageSources.forEach((src) => {
-      const img = new window.Image()
-      img.src = src
-      img.onload = handleImageLoad
-      img.onerror = handleImageLoad // Count errors as loaded to prevent hanging
-    })
-  }, [handleImageLoad, previewImages])
-
   return (
     <section className="hero" id="Home">
       {!imagesLoaded && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
-          <p>
+          <p className="font-body">
             Loading {loadedImagesCount}/{totalImages} images...
           </p>
         </div>
       )}
 
-      <div className="hero-container" ref={containerRef}>
-        <div className="col c-1" ref={addColRef}>
-          <div className="item" ref={addItem1Refs}>
-            <NextImage
-              src="/intro/anri-p.webp"
-              alt="Anri album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem1Refs}>
-            <NextImage
-              src="/intro/blu-p.webp"
-              alt="Blu album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem1Refs}>
-            <NextImage
-              src="/intro/brother-p.webp"
-              alt="Little Brother album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem1Refs}>
-            <NextImage
-              src="/intro/camp-lo-p.webp"
-              alt="Camp Lo album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem1Refs}>
-            <NextImage
-              src="/intro/dan-p.webp"
-              alt="Steely Dan album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-        </div>
-        <div className="col c-2" ref={addColRef}>
-          <div className="item" ref={addItem2Refs}>
-            <NextImage
-              src="/intro/deltron-p.webp"
-              alt="Deltron album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem2Refs}>
-            <NextImage
-              src="/intro/dilla-p.webp"
-              alt="J Dilla album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem2Refs}>
-            <NextImage
-              src="/intro/doom-p.webp"
-              alt="MF Doom album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem2Refs}>
-            <NextImage
-              src="/intro/glasper-p.webp"
-              alt="Robert Glasper album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem2Refs}>
-            <NextImage
-              src="/intro/heron-p.webp"
-              alt="Gill Scott Heron album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-        </div>
-        <div className="col c-3" ref={addColRef}>
-          <div className="item" ref={addItem3Refs}>
-            <NextImage
-              src="/intro/hiero-p.webp"
-              alt="Hieroglyphics album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem3Refs}>
-            <NextImage
-              src="/intro/jeru-p.webp"
-              alt="Jeru tha Damaja album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item main-image" ref={addItem3Refs}>
-            <div className="main-image-container">
-              <NextImage
-                src={previewImages[currentImageIndex].src}
-                alt={previewImages[currentImageIndex].alt}
-                width={1920}
-                height={1080}
-                quality={100}
-                className="intro-img current-img"
-                ref={currentImageRef}
-                priority
-                onLoad={handleImageLoad}
-              />
-              <NextImage
-                src={previewImages[nextImageIndex].src}
-                alt={previewImages[nextImageIndex].alt}
-                width={1920}
-                height={1080}
-                quality={100}
-                className="intro-img next-img"
-                ref={nextImageRef}
-                priority
-                onLoad={handleImageLoad}
-              />
-              <NextImage
-                src={previewImages[prevImageIndex].src}
-                alt={previewImages[prevImageIndex].alt}
-                width={1920}
-                height={1080}
-                quality={100}
-                className="intro-img prev-img"
-                ref={prevImageRef}
-                priority
-                onLoad={handleImageLoad}
-              />
+      {imagesLoaded && (
+        <>
+          <div className="hero-container" ref={containerRef}>
+            <div className="col c-1" ref={addColRef}>
+              <div className="item" ref={addItem1Refs}>
+                <NextImage
+                  src="/intro/anri-p.webp"
+                  alt="Anri album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem1Refs}>
+                <NextImage
+                  src="/intro/blu-p.webp"
+                  alt="Blu album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem1Refs}>
+                <NextImage
+                  src="/intro/brother-p.webp"
+                  alt="Little Brother album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem1Refs}>
+                <NextImage
+                  src="/intro/camp-lo-p.webp"
+                  alt="Camp Lo album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem1Refs}>
+                <NextImage
+                  src="/intro/dan-p.webp"
+                  alt="Steely Dan album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+            </div>
+            <div className="col c-2" ref={addColRef}>
+              <div className="item" ref={addItem2Refs}>
+                <NextImage
+                  src="/intro/deltron-p.webp"
+                  alt="Deltron album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem2Refs}>
+                <NextImage
+                  src="/intro/dilla-p.webp"
+                  alt="J Dilla album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem2Refs}>
+                <NextImage
+                  src="/intro/doom-p.webp"
+                  alt="MF Doom album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem2Refs}>
+                <NextImage
+                  src="/intro/glasper-p.webp"
+                  alt="Robert Glasper album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem2Refs}>
+                <NextImage
+                  src="/intro/heron-p.webp"
+                  alt="Gill Scott Heron album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+            </div>
+            <div className="col c-3" ref={addColRef}>
+              <div className="item" ref={addItem3Refs}>
+                <NextImage
+                  src="/intro/hiero-p.webp"
+                  alt="Hieroglyphics album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem3Refs}>
+                <NextImage
+                  src="/intro/jeru-p.webp"
+                  alt="Jeru tha Damaja album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item main-image" ref={addItem3Refs}>
+                <div className="main-image-container">
+                  <NextImage
+                    src={previewImages[currentImageIndex].src}
+                    alt={previewImages[currentImageIndex].alt}
+                    width={1920}
+                    height={1080}
+                    quality={100}
+                    className="intro-img current-img"
+                    ref={currentImageRef}
+                    priority
+                  />
+                  <NextImage
+                    src={previewImages[nextImageIndex].src}
+                    alt={previewImages[nextImageIndex].alt}
+                    width={1920}
+                    height={1080}
+                    quality={100}
+                    className="intro-img next-img"
+                    ref={nextImageRef}
+                    priority
+                  />
+                  <NextImage
+                    src={previewImages[prevImageIndex].src}
+                    alt={previewImages[prevImageIndex].alt}
+                    width={1920}
+                    height={1080}
+                    quality={100}
+                    className="intro-img prev-img"
+                    ref={prevImageRef}
+                    priority
+                  />
+                </div>
+              </div>
+              <div className="item" ref={addItem3Refs}>
+                <NextImage
+                  src="/intro/lauryn-p.webp"
+                  alt="Lauryn Hill album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem3Refs}>
+                <NextImage
+                  src="/intro/madlib-p.webp"
+                  alt="Madlib album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+            </div>
+            <div className="col c-4" ref={addColRef}>
+              <div className="item" ref={addItem4Refs}>
+                <NextImage
+                  src="/intro/marvin-p.webp"
+                  alt="Marvin Gaye album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem4Refs}>
+                <NextImage
+                  src="/intro/maze-p.webp"
+                  alt="Maze album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem4Refs}>
+                <NextImage
+                  src="/intro/mos-p.webp"
+                  alt="Mos Def album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem4Refs}>
+                <NextImage
+                  src="/intro/outkast-p.webp"
+                  alt="Outkast album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem4Refs}>
+                <NextImage
+                  src="/intro/pete-p.webp"
+                  alt="Pete Rock album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+            </div>
+            <div className="col c-5" ref={addColRef}>
+              <div className="item" ref={addItem5Refs}>
+                <NextImage
+                  src="/intro/quasi-p.webp"
+                  alt="Quasimoto album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem5Refs}>
+                <NextImage
+                  src="/intro/ryo-p.webp"
+                  alt="Ryo Fukui album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem5Refs}>
+                <NextImage
+                  src="/intro/sade-p.webp"
+                  alt="Sade album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem5Refs}>
+                <NextImage
+                  src="/intro/souls-p.webp"
+                  alt="Souls of Mischief album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
+              <div className="item" ref={addItem5Refs}>
+                <NextImage
+                  src="/intro/taeko-p.webp"
+                  alt="Taeko Onuki album cover"
+                  width={300}
+                  height={300}
+                  className="intro-img"
+                />
+              </div>
             </div>
           </div>
-          <div className="item" ref={addItem3Refs}>
-            <NextImage
-              src="/intro/lauryn-p.webp"
-              alt="Lauryn Hill album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem3Refs}>
-            <NextImage
-              src="/intro/madlib-p.webp"
-              alt="Madlib album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-        </div>
-        <div className="col c-4" ref={addColRef}>
-          <div className="item" ref={addItem4Refs}>
-            <NextImage
-              src="/intro/marvin-p.webp"
-              alt="Marvin Gaye album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem4Refs}>
-            <NextImage
-              src="/intro/maze-p.webp"
-              alt="Maze album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem4Refs}>
-            <NextImage
-              src="/intro/mos-p.webp"
-              alt="Mos Def album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem4Refs}>
-            <NextImage
-              src="/intro/outkast-p.webp"
-              alt="Outkast album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem4Refs}>
-            <NextImage
-              src="/intro/pete-p.webp"
-              alt="Pete Rock album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-        </div>
-        <div className="col c-5" ref={addColRef}>
-          <div className="item" ref={addItem5Refs}>
-            <NextImage
-              src="/intro/quasi-p.webp"
-              alt="Quasimoto album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem5Refs}>
-            <NextImage
-              src="/intro/ryo-p.webp"
-              alt="Ryo Fukui album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem5Refs}>
-            <NextImage
-              src="/intro/sade-p.webp"
-              alt="Sade album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem5Refs}>
-            <NextImage
-              src="/intro/souls-p.webp"
-              alt="Souls of Mischief album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-          <div className="item" ref={addItem5Refs}>
-            <NextImage
-              src="/intro/taeko-p.webp"
-              alt="Taeko Onuki album cover"
-              width={300}
-              height={300}
-              className="intro-img"
-              onLoad={handleImageLoad}
-            />
-          </div>
-        </div>
-      </div>
 
-      <div className="shop-title">
-        <div className="icon t-shadower cursor-pointer" ref={prevIconRef}>
-          <RiArrowLeftLongLine />
-        </div>
-        <div className="title" ref={titleRef}>
-          <h5>COFFEE & BAR</h5>
-          <h1>Vinyl Cafe</h1>
-          <h6>Good Music, Good Vibes, Good Times</h6>
-          <dl>
-            <dt>Open Hours</dt>
-            <dd>Mon-Fri 12PM-4PM 7PM-12AM</dd>
-            <dd>Sat-Sun 1PM-12AM</dd>
-            <dd>Thur Closed</dd>
-          </dl>
-        </div>
-        <div className="icon-2 t-shadower cursor-pointer" ref={nextIconRef}>
-          <RiArrowRightLongLine />
-        </div>
-      </div>
+          <div className="shop-title">
+            <div className="icon t-shadower cursor-pointer" ref={prevIconRef}>
+              <RiArrowLeftLongLine />
+            </div>
+            <div className="title" ref={titleRef}>
+              <h5>COFFEE & BAR</h5>
+              <h1>Vinyl Cafe</h1>
+              <h6>Good Music, Good Vibes, Good Times</h6>
+              <dl>
+                <dt>Open Hours</dt>
+                <dd>Mon-Fri 12PM-4PM 7PM-12AM</dd>
+                <dd>Sat-Sun 1PM-12AM</dd>
+                <dd>Thur Closed</dd>
+              </dl>
+            </div>
+            <div className="icon-2 t-shadower cursor-pointer" ref={nextIconRef}>
+              <RiArrowRightLongLine />
+            </div>
+          </div>
 
-      <div className="hero-footer">
-        <div className="preview">
-          {previewImages.map((img, index) => (
-            <NextImage
-              key={index}
-              src={img.src || "/placeholder.svg"}
-              alt={img.alt}
-              width={1920}
-              height={1000}
-              className="intro-img hero-img"
-              ref={addPreviewImgRef}
-              onLoad={handleImageLoad}
-            />
-          ))}
-        </div>
+          <div className="hero-footer">
+            <div className="preview">
+              {previewImages.map((img, index) => (
+                <NextImage
+                  key={index}
+                  src={img.src || "/placeholder.svg"}
+                  alt={img.alt}
+                  width={1920}
+                  height={1000}
+                  className="intro-img hero-img"
+                  ref={addPreviewImgRef}
+                />
+              ))}
+            </div>
 
-        <div className="slide-num">
-          <p ref={slideNumRef}>1 &mdash; 5</p>
-        </div>
-      </div>
+            <div className="slide-num">
+              <p ref={slideNumRef}>1 &mdash; 5</p>
+            </div>
+          </div>
+        </>
+      )}
     </section>
   )
 }
