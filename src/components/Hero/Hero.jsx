@@ -290,11 +290,6 @@ const Hero = () => {
           setCurrentImageIndex(newIndex)
           setNextImageIndex(nextImageIdx)
           setIsTransitioning(false)
-
-          // Reset positions for next animation
-          gsap.set(currentImg, { opacity: 1, scale: 1, x: 0 })
-          gsap.set(prevImg, { opacity: 0, scale: 0.95, x: -30 })
-          gsap.set(nextImg, { opacity: 0, scale: 0.95, x: 30 })
         }
       })
 
@@ -304,27 +299,27 @@ const Hero = () => {
           opacity: 0,
           scale: 0.95,
           x: -30, // Move current image to the left as it exits
-          duration: 0.8
+          duration: 1
         })
         .to(nextImg, {
           opacity: 1,
           scale: 1,
           x: 0, // Move next image to center
-          duration: 0.8
-        }, "-=0.8") // Full overlap for smooth crossfade
+          duration: 1
+        }, "-=1") // Full overlap for smooth crossfade
       } else {
         tl.to(currentImg, {
           opacity: 0,
           scale: 0.95,
           x: 30, // Move current image to the right as it exits
-          duration: 0.8
+          duration: 1
         })
         .to(prevImg, {
           opacity: 1,
           scale: 1,
           x: 0, // Move prev image to center
-          duration: 0.8
-        }, "-=0.8") // Full overlap for smooth crossfade
+          duration: 1
+        }, "-=1") // Full overlap for smooth crossfade
       }
 
       // Update slide number
@@ -707,7 +702,7 @@ const Hero = () => {
       </div>
 
       <div className="shop-title">
-        <div className="icon t-shadower" ref={prevIconRef}>
+        <div className="icon t-shadower cursor-pointer" ref={prevIconRef}>
           <RiArrowLeftLongLine />
         </div>
         <div className="title" ref={titleRef}>
@@ -721,7 +716,7 @@ const Hero = () => {
             <dd>Thur Closed</dd>
           </dl>
         </div>
-        <div className="icon-2 t-shadower" ref={nextIconRef}>
+        <div className="icon-2 t-shadower cursor-pointer" ref={nextIconRef}>
           <RiArrowRightLongLine />
         </div>
       </div>
