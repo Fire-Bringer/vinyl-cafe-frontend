@@ -32,7 +32,7 @@ const Hero = () => {
   const prevImageRef = useRef(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
-  const totalImages = 26 // Total number of images to load (25 album covers + 1 main image)
+  const totalImages = 16 // Total number of images to load (25 album covers + 1 main image)
 
   const previewImages = [
     { src: "/hero/vinyl_cafe1.webp", alt: "First hero image cover" },
@@ -95,25 +95,25 @@ const Hero = () => {
     // Create an array of all image sources
     const allImageSources = [
       "/intro/anri-p.webp",
-      "/intro/blu-p.webp",
+      //"/intro/blu-p.webp",
       "/intro/brother-p.webp",
       "/intro/camp-lo-p.webp",
-      "/intro/dan-p.webp",
-      "/intro/deltron-p.webp",
+      //"/intro/dan-p.webp",
+      //"/intro/deltron-p.webp",
       "/intro/dilla-p.webp",
       "/intro/doom-p.webp",
-      "/intro/glasper-p.webp",
+      //"/intro/glasper-p.webp",
       "/intro/heron-p.webp",
-      "/intro/hiero-p.webp",
-      "/intro/jeru-p.webp",
-      "/intro/lauryn-p.webp",
+      //"/intro/hiero-p.webp",
+      //"/intro/jeru-p.webp",
+      //"/intro/lauryn-p.webp",
       "/intro/madlib-p.webp",
       "/intro/marvin-p.webp",
-      "/intro/maze-p.webp",
+      //"/intro/maze-p.webp",
       "/intro/mos-p.webp",
-      "/intro/outkast-p.webp",
+      //"/intro/outkast-p.webp",
       "/intro/pete-p.webp",
-      "/intro/quasi-p.webp",
+      //"/intro/quasi-p.webp",
       "/intro/ryo-p.webp",
       "/intro/sade-p.webp",
       "/intro/souls-p.webp",
@@ -419,8 +419,8 @@ const Hero = () => {
               </div>
               <div className="item" ref={addItem1Refs}>
                 <NextImage
-                  src="/intro/blu-p.webp"
-                  alt="Blu album cover"
+                  src="/intro/souls-p.webp"
+                  alt="Souls album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -446,8 +446,8 @@ const Hero = () => {
               </div>
               <div className="item" ref={addItem1Refs}>
                 <NextImage
-                  src="/intro/dan-p.webp"
-                  alt="Steely Dan album cover"
+                  src="/intro/taeko-p.webp"
+                  alt="Taeko album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -457,8 +457,8 @@ const Hero = () => {
             <div className="col c-2" ref={addColRef}>
               <div className="item" ref={addItem2Refs}>
                 <NextImage
-                  src="/intro/deltron-p.webp"
-                  alt="Deltron album cover"
+                  src="/intro/sade-p.webp"
+                  alt="Sade album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -484,8 +484,8 @@ const Hero = () => {
               </div>
               <div className="item" ref={addItem2Refs}>
                 <NextImage
-                  src="/intro/glasper-p.webp"
-                  alt="Robert Glasper album cover"
+                  src="/intro/ryo-p.webp"
+                  alt="Ryo album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -504,8 +504,8 @@ const Hero = () => {
             <div className="col c-3" ref={addColRef}>
               <div className="item" ref={addItem3Refs}>
                 <NextImage
-                  src="/intro/hiero-p.webp"
-                  alt="Hieroglyphics album cover"
+                  src="/intro/pete-p.webp"
+                  alt="Pete album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -513,8 +513,8 @@ const Hero = () => {
               </div>
               <div className="item" ref={addItem3Refs}>
                 <NextImage
-                  src="/intro/jeru-p.webp"
-                  alt="Jeru tha Damaja album cover"
+                  src="/intro/anri-p.webp"
+                  alt="Anri album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -556,8 +556,8 @@ const Hero = () => {
               </div>
               <div className="item" ref={addItem3Refs}>
                 <NextImage
-                  src="/intro/lauryn-p.webp"
-                  alt="Lauryn Hill album cover"
+                  src="/intro/camp-lo-p.webp"
+                  alt="Camp Lo album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -585,8 +585,8 @@ const Hero = () => {
               </div>
               <div className="item" ref={addItem4Refs}>
                 <NextImage
-                  src="/intro/maze-p.webp"
-                  alt="Maze album cover"
+                  src="/intro/dilla-p.webp"
+                  alt="Dilla album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -603,8 +603,8 @@ const Hero = () => {
               </div>
               <div className="item" ref={addItem4Refs}>
                 <NextImage
-                  src="/intro/outkast-p.webp"
-                  alt="Outkast album cover"
+                  src="/intro/doom-p.webp"
+                  alt="Doom album cover"
                   width={300}
                   height={300}
                   className="intro-img"
@@ -623,8 +623,8 @@ const Hero = () => {
             <div className="col c-5" ref={addColRef}>
               <div className="item" ref={addItem5Refs}>
                 <NextImage
-                  src="/intro/quasi-p.webp"
-                  alt="Quasimoto album cover"
+                  src="/intro/heron-p.webp"
+                  alt="Heron album cover"
                   width={300}
                   height={300}
                   className="intro-img"
