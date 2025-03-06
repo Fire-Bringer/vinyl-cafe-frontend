@@ -39,21 +39,21 @@ const Events = () => {
       details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
     },
     {
-      src: '/avalanche-ig.jpg',
+      src: '/avalanche-10.jpg',
       alt: 'Avalanche 18 event image',
-      date: '9/4',
-      day: 'SAT',
-      title: 'Sounds from the Underground',
-      time: 'OPEN 16:00-22:00',
+      date: '10/15',
+      day: 'SUN',
+      title: 'AVALANCHE X',
+      time: 'OPEN 17:00-22:00',
       details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
     },
     {
-      src: '/choco-party.jpg',
+      src: '/babel-10.jpg',
       alt: 'Chocolate party event image',
-      date: '5/24',
+      date: '8/10',
       day: 'FRI',
-      title: 'The Chocolate Party',
-      time: 'OPEN 19:00-23:00',
+      title: 'BABEL X',
+      time: 'OPEN 18:30-23:00',
       details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
     },
   ];

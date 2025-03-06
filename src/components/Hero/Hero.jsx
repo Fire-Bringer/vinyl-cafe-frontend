@@ -32,7 +32,7 @@ const Hero = () => {
   const prevImageRef = useRef(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
-  const totalImages = 15 // Total number of images to load (25 album covers + 1 main image)
+  const totalImages = 15 // Total number of images to load (15 album covers + 1 main image)
 
   const previewImages = [
     { src: "/hero/vinyl_cafe1.webp", alt: "First hero image cover" },
