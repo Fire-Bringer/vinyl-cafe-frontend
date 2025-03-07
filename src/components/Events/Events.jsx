@@ -17,7 +17,10 @@ const Events = () => {
   const [eventDay, setEventDay] = useState('SAT');
   const [eventTitle, setEventTitle] = useState('Sounds from the Underground');
   const [eventTime, setEventTime] = useState('OPEN 16:00-22:00');
-  const [eventDetails, setEventDetails] = useState('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.');
+  const [eventDetails, setEventDetails] = useState('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.');
+
+  // Add a state to track when images are preloaded
+  const [imagesPreloaded, setImagesPreloaded] = useState(false);
 
   const flyerImages = [
     {
@@ -27,7 +30,7 @@ const Events = () => {
       day: 'SAT',
       title: 'Sounds from the Underground',
       time: 'OPEN 16:00-22:00',
-      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
     },
     {
       src: '/choco-party.jpg',
@@ -36,7 +39,7 @@ const Events = () => {
       day: 'FRI',
       title: 'The Chocolate Party',
       time: 'OPEN 19:00-23:00',
-      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
     },
     {
       src: '/avalanche-10.jpg',
@@ -45,7 +48,7 @@ const Events = () => {
       day: 'SUN',
       title: 'AVALANCHE X',
       time: 'OPEN 17:00-22:00',
-      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
     },
     {
       src: '/babel-10.jpg',
@@ -54,31 +57,64 @@ const Events = () => {
       day: 'FRI',
       title: 'BABEL X',
       time: 'OPEN 18:30-23:00',
-      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
     },
   ];
 
-  // NEW TEST
+  // Add this new useEffect for image preloading BEFORE your main useEffect
   useEffect(() => {
-    const flyerImgs = flyerImages; // Use the image data array
+    // Create an array to store the preloaded image objects
+    const preloadedImages = [];
+
+    // Track how many images have been loaded
+    let loadedCount = 0;
+
+    // Preload all images
+    flyerImages.forEach((flyer) => {
+      // Use window.Image explicitly to avoid the naming conflict
+      const img = new window.Image();
+
+      // Add an onload handler to track when all images are loaded
+      img.onload = () => {
+        loadedCount++;
+        // When all images are loaded, update the state
+        if (loadedCount === flyerImages.length) {
+          setImagesPreloaded(true);
+          console.log('All flyer images preloaded successfully');
+        }
+      };
+
+      // Set the src to start loading the image
+      img.src = flyer.src;
+
+      // Store the image object in the array
+      preloadedImages.push(img);
+    });
+  }, []); // Empty dependency array ensures this runs only once
+
+  // Your existing animation useEffect
+  useEffect(() => {
+    const flyerImgs = flyerImages;
     const mainFlyer = mainFlyerRef.current;
-    const prevArrow = prevArrowRef.current; // Get from ref
-    const nextArrow = nextArrowRef.current; // Get from ref
+    const prevArrow = prevArrowRef.current;
+    const nextArrow = nextArrowRef.current;
     const flyerContentDiv = flyerContentRef.current;
 
     if (!mainFlyer || !flyerImgs || !prevArrow || !nextArrow || !flyerContentDiv) {
-      return; // Ensure elements are available
+      return;
     }
 
     let currentIndex = 0;
 
+    // Modify your updateFlyer function to leverage preloaded images
     function updateFlyer(index) {
       gsap.to(mainFlyer, {
         duration: 0.5,
         scale: 0,
         opacity: 0,
         onComplete: () => {
-          setMainFlyerSrc(flyerImgs[index].src); // Update the state!
+          // Since images are preloaded, this state update will be faster
+          setMainFlyerSrc(flyerImgs[index].src);
           gsap.to(mainFlyer, { duration: 0.5, scale: 1, opacity: 1 });
         },
       });
@@ -90,7 +126,7 @@ const Events = () => {
         x: 100,
         opacity: 0,
         onComplete: () => {
-          setEventDate(flyerImgs[index].date); // Update the state!
+          setEventDate(flyerImgs[index].date);
           setEventDay(flyerImgs[index].day);
           setEventTitle(flyerImgs[index].title);
           setEventTime(flyerImgs[index].time);
@@ -101,24 +137,27 @@ const Events = () => {
     }
 
     prevArrow.addEventListener('click', () => {
-      console.log('test click 1');
       currentIndex = currentIndex > 0 ? currentIndex - 1 : flyerImgs.length - 1;
       updateFlyer(currentIndex);
       updateContent(currentIndex);
     });
 
     nextArrow.addEventListener('click', () => {
-      console.log('test click 2');
       currentIndex = currentIndex < flyerImgs.length - 1 ? currentIndex + 1 : 0;
       updateFlyer(currentIndex);
       updateContent(currentIndex);
     });
 
-    // Set up initial image and number
-    updateFlyer(0); // Show the first image initially.
+    // Initial setup
+    updateFlyer(0);
 
-  }, []);
+    // Cleanup function to remove event listeners
+    return () => {
+      prevArrow.removeEventListener('click', () => {});
+      nextArrow.removeEventListener('click', () => {});
+    };
 
+  }, []); // Keep the empty dependency array
 
   return (
     <section id="Events" className="h-auto flex flex-col items-center">
@@ -160,6 +199,7 @@ const Events = () => {
               alt="Event flyer"
               width={1080}
               height={1350}
+              priority={true} // Add priority for the first image
               className="w-full object-contain rounded-[20px] shadower"
             />
           </div>
