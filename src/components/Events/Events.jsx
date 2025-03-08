@@ -61,37 +61,6 @@ const Events = () => {
     },
   ];
 
-  // Add this new useEffect for image preloading BEFORE your main useEffect
-  useEffect(() => {
-    // Create an array to store the preloaded image objects
-    const preloadedImages = [];
-
-    // Track how many images have been loaded
-    let loadedCount = 0;
-
-    // Preload all images
-    flyerImages.forEach((flyer) => {
-      // Use window.Image explicitly to avoid the naming conflict
-      const img = new window.Image();
-
-      // Add an onload handler to track when all images are loaded
-      img.onload = () => {
-        loadedCount++;
-        // When all images are loaded, update the state
-        if (loadedCount === flyerImages.length) {
-          setImagesPreloaded(true);
-          console.log('All flyer images preloaded successfully');
-        }
-      };
-
-      // Set the src to start loading the image
-      img.src = flyer.src;
-
-      // Store the image object in the array
-      preloadedImages.push(img);
-    });
-  }, []); // Empty dependency array ensures this runs only once
-
   // Your existing animation useEffect
   useEffect(() => {
     const flyerImgs = flyerImages;
@@ -192,14 +161,14 @@ const Events = () => {
         <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-2 lg:gap-4 w-full mt-4">
 
           {/* Event Flyer */}
-          <div className="w-[18rem] lg:w-[25rem] relative mb-96 md:mb-0" ref={mainFlyerRef}>
+          <div className="w-[18rem] lg:w-[25rem] relative mb-[25rem] md:mb-0" ref={mainFlyerRef}>
             {flyerImages.map((flyer, index) => (
               <div
                 key={index}
                 className={`absolute top-0 left-0 w-full ${
                   index === currentFlyerIndex
-                    ? 'opacity-100 z-10'
-                    : 'opacity-0 z-0'
+                    ? 'opacity-100 z-0'
+                    : 'opacity-0 -z-10'
                 }`}
               >
                 <Image
@@ -207,7 +176,7 @@ const Events = () => {
                   alt={flyer.alt}
                   width={1080}
                   height={1350}
-                  priority={true} // Prioritize all images
+                  priority={index === 0} // Only prioritize the first image
                   className="w-full object-contain rounded-[20px] shadower"
                 />
               </div>

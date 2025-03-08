@@ -35,7 +35,7 @@ const Menu = () => {
   }, [isModalOpen]);
 
   return (
-    <section id="Menu" className="flex flex-col justify-center items-center py-16">
+    <section id="Menu" className="flex flex-col justify-center items-center pb-16 md:pt-16">
 
       {/* Menu Heading */}
       <h2 className="font-display text-4xl">Menu</h2>
