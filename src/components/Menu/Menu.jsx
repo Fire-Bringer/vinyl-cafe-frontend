@@ -1,6 +1,6 @@
 import Image from "next/image";
 import FileIcon from "../SVGs/File-icon";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 
 const Menu = () => {
@@ -9,18 +9,24 @@ const Menu = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  // Track animation instances for cleanup
+  const animationsRef = useRef({
+    backdrop: null,
+    content: null
+  });
 
-  const closeModal = () => {
+  const openModal = useCallback(() => {
+    setIsModalOpen(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
 
   // Initialize modal on first render
   useEffect(() => {
     if (modalContactRef.current && isFirstRender) {
-      // Set initial state with GSAP instead of direct style manipulation
+      // Set initial state with GSAP
       gsap.set(modalContactRef.current, {
         opacity: 0,
         pointerEvents: "none",
@@ -28,59 +34,105 @@ const Menu = () => {
       });
       setIsFirstRender(false);
     }
+
+    // Cleanup function to kill any animations when component unmounts
+    return () => {
+      // Kill any animations that might be running
+      if (modalContactRef.current) {
+        gsap.killTweensOf(modalContactRef.current);
+      }
+      if (modalContentRef.current) {
+        gsap.killTweensOf(modalContentRef.current);
+      }
+    };
   }, [isFirstRender]);
 
-  // Handle modal open/close animations
+  // Handle modal open/close animations with proper cleanup
   useEffect(() => {
     if (!modalContactRef.current || isFirstRender) return;
 
+    // Clean up any existing animations before creating new ones
+    if (animationsRef.current.backdrop) {
+      animationsRef.current.backdrop.kill();
+    }
+    if (animationsRef.current.content) {
+      animationsRef.current.content.kill();
+    }
+
     if (isModalOpen) {
       // Show backdrop first
-      gsap.to(modalContactRef.current, {
+      animationsRef.current.backdrop = gsap.to(modalContactRef.current, {
         opacity: 1,
-        duration: 0.7,
+        duration: 0.5, // Slightly faster for better UX
         ease: "power2.out",
         pointerEvents: "auto"
       });
 
       // Then animate in the content
       if (modalContentRef.current) {
-        gsap.fromTo(modalContentRef.current,
+        animationsRef.current.content = gsap.fromTo(modalContentRef.current,
           { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.7, delay: 0.1, ease: "back.out" }
+          { scale: 1, opacity: 1, duration: 0.5, delay: 0.1, ease: "back.out" }
         );
       }
     } else {
       // Animate out the content first
       if (modalContentRef.current) {
-        gsap.to(modalContentRef.current, {
+        animationsRef.current.content = gsap.to(modalContentRef.current, {
           scale: 0.8,
           opacity: 0,
-          duration: 0.7,
+          duration: 0.5, // Slightly faster for better UX
           ease: "power2.in"
         });
       }
 
       // Then hide the backdrop
-      gsap.to(modalContactRef.current, {
+      animationsRef.current.backdrop = gsap.to(modalContactRef.current, {
         opacity: 0,
-        duration: 0.7,
+        duration: 0.5,
         delay: 0.2,
         pointerEvents: "none",
         ease: "power2.in"
       });
     }
+
+    // Cleanup function that kills animations when effect re-runs or component unmounts
+    return () => {
+      if (animationsRef.current.backdrop) {
+        animationsRef.current.backdrop.kill();
+      }
+      if (animationsRef.current.content) {
+        animationsRef.current.content.kill();
+      }
+    };
   }, [isModalOpen, isFirstRender]);
+
+  // Handle click events on modal backdrop - with cleanup
+  useEffect(() => {
+    const modalEl = modalContactRef.current;
+    if (!modalEl) return;
+
+    const handleBackdropClick = (e) => {
+      if (e.target === modalEl) {
+        closeModal();
+      }
+    };
+
+    modalEl.addEventListener('click', handleBackdropClick);
+
+    // Clean up event listener when component unmounts
+    return () => {
+      modalEl.removeEventListener('click', handleBackdropClick);
+    };
+  }, [closeModal]);
 
   return (
     <section id="Menu" className="flex flex-col justify-center items-center pb-16 md:pt-16">
-
       {/* Menu Heading */}
       <h2 className="font-display text-4xl">Menu</h2>
 
       {/* Image Grid */}
       <div className="grid grid-cols-3 grid-rows-2 w-full md:w-4/5 xl:w-1/2 2xl:w-2/5 mt-4">
-
         <div>
           <Image
             src="/menu/best1.webp"
@@ -140,31 +192,26 @@ const Menu = () => {
             className="col-start-3 row-start-2"
           />
         </div>
-
-
       </div>
 
       {/* Description */}
-      <p className="font-body text-base w-4/5 md:w-3/5 xl:w-1/4 mt-4">Menu description with a good number of words which will fill up this text box. It is my hope the this lorem will do its job properly. </p>
+      <p className="font-body text-base w-4/5 md:w-3/5 xl:w-1/4 mt-4">
+        Menu description with a good number of words which will fill up this text box. It is my hope the this lorem will do its job properly.
+      </p>
 
       {/* Links */}
       <button
         className="flex gap-2 mt-4 cursor-pointer"
-        onClick={() => openModal()}
+        onClick={openModal}
       >
         <FileIcon/>
         <h6>PDF MENU</h6>
       </button>
 
-      {/* Modal - Keep it always in DOM but control visibility with GSAP */}
+      {/* Modal - Always in DOM but visibility controlled by GSAP */}
       <div
         ref={modalContactRef}
         className="fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center"
-        onClick={(e) => {
-          if (e.target === modalContactRef.current) {
-            closeModal();
-          }
-        }}
       >
         <div ref={modalContentRef} className="bg-background-600 rounded-[20px] p-4 overflow-hidden">
           <Image
@@ -176,7 +223,6 @@ const Menu = () => {
           />
         </div>
       </div>
-
     </section>
   );
 };

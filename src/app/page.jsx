@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState, lazy, Suspense, useRef } from 'react';
 import Navbar from '@/components/Navbar/Navbar.js';
 import Hero from '@/components/Hero/Hero';
 
@@ -14,6 +14,46 @@ const Break2 = lazy(() => import('@/components/Break/Break2'));
 const Gallery = lazy(() => import('@/components/Gallery/Gallery'));
 const Access = lazy(() => import('@/components/Access/Access'));
 const Footer = lazy(() => import('@/components/Footer/Footer'));
+
+// Custom hook for intersection observer
+function useIntersectionObserver(ref, options = {}) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      // Update state when element enters viewport
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        // Once loaded, no need to keep observing
+        observer.unobserve(entry.target);
+      }
+    }, options);
+
+    observer.observe(ref.current);
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [ref, options]);
+
+  return isVisible;
+}
+
+// Component wrapper for lazy loading on scroll
+function LazyLoadSection({ children, threshold = 0.1, rootMargin = "200px" }) {
+  const sectionRef = useRef(null);
+  const isVisible = useIntersectionObserver(sectionRef, { threshold, rootMargin });
+
+  return (
+    <div ref={sectionRef} className="w-full">
+      {isVisible ? children : <LoadingPlaceholder />}
+    </div>
+  );
+}
 
 function Homepage() {
   const [showContent, setShowContent] = useState(false);
@@ -68,29 +108,38 @@ function Homepage() {
             <Latest/>
           </Suspense>
 
-          <Suspense fallback={<LoadingFallback />}>
-            <Break/>
-            <About/>
-          </Suspense>
+          <LazyLoadSection>
+            <Suspense fallback={<LoadingFallback />}>
+              <Break/>
+              <About/>
+            </Suspense>
+          </LazyLoadSection>
 
-          {/* Image-heavy components get their own boundaries */}
-          <Suspense fallback={<LoadingFallback />}>
-            <Events/>
-          </Suspense>
+          <LazyLoadSection rootMargin="300px">
+            <Suspense fallback={<LoadingFallback />}>
+              <Events/>
+            </Suspense>
+          </LazyLoadSection>
 
-          <Suspense fallback={<LoadingFallback />}>
-            <Menu/>
-            <Break2/>
-          </Suspense>
+          <LazyLoadSection>
+            <Suspense fallback={<LoadingFallback />}>
+              <Menu/>
+              <Break2/>
+            </Suspense>
+          </LazyLoadSection>
 
-          <Suspense fallback={<LoadingFallback />}>
-            <Gallery/>
-          </Suspense>
+          <LazyLoadSection>
+            <Suspense fallback={<LoadingFallback />}>
+              <Gallery/>
+            </Suspense>
+          </LazyLoadSection>
 
-          <Suspense fallback={<LoadingFallback />}>
-            <Access/>
-            <Footer/>
-          </Suspense>
+          <LazyLoadSection>
+            <Suspense fallback={<LoadingFallback />}>
+              <Access/>
+              <Footer/>
+            </Suspense>
+          </LazyLoadSection>
         </>
       )}
     </div>
@@ -100,9 +149,16 @@ function Homepage() {
 // Helper component for cleaner code
 function LoadingFallback() {
   return (
-    <div className="loading-container">
+    <div className="loading-container py-20 flex justify-center items-center">
       <div className="loading-spinner"></div>
     </div>
+  );
+}
+
+// Simple placeholder that takes space but doesn't require resources
+function LoadingPlaceholder() {
+  return (
+    <div className="py-20 w-full animate-pulse bg-background-800/10" />
   );
 }
 

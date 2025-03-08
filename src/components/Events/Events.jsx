@@ -1,12 +1,11 @@
 'use client';
 import Image from "next/image";
 import { RiArrowLeftLine, RiArrowRightLine } from '@remixicon/react';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState, useCallback} from 'react';
 import gsap from 'gsap';
 
 const Events = () => {
-
-  // Slider Definitions
+  // Your existing state and refs
   const mainFlyerRef = useRef(null);
   const prevArrowRef = useRef(null);
   const nextArrowRef = useRef(null);
@@ -17,11 +16,9 @@ const Events = () => {
   const [eventDay, setEventDay] = useState('SAT');
   const [eventTitle, setEventTitle] = useState('Sounds from the Underground');
   const [eventTime, setEventTime] = useState('OPEN 16:00-22:00');
-  const [eventDetails, setEventDetails] = useState('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.');
+  const [eventDetails, setEventDetails] = useState('Lorem Ipsum is simply dummy text of the printing and typesetting industry...');
 
-  // Add a state to track when images are preloaded
-  const [imagesPreloaded, setImagesPreloaded] = useState(false);
-
+  // Your flyerImages array remains the same
   const flyerImages = [
     {
       src: '/avalanche-ig.jpg',
@@ -61,72 +58,106 @@ const Events = () => {
     },
   ];
 
-  // Your existing animation useEffect
-  useEffect(() => {
-    const flyerImgs = flyerImages;
+  // Create callback functions that don't change on every render
+  const updateFlyer = useCallback((index) => {
     const mainFlyer = mainFlyerRef.current;
+    if (!mainFlyer) return;
+
+    // Store the animation in a variable so we can kill it if needed
+    const fadeOutAnim = gsap.to(mainFlyer, {
+      duration: 0.5,
+      opacity: 0.3,
+      scale: 0.95,
+      onComplete: () => {
+        setCurrentFlyerIndex(index);
+        gsap.to(mainFlyer, {
+          duration: 0.5,
+          opacity: 1,
+          scale: 1
+        });
+      },
+    });
+
+    // Return the animation for potential cleanup
+    return fadeOutAnim;
+  }, []);
+
+  const updateContent = useCallback((index) => {
+    const flyerContentDiv = flyerContentRef.current;
+    if (!flyerContentDiv || !flyerImages[index]) return;
+
+    // Store animation in variable
+    const contentAnim = gsap.to(flyerContentDiv, {
+      duration: 0.5,
+      x: 100,
+      opacity: 0,
+      onComplete: () => {
+        setEventDate(flyerImages[index].date);
+        setEventDay(flyerImages[index].day);
+        setEventTitle(flyerImages[index].title);
+        setEventTime(flyerImages[index].time);
+        setEventDetails(flyerImages[index].details);
+
+        gsap.to(flyerContentDiv, {
+          duration: 0.5,
+          x: 0,
+          opacity: 1
+        });
+      },
+    });
+
+    // Return the animation for potential cleanup
+    return contentAnim;
+  }, [flyerImages]);
+
+  // Navigation handlers with proper callback references
+  const handlePrev = useCallback(() => {
+    const newIndex = currentFlyerIndex > 0 ? currentFlyerIndex - 1 : flyerImages.length - 1;
+    updateFlyer(newIndex);
+    updateContent(newIndex);
+  }, [currentFlyerIndex, flyerImages.length, updateFlyer, updateContent]);
+
+  const handleNext = useCallback(() => {
+    const newIndex = currentFlyerIndex < flyerImages.length - 1 ? currentFlyerIndex + 1 : 0;
+    updateFlyer(newIndex);
+    updateContent(newIndex);
+  }, [currentFlyerIndex, flyerImages.length, updateFlyer, updateContent]);
+
+  // Setup and cleanup event listeners - only once
+  useEffect(() => {
     const prevArrow = prevArrowRef.current;
     const nextArrow = nextArrowRef.current;
-    const flyerContentDiv = flyerContentRef.current;
 
-    if (!mainFlyer || !flyerImgs || !prevArrow || !nextArrow || !flyerContentDiv) {
-      return;
-    }
+    if (!prevArrow || !nextArrow) return;
 
-    // Modify updateFlyer function to use the index state
-    function updateFlyer(index) {
+    // Add event listeners
+    prevArrow.addEventListener('click', handlePrev);
+    nextArrow.addEventListener('click', handleNext);
 
-      gsap.to(mainFlyer, {
-        duration: 0.5,
-        opacity: 0.3,
-        scale: 0.95,
-        onComplete: () => {
-          setCurrentFlyerIndex(index);
-          gsap.to(mainFlyer, {
-            duration: 0.5,
-            opacity: 1,
-            scale: 1
-          });
-        },
-      });
-    }
-
-    function updateContent(index) {
-      gsap.to(flyerContentDiv, {
-        duration: 0.5,
-        x: 100,
-        opacity: 0,
-        onComplete: () => {
-          setEventDate(flyerImgs[index].date);
-          setEventDay(flyerImgs[index].day);
-          setEventTitle(flyerImgs[index].title);
-          setEventTime(flyerImgs[index].time);
-          setEventDetails(flyerImgs[index].details);
-          gsap.to(flyerContentDiv, { duration: 0.5, x: 0, opacity: 1 });
-        },
-      });
-    }
-
-    prevArrow.addEventListener('click', () => {
-      const newIndex = currentFlyerIndex > 0 ? currentFlyerIndex - 1 : flyerImgs.length - 1;
-      updateFlyer(newIndex);
-      updateContent(newIndex);
-    });
-
-    nextArrow.addEventListener('click', () => {
-      const newIndex = currentFlyerIndex < flyerImgs.length - 1 ? currentFlyerIndex + 1 : 0;
-      updateFlyer(newIndex);
-      updateContent(newIndex);
-    });
-
-    // Cleanup function
+    // Return cleanup function that removes the EXACT SAME handler functions
     return () => {
-      prevArrow.removeEventListener('click', () => {});
-      nextArrow.removeEventListener('click', () => {});
+      prevArrow.removeEventListener('click', handlePrev);
+      nextArrow.removeEventListener('click', handleNext);
+
+      // Context.clear() is another approach, but we're not using it here
+      // Manually kill any ongoing animations
+      gsap.killTweensOf(mainFlyerRef.current);
+      gsap.killTweensOf(flyerContentRef.current);
     };
+  }, [handlePrev, handleNext]); // Only re-run when handlers change (rare)
 
-  }, [currentFlyerIndex]);
+  // Initialize content on first render
+  useEffect(() => {
+    if (flyerImages.length > 0) {
+      setEventDate(flyerImages[0].date);
+      setEventDay(flyerImages[0].day);
+      setEventTitle(flyerImages[0].title);
+      setEventTime(flyerImages[0].time);
+      setEventDetails(flyerImages[0].details);
+    }
+  }, []);
 
+  // Rest of your component remains the same
   return (
     <section id="Events" className="h-auto flex flex-col items-center md:mb-20 lg:mb-40">
 
