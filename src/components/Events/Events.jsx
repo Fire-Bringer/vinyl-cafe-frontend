@@ -106,13 +106,18 @@ const Events = () => {
 
     // Modify updateFlyer function to use the index state
     function updateFlyer(index) {
+
       gsap.to(mainFlyer, {
         duration: 0.5,
-        scale: 0.5,
-        opacity: 0,
+        opacity: 0.3,
+        scale: 0.95,
         onComplete: () => {
           setCurrentFlyerIndex(index);
-          gsap.to(mainFlyer, { duration: 0.5, scale: 1, opacity: 1 });
+          gsap.to(mainFlyer, {
+            duration: 0.5,
+            opacity: 1,
+            scale: 1
+          });
         },
       });
     }
@@ -151,10 +156,10 @@ const Events = () => {
       nextArrow.removeEventListener('click', () => {});
     };
 
-  }, [currentFlyerIndex]); 
+  }, [currentFlyerIndex]);
 
   return (
-    <section id="Events" className="h-auto flex flex-col items-center">
+    <section id="Events" className="h-auto flex flex-col items-center md:mb-20 lg:mb-40">
 
       {/* Event Backdrop */}
       <div className="-z-10 mt-4 relative w-full h-[20rem] md:h-[25rem] bg-[url(/hero/vinyl_cafe5.webp)] bg-cover bg-center">
@@ -187,18 +192,22 @@ const Events = () => {
         <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-2 lg:gap-4 w-full mt-4">
 
           {/* Event Flyer */}
-          <div className="w-[18rem] lg:w-[25rem]" ref={mainFlyerRef}>
+          <div className="w-[18rem] lg:w-[25rem] relative mb-96 md:mb-0" ref={mainFlyerRef}>
             {flyerImages.map((flyer, index) => (
               <div
                 key={index}
-                className={`${index === currentFlyerIndex ? 'block' : 'hidden'}`}
+                className={`absolute top-0 left-0 w-full ${
+                  index === currentFlyerIndex
+                    ? 'opacity-100 z-10'
+                    : 'opacity-0 z-0'
+                }`}
               >
                 <Image
                   src={flyer.src}
                   alt={flyer.alt}
                   width={1080}
                   height={1350}
-                  priority={index === 0} // Priority only for first image
+                  priority={true} // Prioritize all images
                   className="w-full object-contain rounded-[20px] shadower"
                 />
               </div>

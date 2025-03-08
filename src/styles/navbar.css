@@ -30,7 +30,7 @@
   height: 100vh;
   padding: 2em;
   background: #DCC8AB;
-  z-index: 2;
+  z-index: 50;
   display: flex;
   clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
 }
