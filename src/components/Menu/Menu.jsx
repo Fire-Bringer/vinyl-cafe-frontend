@@ -21,8 +21,8 @@ const Menu = () => {
         gsap.to(modalContactRef.current, { scale: 1, opacity: 1, duration: 0.5, pointerEvents: "auto" });
     } else {
         // Only animate when isModalOpen becomes false *after* it has been true
-        if (modalContactRef.current && modalContactRef.current.style.scale !== "0") {  // Check if it has been opened
-            gsap.to(modalContactRef.current, { scale: 0, opacity: 0, duration: 0.5, pointerEvents: "none"});
+        if (modalContactRef.current && modalContactRef.current.style.scale !== "0.7") {  // Check if it has been opened
+            gsap.to(modalContactRef.current, { scale: 0.7, opacity: 0, duration: 0.5, pointerEvents: "none"});
         } else {
             // For the very first render, just set the styles directly (no animation)
             if (modalContactRef.current) {
@@ -111,7 +111,7 @@ const Menu = () => {
 
       {/* Links */}
       <button
-        className="flex gap-2 mt-4"
+        className="flex gap-2 mt-4 cursor-pointer"
         onClick={() => openModal()}
       >
         <FileIcon/>
@@ -121,7 +121,7 @@ const Menu = () => {
       {/* Modal */}
       <div
         ref={modalContactRef}
-        className={`fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center transition-opacity duration-500 ${isModalOpen ? 'flex' : 'hidden'}`} // Use state for classes
+        className={`fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center transition-opacity duration-500 ${isModalOpen ? 'opacity-100' : 'opacity-0'}`} // Use state for classes
         onClick={(e) => { // Close only if click is directly on the backdrop
           if (e.target === modalContactRef.current) {
             closeModal();
