@@ -4,35 +4,73 @@ import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 
 const Menu = () => {
-
   const modalContactRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal open/close
+  const modalContentRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const openModal = () => {
-    setIsModalOpen(true); // Set state first
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Set state first
+    setIsModalOpen(false);
   };
 
+  // Initialize modal on first render
   useEffect(() => {
-    if (isModalOpen) {
-        gsap.to(modalContactRef.current, { scale: 1, opacity: 1, duration: 0.5, pointerEvents: "auto" });
-    } else {
-        // Only animate when isModalOpen becomes false *after* it has been true
-        if (modalContactRef.current && modalContactRef.current.style.scale !== "0.7") {  // Check if it has been opened
-            gsap.to(modalContactRef.current, { scale: 0.7, opacity: 0, duration: 0.5, pointerEvents: "none"});
-        } else {
-            // For the very first render, just set the styles directly (no animation)
-            if (modalContactRef.current) {
-                modalContactRef.current.style.scale = 0.7;
-                modalContactRef.current.style.opacity = 0;
-                modalContactRef.current.style.pointerEvents = "none";
-            }
-        }
+    if (modalContactRef.current && isFirstRender) {
+      // Set initial state with GSAP instead of direct style manipulation
+      gsap.set(modalContactRef.current, {
+        opacity: 0,
+        pointerEvents: "none",
+        display: "flex" // Always have it in the DOM but invisible
+      });
+      setIsFirstRender(false);
     }
-  }, [isModalOpen]);
+  }, [isFirstRender]);
+
+  // Handle modal open/close animations
+  useEffect(() => {
+    if (!modalContactRef.current || isFirstRender) return;
+
+    if (isModalOpen) {
+      // Show backdrop first
+      gsap.to(modalContactRef.current, {
+        opacity: 1,
+        duration: 0.7,
+        ease: "power2.out",
+        pointerEvents: "auto"
+      });
+
+      // Then animate in the content
+      if (modalContentRef.current) {
+        gsap.fromTo(modalContentRef.current,
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.7, delay: 0.1, ease: "back.out" }
+        );
+      }
+    } else {
+      // Animate out the content first
+      if (modalContentRef.current) {
+        gsap.to(modalContentRef.current, {
+          scale: 0.8,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power2.in"
+        });
+      }
+
+      // Then hide the backdrop
+      gsap.to(modalContactRef.current, {
+        opacity: 0,
+        duration: 0.7,
+        delay: 0.2,
+        pointerEvents: "none",
+        ease: "power2.in"
+      });
+    }
+  }, [isModalOpen, isFirstRender]);
 
   return (
     <section id="Menu" className="flex flex-col justify-center items-center pb-16 md:pt-16">
@@ -118,27 +156,25 @@ const Menu = () => {
         <h6>PDF MENU</h6>
       </button>
 
-      {/* Modal */}
+      {/* Modal - Keep it always in DOM but control visibility with GSAP */}
       <div
         ref={modalContactRef}
-        className={`fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center transition-opacity duration-500 ${isModalOpen ? 'opacity-100' : 'opacity-0'}`} // Use state for classes
-        onClick={(e) => { // Close only if click is directly on the backdrop
+        className="fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center"
+        onClick={(e) => {
           if (e.target === modalContactRef.current) {
             closeModal();
           }
         }}
       >
-        {isModalOpen && (
+        <div ref={modalContentRef} className="bg-background-600 rounded-[20px] p-4 overflow-hidden">
           <Image
-            onClose={closeModal} // Pass the closeModal function as a prop
-            onClick={(e) => e.stopPropagation()} // Keep this!
-            className="bg-background-600 rounded-[20px] p-4 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
             src='/menu.png'
             alt='Menu image'
             width={500}
             height={1000}
           />
-        )}
+        </div>
       </div>
 
     </section>
