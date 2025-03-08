@@ -26,7 +26,7 @@ const Menu = () => {
         } else {
             // For the very first render, just set the styles directly (no animation)
             if (modalContactRef.current) {
-                modalContactRef.current.style.scale = 0;
+                modalContactRef.current.style.scale = 0.7;
                 modalContactRef.current.style.opacity = 0;
                 modalContactRef.current.style.pointerEvents = "none";
             }
