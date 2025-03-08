@@ -86,8 +86,8 @@ const Gallery = () => {
             key={index}
             src={src}
             alt={`Gallery image ${index + 1}`}
-            width={900}
-            height={900}
+            width={450}
+            height={450}
             className="rounded-[20px] shadower cursor-pointer"
             onClick={() => openModal(src)}
           />
@@ -109,8 +109,8 @@ const Gallery = () => {
             <Image
               src={modalImage}
               alt="Modal Image"
-              width={900}
-              height={900}
+              width={450}
+              height={450}
               className="rounded-[20px] object-contain aspect-square"
             />
           )}
