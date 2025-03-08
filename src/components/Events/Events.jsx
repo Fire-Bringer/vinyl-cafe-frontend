@@ -12,7 +12,7 @@ const Events = () => {
   const nextArrowRef = useRef(null);
   const flyerContentRef = useRef(null);
 
-  const [mainFlyerSrc, setMainFlyerSrc] = useState('/avalanche-ig.jpg');
+  const [currentFlyerIndex, setCurrentFlyerIndex] = useState(0);
   const [eventDate, setEventDate] = useState('9/4');
   const [eventDay, setEventDay] = useState('SAT');
   const [eventTitle, setEventTitle] = useState('Sounds from the Underground');
@@ -104,17 +104,14 @@ const Events = () => {
       return;
     }
 
-    let currentIndex = 0;
-
-    // Modify your updateFlyer function to leverage preloaded images
+    // Modify updateFlyer function to use the index state
     function updateFlyer(index) {
       gsap.to(mainFlyer, {
         duration: 0.5,
-        scale: 0,
+        scale: 0.5,
         opacity: 0,
         onComplete: () => {
-          // Since images are preloaded, this state update will be faster
-          setMainFlyerSrc(flyerImgs[index].src);
+          setCurrentFlyerIndex(index);
           gsap.to(mainFlyer, { duration: 0.5, scale: 1, opacity: 1 });
         },
       });
@@ -137,27 +134,24 @@ const Events = () => {
     }
 
     prevArrow.addEventListener('click', () => {
-      currentIndex = currentIndex > 0 ? currentIndex - 1 : flyerImgs.length - 1;
-      updateFlyer(currentIndex);
-      updateContent(currentIndex);
+      const newIndex = currentFlyerIndex > 0 ? currentFlyerIndex - 1 : flyerImgs.length - 1;
+      updateFlyer(newIndex);
+      updateContent(newIndex);
     });
 
     nextArrow.addEventListener('click', () => {
-      currentIndex = currentIndex < flyerImgs.length - 1 ? currentIndex + 1 : 0;
-      updateFlyer(currentIndex);
-      updateContent(currentIndex);
+      const newIndex = currentFlyerIndex < flyerImgs.length - 1 ? currentFlyerIndex + 1 : 0;
+      updateFlyer(newIndex);
+      updateContent(newIndex);
     });
 
-    // Initial setup
-    updateFlyer(0);
-
-    // Cleanup function to remove event listeners
+    // Cleanup function
     return () => {
       prevArrow.removeEventListener('click', () => {});
       nextArrow.removeEventListener('click', () => {});
     };
 
-  }, []); // Keep the empty dependency array
+  }, [currentFlyerIndex]); 
 
   return (
     <section id="Events" className="h-auto flex flex-col items-center">
@@ -194,14 +188,21 @@ const Events = () => {
 
           {/* Event Flyer */}
           <div className="w-[18rem] lg:w-[25rem]" ref={mainFlyerRef}>
-            <Image
-              src={mainFlyerSrc}
-              alt="Event flyer"
-              width={1080}
-              height={1350}
-              priority={true} // Add priority for the first image
-              className="w-full object-contain rounded-[20px] shadower"
-            />
+            {flyerImages.map((flyer, index) => (
+              <div
+                key={index}
+                className={`${index === currentFlyerIndex ? 'block' : 'hidden'}`}
+              >
+                <Image
+                  src={flyer.src}
+                  alt={flyer.alt}
+                  width={1080}
+                  height={1350}
+                  priority={index === 0} // Priority only for first image
+                  className="w-full object-contain rounded-[20px] shadower"
+                />
+              </div>
+            ))}
           </div>
 
           {/* Event Details */}
