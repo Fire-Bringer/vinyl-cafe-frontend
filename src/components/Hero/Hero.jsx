@@ -117,7 +117,7 @@ const Hero = () => {
         // Add a small delay to ensure browser has time to render images
         setTimeout(() => {
           setImagesLoaded(true)
-        }, 300)
+        }, 250)
       })
       .catch((error) => {
         console.error("Error loading images:", error)
@@ -136,7 +136,7 @@ const Hero = () => {
       containerRef.current.getBoundingClientRect()
     }
 
-    const tl = gsap.timeline({ delay: 0.5 }) // Add a small delay
+    const tl = gsap.timeline({ delay: 1 }) // Add a small delay
 
     // Moves all columns to the top from the bottom
     tl.to(colRefs.current, {
@@ -414,8 +414,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/anri-p.webp"
                   alt="Anri album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -423,8 +423,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/brother-p.webp"
                   alt="Little Brother album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -432,8 +432,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/camp-lo-p.webp"
                   alt="Camp Lo album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -441,8 +441,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/dilla-p.webp"
                   alt="J Dilla album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -450,8 +450,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/doom-p.webp"
                   alt="MF Doom album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -461,8 +461,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/heron-p.webp"
                   alt="Gill Scott Heron album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -470,8 +470,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/madlib-p.webp"
                   alt="Madlib album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -479,8 +479,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/marvin-p.webp"
                   alt="Marvin Gaye album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -488,8 +488,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/mos-p.webp"
                   alt="Mos Def album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -497,8 +497,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/pete-p.webp"
                   alt="Pete Rock album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -508,8 +508,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/ryo-p.webp"
                   alt="Ryo Fukui album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -517,8 +517,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/sade-p.webp"
                   alt="Sade album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -560,8 +560,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/souls-p.webp"
                   alt="Souls of Mischief album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -569,8 +569,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/taeko-p.webp"
                   alt="Taeko Onuki album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -580,8 +580,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/anri-p.webp"
                   alt="Anri album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -589,8 +589,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/brother-p.webp"
                   alt="Little Brother album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -598,8 +598,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/camp-lo-p.webp"
                   alt="Camp Lo album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -607,8 +607,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/dilla-p.webp"
                   alt="J Dilla album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -616,8 +616,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/doom-p.webp"
                   alt="Doom album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -627,8 +627,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/heron-p.webp"
                   alt="Heron album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -636,8 +636,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/madlib-p.webp"
                   alt="Madlib album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -645,8 +645,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/marvin-p.webp"
                   alt="Marvin Gaye album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -654,8 +654,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/mos-p.webp"
                   alt="Mos Def album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
@@ -663,8 +663,8 @@ const Hero = () => {
                 <NextImage
                   src="/intro/pete-p.webp"
                   alt="Pete Rock album cover"
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="intro-img"
                 />
               </div>
