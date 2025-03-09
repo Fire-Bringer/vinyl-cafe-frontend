@@ -93,7 +93,7 @@ const Hero = () => {
   // Preload all images before rendering
   useEffect(() => {
     // Create an array of all image sources
-    const allImageSources = [
+    const imagePromises = [
       "/intro/anri-p.webp",
       "/intro/brother-p.webp",
       "/intro/camp-lo-p.webp",
@@ -111,20 +111,32 @@ const Hero = () => {
       ...previewImages.map((img) => img.src),
     ]
 
-    // Preload all images using the global Image constructor
-    allImageSources.forEach((src) => {
-      const img = new window.Image()
-      img.src = src
-      img.onload = handleImageLoad
-      img.onerror = handleImageLoad // Count errors as loaded to prevent hanging
-    })
-  }, [handleImageLoad, previewImages])
+    // Wait for all images to load before setting imagesLoaded to true
+    Promise.all(imagePromises)
+      .then(() => {
+        // Add a small delay to ensure browser has time to render images
+        setTimeout(() => {
+          setImagesLoaded(true)
+        }, 300)
+      })
+      .catch((error) => {
+        console.error("Error loading images:", error)
+        // Set images as loaded anyway to prevent UI from hanging
+        setImagesLoaded(true)
+      })
+  }, []) // Empty dependency array since previewImages is defined in the component
 
   // Animation Definition - Only runs after all images are loaded
   useEffect(() => {
     if (!imagesLoaded) return
 
-    const tl = gsap.timeline({ delay: 0 })
+    // Force layout calculation to ensure images are rendered
+    if (containerRef.current) {
+      // This will force a reflow
+      containerRef.current.getBoundingClientRect()
+    }
+
+    const tl = gsap.timeline({ delay: 0.5 }) // Add a small delay
 
     // Moves all columns to the top from the bottom
     tl.to(colRefs.current, {
