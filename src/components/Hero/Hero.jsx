@@ -2,7 +2,7 @@
 import NextImage from "next/image"
 import "@/styles/hero.css"
 import "@/styles/hero-loading.css"
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { RiArrowLeftLongLine, RiArrowRightLongLine } from "@remixicon/react"
 
@@ -30,8 +30,6 @@ const Hero = () => {
   const nextImageRef = useRef(null)
   const prevImageRef = useRef(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
-
-  const totalImages = 9 // Total number of images to load (8 album covers + 1 main image)
 
   const previewImages = [
     { src: "/hero/vinyl_cafe1.webp", alt: "First hero image cover" },
@@ -117,7 +115,7 @@ const Hero = () => {
         // Add a slightly longer delay to ensure browser has fully rendered images
         setTimeout(() => {
           setImagesLoaded(true);
-        }, 500);
+        }, 1000);
       })
       .catch((error) => {
         console.error("Error loading images:", error);
