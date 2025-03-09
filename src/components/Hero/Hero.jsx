@@ -115,7 +115,7 @@ const Hero = () => {
         // Add a slightly longer delay to ensure browser has fully rendered images
         setTimeout(() => {
           setImagesLoaded(true);
-        }, 1000);
+        }, 1500);
       })
       .catch((error) => {
         console.error("Error loading images:", error);
