@@ -6,7 +6,7 @@ const Contact = ({ onClose }) => {
 
       <div className="border w-24 h-[10px] bg-secondary my-4 mx-auto"></div>
 
-      <form className="contact-form max-w-[1000px] m-auto overflow-hidden" action="https://formsubmit.co/" method="post">
+      <form className="contact-form m-auto" action="https://formsubmit.co/" method="post">
 
         <input type="hidden" name="_subject" value="VINYL Message" />
 
@@ -22,12 +22,14 @@ const Contact = ({ onClose }) => {
 
       </form>
 
+      {/*}
       <button
         onClick={onClose}
         className="font-body p-4 bg-background-600 rounded-[20px] nav-shadower"
       >
         Close
-      </button> {/* Add a close button */}
+      </button> {/* Add a close button
+      */}
 
   </div>
   );

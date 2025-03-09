@@ -100,7 +100,7 @@ const Access = () => {
       >
         <div
           ref={modalContentRef}
-          className="bg-background-600 rounded-[20px] overflow-hidden lg:w-2/5"
+          className="bg-background-600 rounded-[20px] overflow-hidden w-4/5 lg:w-2/5"
           onClick={(e) => e.stopPropagation()}
         >
           <Contact onClose={closeModal} />
