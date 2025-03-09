@@ -1,34 +1,58 @@
-'use client';
-import Image from "next/image";
-import { useState, useRef, useEffect, useCallback } from "react";
-import gsap from "gsap";
+"use client"
+import Image from "next/image"
+import { useState, useRef, useEffect, useCallback } from "react"
+import gsap from "gsap"
 
 const Gallery = () => {
-  const [modalImage, setModalImage] = useState(null);
-  const [isFirstRender, setIsFirstRender] = useState(true);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const modalRef = useRef(null);
-  const modalContentRef = useRef(null);
+  const [modalImage, setModalImage] = useState(null)
+  const [isFirstRender, setIsFirstRender] = useState(true)
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const modalRef = useRef(null)
+  const modalContentRef = useRef(null)
+  const imageCache = useRef(new Set())
 
   // Track animation instances for cleanup
   const animationsRef = useRef({
     backdrop: null,
-    content: null
-  });
+    content: null,
+  })
+
+  // Preload images for smoother modal experience
+  useEffect(() => {
+    const imagePaths = [
+      "/gallery/best3.webp",
+      "/gallery/gallery1.webp",
+      "/gallery/gallery2.webp",
+      "/gallery/gallery3.webp",
+      "/gallery/gallery4.webp",
+      "/gallery/gallery5.webp",
+    ]
+
+    // Preload all images that aren't already cached
+    imagePaths.forEach((path) => {
+      if (!imageCache.current.has(path)) {
+        const img = new globalThis.Image()
+        img.src = path
+        img.onload = () => {
+          imageCache.current.add(path)
+        }
+      }
+    })
+  }, [])
 
   // Use useCallback to create stable function references
   const openModal = useCallback((src) => {
-    setImageLoaded(false); // Reset loading state
-    setModalImage(src);
-  }, []);
+    setImageLoaded(false) // Reset loading state
+    setModalImage(src)
+  }, [])
 
   const closeModal = useCallback(() => {
     // Kill any existing animations first
     if (animationsRef.current.content) {
-      animationsRef.current.content.kill();
+      animationsRef.current.content.kill()
     }
     if (animationsRef.current.backdrop) {
-      animationsRef.current.backdrop.kill();
+      animationsRef.current.backdrop.kill()
     }
 
     // Animate out content first
@@ -36,8 +60,8 @@ const Gallery = () => {
       scale: 0.8,
       opacity: 0,
       duration: 0.7,
-      ease: "power2.in"
-    });
+      ease: "power2.in",
+    })
 
     // Then hide backdrop
     animationsRef.current.backdrop = gsap.to(modalRef.current, {
@@ -46,13 +70,28 @@ const Gallery = () => {
       duration: 0.8,
       delay: 0.2,
       ease: "power2.in",
-      onComplete: () => setModalImage(null) // Only reset the image source after animation
-    });
-  }, []);
+      onComplete: () => setModalImage(null), // Only reset the image source after animation
+    })
+  }, [])
 
   const handleImageLoaded = useCallback(() => {
-    setImageLoaded(true);
-  }, []);
+    setImageLoaded(true)
+
+    // Only animate content after image is loaded
+    if (modalContentRef.current) {
+      // Kill any existing content animation
+      if (animationsRef.current.content) {
+        animationsRef.current.content.kill()
+      }
+
+      // Animate in the content now that image is loaded
+      animationsRef.current.content = gsap.fromTo(
+        modalContentRef.current,
+        { scale: 0.8, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.8, ease: "back.out" },
+      )
+    }
+  }, [])
 
   // Initialize modal on first render
   useEffect(() => {
@@ -61,30 +100,27 @@ const Gallery = () => {
       gsap.set(modalRef.current, {
         opacity: 0,
         pointerEvents: "none",
-        display: "flex" // Always have it in the DOM but invisible
-      });
-      setIsFirstRender(false);
+        display: "flex", // Always have it in the DOM but invisible
+      })
+      setIsFirstRender(false)
     }
 
     // Cleanup function for component unmount
     return () => {
       // Kill any animations that might be running
-      gsap.killTweensOf(modalRef.current);
-      gsap.killTweensOf(modalContentRef.current);
-    };
-  }, [isFirstRender]);
+      gsap.killTweensOf(modalRef.current)
+      gsap.killTweensOf(modalContentRef.current)
+    }
+  }, [isFirstRender])
 
-  // Handle modal open animations
+  // Handle modal open animations - only animate backdrop initially
   useEffect(() => {
-    if (!modalRef.current || isFirstRender) return;
+    if (!modalRef.current || isFirstRender) return
 
     if (modalImage) {
-      // Kill any existing animations before creating new ones
+      // Kill any existing backdrop animation
       if (animationsRef.current.backdrop) {
-        animationsRef.current.backdrop.kill();
-      }
-      if (animationsRef.current.content) {
-        animationsRef.current.content.kill();
+        animationsRef.current.backdrop.kill()
       }
 
       // Show backdrop first
@@ -92,15 +128,15 @@ const Gallery = () => {
         opacity: 1,
         duration: 0.7,
         ease: "power2.out",
-        pointerEvents: "auto"
-      });
+        pointerEvents: "auto",
+      })
 
-      // Then animate in the content
+      // Set initial state for content - will be animated after image loads
       if (modalContentRef.current) {
-        animationsRef.current.content = gsap.fromTo(modalContentRef.current,
-          { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.8, delay: 0.1, ease: "back.out" }
-        );
+        gsap.set(modalContentRef.current, {
+          scale: 0.8,
+          opacity: 0,
+        })
       }
     }
 
@@ -108,32 +144,43 @@ const Gallery = () => {
     return () => {
       // Kill animations when effect re-runs or component unmounts
       if (animationsRef.current.backdrop) {
-        animationsRef.current.backdrop.kill();
+        animationsRef.current.backdrop.kill()
       }
-      if (animationsRef.current.content) {
-        animationsRef.current.content.kill();
-      }
-    };
-  }, [modalImage, isFirstRender]);
+    }
+  }, [modalImage, isFirstRender])
 
   // Handle modal backdrop click with proper cleanup
   useEffect(() => {
-    const modalElement = modalRef.current;
-    if (!modalElement) return;
+    const modalElement = modalRef.current
+    if (!modalElement) return
 
     const handleBackdropClick = (e) => {
       if (e.target === modalElement) {
-        closeModal();
+        closeModal()
       }
-    };
+    }
 
-    modalElement.addEventListener('click', handleBackdropClick);
+    modalElement.addEventListener("click", handleBackdropClick)
 
     // Clean up event listener when component unmounts
     return () => {
-      modalElement.removeEventListener('click', handleBackdropClick);
-    };
-  }, [closeModal]);
+      modalElement.removeEventListener("click", handleBackdropClick)
+    }
+  }, [closeModal])
+
+  // Handle escape key to close modal
+  useEffect(() => {
+    const handleEscKey = (e) => {
+      if (e.key === "Escape" && modalImage) {
+        closeModal()
+      }
+    }
+
+    window.addEventListener("keydown", handleEscKey)
+    return () => {
+      window.removeEventListener("keydown", handleEscKey)
+    }
+  }, [modalImage, closeModal])
 
   return (
     <section id="Gallery" className="bg-background-600 flex flex-col place-items-center py-16">
@@ -150,12 +197,12 @@ const Gallery = () => {
         ].map((src, index) => (
           <Image
             key={index}
-            src={src}
+            src={src || "/placeholder.svg"}
             alt={`Gallery image ${index + 1}`}
             width={450}
             height={450}
             priority={index < 2} // Only prioritize first two images
-            className="rounded-[20px] shadower cursor-pointer"
+            className="rounded-[20px] shadower cursor-pointer hover:scale-[1.02] transition-transform duration-300"
             onClick={() => openModal(src)}
           />
         ))}
@@ -179,20 +226,23 @@ const Gallery = () => {
                   <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
                 </div>
               )}
-              <Image
-                src={modalImage}
-                alt="Modal Image"
-                width={900}
-                height={900}
-                className="rounded-[20px] object-contain aspect-square"
-                onLoadingComplete={handleImageLoaded}
-              />
+              <div className={`transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}>
+                <Image
+                  src={modalImage || "/placeholder.svg"}
+                  alt="Modal Image"
+                  width={900}
+                  height={900}
+                  className="rounded-[20px] object-contain aspect-square"
+                  onLoadingComplete={handleImageLoaded}
+                  priority={true}
+                />
+              </div>
             </>
           )}
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Gallery;
+export default Gallery
