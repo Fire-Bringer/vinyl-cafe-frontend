@@ -1,166 +1,180 @@
-'use client';
-import Image from "next/image";
-import { RiArrowLeftLine, RiArrowRightLine } from '@remixicon/react';
-import {useEffect, useRef, useState, useCallback} from 'react';
-import gsap from 'gsap';
+"use client"
+import Image from "next/image"
+import { RiArrowLeftLine, RiArrowRightLine } from "@remixicon/react"
+import { useEffect, useRef, useState } from "react"
+import gsap from "gsap"
 
 const Events = () => {
-  // Your existing state and refs
-  const mainFlyerRef = useRef(null);
-  const prevArrowRef = useRef(null);
-  const nextArrowRef = useRef(null);
-  const flyerContentRef = useRef(null);
+  // Refs for animations
+  const mainFlyerRef = useRef(null)
+  const flyerContentRef = useRef(null)
 
-  const [currentFlyerIndex, setCurrentFlyerIndex] = useState(0);
-  const [eventDate, setEventDate] = useState('9/4');
-  const [eventDay, setEventDay] = useState('SAT');
-  const [eventTitle, setEventTitle] = useState('Sounds from the Underground');
-  const [eventTime, setEventTime] = useState('OPEN 16:00-22:00');
-  const [eventDetails, setEventDetails] = useState('Lorem Ipsum is simply dummy text of the printing and typesetting industry...');
+  const [currentFlyerIndex, setCurrentFlyerIndex] = useState(0)
+
+  // Add these new state variables after the existing state declarations
+  const [autoPlay, setAutoPlay] = useState(true)
+  const autoPlayIntervalRef = useRef(null)
 
   // Your flyerImages array remains the same
   const flyerImages = [
     {
-      src: '/avalanche-ig.jpg',
-      alt: 'Avalanche 18 event image',
-      date: '9/4',
-      day: 'SAT',
-      title: 'Sounds from the Underground',
-      time: 'OPEN 16:00-22:00',
-      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      src: "/avalanche-ig.jpg",
+      alt: "Avalanche 18 event image",
+      date: "9/4",
+      day: "SAT",
+      title: "Sounds from the Underground",
+      time: "OPEN 16:00-22:00",
+      details:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
     },
     {
-      src: '/choco-party.jpg',
-      alt: 'Chocolate party event image',
-      date: '5/24',
-      day: 'FRI',
-      title: 'The Chocolate Party',
-      time: 'OPEN 19:00-23:00',
-      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      src: "/choco-party.jpg",
+      alt: "Chocolate party event image",
+      date: "5/24",
+      day: "FRI",
+      title: "The Chocolate Party",
+      time: "OPEN 19:00-23:00",
+      details:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
     },
     {
-      src: '/avalanche-10.jpg',
-      alt: 'Avalanche 18 event image',
-      date: '10/15',
-      day: 'SUN',
-      title: 'AVALANCHE X',
-      time: 'OPEN 17:00-22:00',
-      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      src: "/avalanche-10.jpg",
+      alt: "Avalanche 18 event image",
+      date: "10/15",
+      day: "SUN",
+      title: "AVALANCHE X",
+      time: "OPEN 17:00-22:00",
+      details:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
     },
     {
-      src: '/babel-10.jpg',
-      alt: 'Chocolate party event image',
-      date: '8/10',
-      day: 'FRI',
-      title: 'BABEL X',
-      time: 'OPEN 18:30-23:00',
-      details: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+      src: "/babel-10.jpg",
+      alt: "Chocolate party event image",
+      date: "8/10",
+      day: "FRI",
+      title: "BABEL X",
+      time: "OPEN 18:30-23:00",
+      details:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
     },
-  ];
+  ]
 
-  // Create callback functions that don't change on every render
-  const updateFlyer = useCallback((index) => {
-    const mainFlyer = mainFlyerRef.current;
-    if (!mainFlyer) return;
+  // Navigation handlers with direct onClick implementation
+  const handlePrev = () => {
+    // Clear any existing interval
+    if (autoPlayIntervalRef.current) {
+      clearInterval(autoPlayIntervalRef.current)
+    }
 
-    // Store the animation in a variable so we can kill it if needed
-    const fadeOutAnim = gsap.to(mainFlyer, {
-      duration: 0.5,
+    const newIndex = currentFlyerIndex > 0 ? currentFlyerIndex - 1 : flyerImages.length - 1
+    animateTransition(newIndex)
+
+    // Optionally restart autoplay after user interaction
+    // Remove these 2 lines if you want manual interaction to permanently stop autoplay
+    setAutoPlay(true)
+  }
+
+  const handleNext = () => {
+    // Clear any existing interval
+    if (autoPlayIntervalRef.current) {
+      clearInterval(autoPlayIntervalRef.current)
+    }
+
+    const newIndex = currentFlyerIndex < flyerImages.length - 1 ? currentFlyerIndex + 1 : 0
+    animateTransition(newIndex)
+
+    // Optionally restart autoplay after user interaction
+    // Remove these 2 lines if you want manual interaction to permanently stop autoplay
+    setAutoPlay(true)
+  }
+
+  // Combined animation function to reduce complexity
+  const animateTransition = (newIndex) => {
+    if (!mainFlyerRef.current || !flyerContentRef.current) return
+
+    // Kill any existing animations to prevent conflicts
+    gsap.killTweensOf(mainFlyerRef.current)
+    gsap.killTweensOf(flyerContentRef.current)
+
+    // Create a timeline for better synchronization
+    const tl = gsap.timeline()
+
+    // Animate flyer out
+    tl.to(mainFlyerRef.current, {
+      duration: 0.3,
       opacity: 0.3,
       scale: 0.95,
-      onComplete: () => {
-        setCurrentFlyerIndex(index);
-        gsap.to(mainFlyer, {
-          duration: 0.5,
-          opacity: 1,
-          scale: 1
-        });
+      ease: "power2.out",
+    })
+
+    // Animate content out
+    tl.to(
+      flyerContentRef.current,
+      {
+        duration: 0.3,
+        x: 50,
+        opacity: 0,
+        ease: "power2.out",
       },
-    });
+      "<",
+    )
 
-    // Return the animation for potential cleanup
-    return fadeOutAnim;
-  }, []);
+    // Update state after animations out
+    tl.call(() => setCurrentFlyerIndex(newIndex))
 
-  const updateContent = useCallback((index) => {
-    const flyerContentDiv = flyerContentRef.current;
-    if (!flyerContentDiv || !flyerImages[index]) return;
+    // Animate flyer in
+    tl.to(mainFlyerRef.current, {
+      duration: 0.3,
+      opacity: 1,
+      scale: 1,
+      ease: "power2.in",
+    })
 
-    // Store animation in variable
-    const contentAnim = gsap.to(flyerContentDiv, {
-      duration: 0.5,
-      x: 100,
-      opacity: 0,
-      onComplete: () => {
-        setEventDate(flyerImages[index].date);
-        setEventDay(flyerImages[index].day);
-        setEventTitle(flyerImages[index].title);
-        setEventTime(flyerImages[index].time);
-        setEventDetails(flyerImages[index].details);
-
-        gsap.to(flyerContentDiv, {
-          duration: 0.5,
-          x: 0,
-          opacity: 1
-        });
+    // Animate content in
+    tl.to(
+      flyerContentRef.current,
+      {
+        duration: 0.3,
+        x: 0,
+        opacity: 1,
+        ease: "power2.in",
       },
-    });
+      "<",
+    )
+  }
 
-    // Return the animation for potential cleanup
-    return contentAnim;
-  }, [flyerImages]);
-
-  // Navigation handlers with proper callback references
-  const handlePrev = useCallback(() => {
-    const newIndex = currentFlyerIndex > 0 ? currentFlyerIndex - 1 : flyerImages.length - 1;
-    updateFlyer(newIndex);
-    updateContent(newIndex);
-  }, [currentFlyerIndex, flyerImages.length, updateFlyer, updateContent]);
-
-  const handleNext = useCallback(() => {
-    const newIndex = currentFlyerIndex < flyerImages.length - 1 ? currentFlyerIndex + 1 : 0;
-    updateFlyer(newIndex);
-    updateContent(newIndex);
-  }, [currentFlyerIndex, flyerImages.length, updateFlyer, updateContent]);
-
-  // Setup and cleanup event listeners - only once
+  // Cleanup GSAP animations on unmount
   useEffect(() => {
-    const prevArrow = prevArrowRef.current;
-    const nextArrow = nextArrowRef.current;
-
-    if (!prevArrow || !nextArrow) return;
-
-    // Add event listeners
-    prevArrow.addEventListener('click', handlePrev);
-    nextArrow.addEventListener('click', handleNext);
-
-    // Return cleanup function that removes the EXACT SAME handler functions
     return () => {
-      prevArrow.removeEventListener('click', handlePrev);
-      nextArrow.removeEventListener('click', handleNext);
-
-      // Context.clear() is another approach, but we're not using it here
-      // Manually kill any ongoing animations
-      gsap.killTweensOf(mainFlyerRef.current);
-      gsap.killTweensOf(flyerContentRef.current);
-    };
-  }, [handlePrev, handleNext]); // Only re-run when handlers change (rare)
-
-  // Initialize content on first render
-  useEffect(() => {
-    if (flyerImages.length > 0) {
-      setEventDate(flyerImages[0].date);
-      setEventDay(flyerImages[0].day);
-      setEventTitle(flyerImages[0].title);
-      setEventTime(flyerImages[0].time);
-      setEventDetails(flyerImages[0].details);
+      if (mainFlyerRef.current) gsap.killTweensOf(mainFlyerRef.current)
+      if (flyerContentRef.current) gsap.killTweensOf(flyerContentRef.current)
     }
-  }, []);
+  }, [])
 
-  // Rest of your component remains the same
+  // Add this useEffect hook for the auto-rotation timer
+  // Place it before the return statement
+  useEffect(() => {
+    // Start the interval if autoPlay is true
+    if (autoPlay) {
+      autoPlayIntervalRef.current = setInterval(() => {
+        const newIndex = currentFlyerIndex < flyerImages.length - 1 ? currentFlyerIndex + 1 : 0
+        animateTransition(newIndex)
+      }, 5000) // Change slide every 5 seconds
+    }
+
+    // Clear the interval when component unmounts or autoPlay changes
+    return () => {
+      if (autoPlayIntervalRef.current) {
+        clearInterval(autoPlayIntervalRef.current)
+      }
+    }
+  }, [autoPlay, currentFlyerIndex, flyerImages.length])
+
+  // Get current flyer data
+  const currentFlyer = flyerImages[currentFlyerIndex]
+
   return (
     <section id="Events" className="h-auto flex flex-col items-center md:mb-20 lg:mb-40">
-
       {/* Event Backdrop */}
       <div className="-z-10 mt-4 relative w-full h-[20rem] md:h-[25rem] bg-[url(/hero/vinyl_cafe5.webp)] bg-cover bg-center">
         <div className="absolute inset-0 bg-gradient-to-r from-[#00000080] to-[#54151980]"></div>
@@ -171,39 +185,50 @@ const Events = () => {
 
       {/* Main Container */}
       <div className="-mt-72 md:-mt-[40rem] mb-20 flex flex-col justify-center items-center">
-
         {/* Event Header & Sliders */}
         <div className="w-4/5 md:w-full flex justify-between text-primary">
-
           <h2 className="font-display text-center text-4xl self-center t-shadower">Events</h2>
 
           <div className="flex justify-center gap-8">
-            <button className="p-2 rounded-full text-secondary bg-primary border shadower" ref={prevArrowRef} >
+            <button
+              className="p-2 rounded-full text-secondary bg-primary border shadower"
+              onClick={handlePrev}
+              aria-label="Previous event"
+            >
               <RiArrowLeftLine width="20" height="20" />
             </button>
-            <button className="p-2 rounded-full text-secondary bg-primary shadower" ref={nextArrowRef} >
+            <button
+              className="p-2 rounded-full text-secondary bg-primary shadower"
+              onClick={handleNext}
+              aria-label="Next event"
+            >
               <RiArrowRightLine width="20" height="20" />
             </button>
+            {/*
+            <button
+              className={`p-2 rounded-full text-secondary ${autoPlay ? 'bg-green-500' : 'bg-primary'} shadower`}
+              onClick={() => setAutoPlay(!autoPlay)}
+              aria-label={autoPlay ? "Pause auto-rotation" : "Start auto-rotation"}
+            >
+              {autoPlay ? "⏸️" : "▶️"}
+            </button>
+            */}
           </div>
-
         </div>
 
         {/* Content Container */}
         <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-2 lg:gap-4 w-full mt-4">
-
           {/* Event Flyer */}
           <div className="w-[18rem] lg:w-[25rem] relative mb-[25rem] md:mb-0" ref={mainFlyerRef}>
             {flyerImages.map((flyer, index) => (
               <div
                 key={index}
-                className={`absolute top-0 left-0 w-full ${
-                  index === currentFlyerIndex
-                    ? 'opacity-100 z-0'
-                    : 'opacity-0 -z-10'
+                className={`absolute top-0 left-0 w-full transition-opacity duration-300 ${
+                  index === currentFlyerIndex ? "opacity-100 z-0" : "opacity-0 -z-10"
                 }`}
               >
                 <Image
-                  src={flyer.src}
+                  src={flyer.src || "/placeholder.svg"}
                   alt={flyer.alt}
                   width={1080}
                   height={1350}
@@ -215,32 +240,29 @@ const Events = () => {
           </div>
 
           {/* Event Details */}
-          <div className="bg-background-600 md:bg-background shadower w-full md:w-[20rem] lg:w-[25rem] h-auto font-body flex flex-col items-center justify-center md:rounded-[20px] p-8" ref={flyerContentRef}>
-
+          <div
+            className="bg-background-600 md:bg-background shadower w-full md:w-[20rem] lg:w-[25rem] h-auto font-body flex flex-col items-center justify-center md:rounded-[20px] p-8"
+            ref={flyerContentRef}
+          >
             {/* Details Container */}
             <div className="w-4/5 md:w-full">
-
               <div className="event-date flex gap-2">
-                <h3 className="text-xl">{eventDate}</h3>
-                <h4 className="text-base">{eventDay}</h4>
+                <h3 className="text-xl">{currentFlyer.date}</h3>
+                <h4 className="text-base">{currentFlyer.day}</h4>
               </div>
 
-              <h3 className="mt-2 text-xl">{eventTitle}</h3>
+              <h3 className="mt-2 text-xl">{currentFlyer.title}</h3>
 
-              <h5 className="mt-2 text-xs">{eventTime}</h5>
+              <h5 className="mt-2 text-xs">{currentFlyer.time}</h5>
 
-              <p className="mt-4 text-base">{eventDetails}</p>
-
+              <p className="mt-4 text-base">{currentFlyer.details}</p>
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </section>
-  );
-};
+  )
+}
 
-export default Events;
+export default Events
+
