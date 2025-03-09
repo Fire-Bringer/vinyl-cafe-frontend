@@ -80,8 +80,8 @@ const Hero = () => {
 
   // Preload all images before rendering
   useEffect(() => {
-    // Create an array of all image sources
-    const imagePromises = [
+    // Create array of all image sources
+    const allImageSources = [
       "/intro/anri-p.webp",
       "/intro/camp-lo-p.webp",
       "/intro/dilla-p.webp",
@@ -91,22 +91,40 @@ const Hero = () => {
       "/intro/souls-p.webp",
       "/intro/taeko-p.webp",
       ...previewImages.map((img) => img.src),
-    ]
+    ];
+
+    // Count of loaded images
+    let loadedCount = 0;
+
+    // Actually preload images by creating Image objects
+    const imagePromises = allImageSources.map(src => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          loadedCount++;
+          console.log(`Loaded ${loadedCount}/${allImageSources.length} images`);
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = src; // This triggers the loading
+      });
+    });
 
     // Wait for all images to load before setting imagesLoaded to true
     Promise.all(imagePromises)
       .then(() => {
-        // Add a small delay to ensure browser has time to render images
+        console.log('All images loaded successfully');
+        // Add a slightly longer delay to ensure browser has fully rendered images
         setTimeout(() => {
-          setImagesLoaded(true)
-        }, 250)
+          setImagesLoaded(true);
+        }, 500);
       })
       .catch((error) => {
-        console.error("Error loading images:", error)
+        console.error("Error loading images:", error);
         // Set images as loaded anyway to prevent UI from hanging
-        setImagesLoaded(true)
-      })
-  }, []) // Empty dependency array since previewImages is defined in the component
+        setImagesLoaded(true);
+      });
+  }, []); // Empty dependency array since previewImages is defined in the component
 
   // Animation Definition - Only runs after all images are loaded
   useEffect(() => {
