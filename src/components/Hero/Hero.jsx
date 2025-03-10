@@ -41,7 +41,7 @@ const columnConfig = [
   [6, 11, 2, 7, 12],    // column 5
 ];
 
-const Hero = () => {
+const Hero = ({ onComplete }) => {
   // DOM Element Reference Definitions
   const containerRef = useRef(null)
   const colRefs = useRef([])
@@ -197,7 +197,15 @@ const Hero = () => {
     const zoomDuration = isMobile ? 4 : 4;
     const initialDelay = isMobile ? 1 : 1;
 
-    const tl = gsap.timeline({ delay: initialDelay })
+    const tl = gsap.timeline({
+      delay: initialDelay,
+      onComplete: () => {
+        // Call onComplete when the entire animation timeline finishes
+        if (typeof onComplete === 'function') {
+          onComplete();
+        }
+      }
+    })
 
     // Moves all columns to the top from the bottom
     tl.to(colRefs.current, {
@@ -319,7 +327,7 @@ const Hero = () => {
       },
       "-=1.5",
     )
-  }, [imagesLoaded])
+  }, [imagesLoaded, onComplete])
 
   // Slider animation
   useEffect(() => {
@@ -414,7 +422,7 @@ const Hero = () => {
           scale: 1,
           x: 0,
           duration: 0.7
-        }, "-=0.6") // Reduced overlap to prevent flashing
+        }, "-=0.4") // Reduced overlap to prevent flashing
       } else {
         // First start fading out current image
         tl.to(currentImg, {
@@ -429,7 +437,7 @@ const Hero = () => {
           scale: 1,
           x: 0,
           duration: 0.7
-        }, "-=0.6") // Reduced overlap to prevent flashing
+        }, "-=0.4") // Reduced overlap to prevent flashing
       }
 
       // Update slide number with the same technique

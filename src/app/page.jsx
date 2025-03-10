@@ -32,12 +32,13 @@ function Homepage() {
 
   // Handle hero completion
   const handleHeroComplete = () => {
+    console.log("Hero animation complete!");
     setShowContent(true);
     // Enable scrolling after hero animation completes
     setBodyScroll(true);
   }
 
-  // Disable scrolling on initial load
+  // On initial load, disable scrolling
   useEffect(() => {
     // Check if this is a subsequent visit using sessionStorage
     const isSubsequentVisit = sessionStorage.getItem("hasVisitedBefore");
@@ -45,13 +46,16 @@ function Homepage() {
     if (!isSubsequentVisit) {
       // Prevent scrolling during initial hero animation
       setBodyScroll(false);
+    } else {
+      // For subsequent visits, we still want to show content right away
+      setShowContent(true);
     }
 
     // Safety timeout to ensure content and scrolling eventually enabled
     const safetyTimer = setTimeout(() => {
       setShowContent(true);
       setBodyScroll(true);
-    }, 7000)
+    }, 20000) // Longer safety timeout to accommodate full animation
 
     return () => {
       clearTimeout(safetyTimer);
