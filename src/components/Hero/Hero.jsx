@@ -160,6 +160,26 @@ const Hero = () => {
       });
   }, []); // Empty dependency array since previewImages is defined in the component
 
+  // Add this function to preload the next/prev images
+  const preloadAdjacentImages = () => {
+    const nextIdx = (currentImageIndex + 1) % previewImages.length;
+    const prevIdx = (currentImageIndex - 1 + previewImages.length) % previewImages.length;
+
+    // Preload next and previous images
+    const nextImage = new Image();
+    nextImage.src = previewImages[nextIdx].src;
+
+    const prevImage = new Image();
+    prevImage.src = previewImages[prevIdx].src;
+  }
+
+  // Call this after images load or when current image changes
+  useEffect(() => {
+    if (imagesLoaded) {
+      preloadAdjacentImages();
+    }
+  }, [imagesLoaded, currentImageIndex]);
+
   // Animation Definition - Only runs after all images are loaded
   useEffect(() => {
     if (!imagesLoaded) return
@@ -316,9 +336,21 @@ const Hero = () => {
       return
     }
 
-    gsap.set(prevImg, { opacity: 0, scale: 0.95, x: -10, display: 'block' })
-    gsap.set(currentImg, { opacity: 1, scale: 1, x: 0, display: 'block' })
-    gsap.set(nextImg, { opacity: 0, scale: 0.95, x: 10, display: 'block' })
+    gsap.set(prevImg, {
+      opacity: 0,
+      scale: 0.95,
+      x: -10,
+    })
+    gsap.set(currentImg, {
+      opacity: 1,
+      scale: 1,
+      x: 0,
+    })
+    gsap.set(nextImg, {
+      opacity: 0,
+      scale: 0.95,
+      x: 10,
+    })
 
     function updateImage(newIndex, direction = "next") {
       if (isTransitioning) return
@@ -343,7 +375,6 @@ const Hero = () => {
           opacity: 0,
           scale: 0.95,
           x: 30,
-          display: 'block',
           src: previewImages[newIndex].src
         })
       } else {
@@ -352,12 +383,11 @@ const Hero = () => {
           opacity: 0,
           scale: 0.95,
           x: -30,
-          display: 'block',
           src: previewImages[newIndex].src
         })
       }
 
-      // Create animation timeline
+      // Create animation timeline with improved sequencing
       const tl = gsap.timeline({
         defaults: { ease: "power2.inOut" },
         onComplete: () => {
@@ -369,36 +399,40 @@ const Hero = () => {
         }
       })
 
-      // Animate current image out
+      // Animate with improved timing to prevent flashing
       if (direction === "next") {
+        // First start fading out current image
         tl.to(currentImg, {
           opacity: 0,
           scale: 0.95,
-          x: -30, // Move current image to the left as it exits
-          duration: 1
+          x: -30,
+          duration: 0.7
         })
+        // Then start fading in next image with slight delay
         .to(nextImg, {
           opacity: 1,
           scale: 1,
-          x: 0, // Move next image to center
-          duration: 1
-        }, "-=1") // Full overlap for smooth crossfade
+          x: 0,
+          duration: 0.7
+        }, "-=0.6") // Reduced overlap to prevent flashing
       } else {
+        // First start fading out current image
         tl.to(currentImg, {
           opacity: 0,
           scale: 0.95,
-          x: 30, // Move current image to the right as it exits
-          duration: 1
+          x: 30,
+          duration: 0.7
         })
+        // Then start fading in prev image with slight delay
         .to(prevImg, {
           opacity: 1,
           scale: 1,
-          x: 0, // Move prev image to center
-          duration: 1
-        }, "-=1") // Full overlap for smooth crossfade
+          x: 0,
+          duration: 0.7
+        }, "-=0.6") // Reduced overlap to prevent flashing
       }
 
-      // Update slide number
+      // Update slide number with the same technique
       tl.to(slideNum, {
         opacity: 0,
         y: -5,

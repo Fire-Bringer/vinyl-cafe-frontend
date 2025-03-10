@@ -17,20 +17,48 @@ import Footer from "@/components/Footer/Footer"
 function Homepage() {
   const [showContent, setShowContent] = useState(false)
 
-  // Handle hero completion
-  const handleHeroComplete = () => {
-    setShowContent(true)
+  // Function to control body scroll
+  const setBodyScroll = (allowScroll) => {
+    if (typeof document !== 'undefined') {
+      if (allowScroll) {
+        document.body.style.overflow = 'auto';
+        document.body.style.height = 'auto';
+      } else {
+        document.body.style.overflow = 'hidden';
+        document.body.style.height = '100vh';
+      }
+    }
   }
 
-  // Safety timeout to ensure content eventually shows
+  // Handle hero completion
+  const handleHeroComplete = () => {
+    setShowContent(true);
+    // Enable scrolling after hero animation completes
+    setBodyScroll(true);
+  }
+
+  // Disable scrolling on initial load
   useEffect(() => {
-    // Show content after 7 seconds regardless of hero status
+    // Check if this is a subsequent visit using sessionStorage
+    const isSubsequentVisit = sessionStorage.getItem("hasVisitedBefore");
+
+    if (!isSubsequentVisit) {
+      // Prevent scrolling during initial hero animation
+      setBodyScroll(false);
+    }
+
+    // Safety timeout to ensure content and scrolling eventually enabled
     const safetyTimer = setTimeout(() => {
-      setShowContent(true)
+      setShowContent(true);
+      setBodyScroll(true);
     }, 7000)
 
-    return () => clearTimeout(safetyTimer)
-  }, [])
+    return () => {
+      clearTimeout(safetyTimer);
+      // Always ensure scrolling is re-enabled when component unmounts
+      setBodyScroll(true);
+    };
+  }, []);
 
   // Handle subsequent visits
   useEffect(() => {
@@ -39,15 +67,17 @@ function Homepage() {
 
     if (isSubsequentVisit) {
       // Skip hero animation on subsequent visits
-      setShowContent(true)
+      setShowContent(true);
+      // Allow scrolling immediately for returning visitors
+      setBodyScroll(true);
     } else {
       // Mark that the user has visited before
-      sessionStorage.setItem("hasVisitedBefore", "true")
+      sessionStorage.setItem("hasVisitedBefore", "true");
     }
 
     // Scroll to top on mount
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div>
