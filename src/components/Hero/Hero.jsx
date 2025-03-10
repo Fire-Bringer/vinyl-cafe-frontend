@@ -147,7 +147,7 @@ const Hero = ({ onComplete }) => {
         console.log('All images loaded successfully');
         // Longer delay on mobile to ensure rendering completes
         const isMobile = window.innerWidth <= 768;
-        const delay = isMobile ? 500 : 300;
+        const delay = isMobile ? 3000 : 2000;
 
         // Simply set images loaded, the CSS will handle the fade out
         setTimeout(() => {
