@@ -93,17 +93,30 @@ const Hero = () => {
 
     // Count of loaded images
     let loadedCount = 0;
+    const totalImages = allImageSources.length;
+
+    // Update loading state function
+    const updateLoadingProgress = () => {
+      loadedCount++;
+      console.log(`Loaded ${loadedCount}/${totalImages} images`);
+    };
 
     // Actually preload images by creating Image objects
     const imagePromises = allImageSources.map(src => {
       return new Promise((resolve, reject) => {
+        // For smaller album images, use regular Image loader
         const img = new Image();
         img.onload = () => {
-          loadedCount++;
-          console.log(`Loaded ${loadedCount}/${allImageSources.length} images`);
+          updateLoadingProgress();
           resolve();
         };
-        img.onerror = reject;
+        img.onerror = (err) => {
+          console.error(`Failed to load image: ${src}`, err);
+          updateLoadingProgress(); // Still count as "loaded" to prevent UI hanging
+          resolve(); // Resolve anyway to not block everything else
+        };
+        // Add crossOrigin if images are hosted on different domain
+        // img.crossOrigin = "anonymous";
         img.src = src; // This triggers the loading
       });
     });
@@ -112,10 +125,13 @@ const Hero = () => {
     Promise.all(imagePromises)
       .then(() => {
         console.log('All images loaded successfully');
-        // Add a slightly longer delay to ensure browser has fully rendered images
+        // Longer delay on mobile to ensure rendering completes
+        const isMobile = window.innerWidth <= 768;
+        const delay = isMobile ? 2500 : 1500;
+
         setTimeout(() => {
           setImagesLoaded(true);
-        }, 1500);
+        }, delay);
       })
       .catch((error) => {
         console.error("Error loading images:", error);
