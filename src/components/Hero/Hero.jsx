@@ -181,7 +181,7 @@ const Hero = ({ onComplete }) => {
     }
   }, [imagesLoaded, currentImageIndex]);
 
-  // Animation Definition - Only runs after all images are loaded
+  // Opening Animation Definition - Only runs after all images are loaded
   useEffect(() => {
     if (!imagesLoaded) return
 
@@ -408,7 +408,6 @@ const Hero = ({ onComplete }) => {
         }
       })
 
-      // Animate with improved timing to prevent flashing
       if (direction === "next") {
         // First start fading out current image
         tl.to(currentImg, {
@@ -423,7 +422,7 @@ const Hero = ({ onComplete }) => {
           scale: 1,
           x: 0,
           duration: 0.7
-        }, "-=0.4") // Reduced overlap to prevent flashing
+        }, "-=0.7")
       } else {
         // First start fading out current image
         tl.to(currentImg, {
@@ -438,7 +437,7 @@ const Hero = ({ onComplete }) => {
           scale: 1,
           x: 0,
           duration: 0.7
-        }, "-=0.4") // Reduced overlap to prevent flashing
+        }, "-=0.7")
       }
 
       // Update slide number with the same technique
@@ -492,7 +491,7 @@ const Hero = ({ onComplete }) => {
             priority
           />
         </div>
-        <p className="font-body text-primary loading-text">Loading Vinyl Cafe...</p>
+        <p className="font-body text-primary loading-text">"And munchies for all..."</p>
       </div>
 
       {imagesLoaded && (
