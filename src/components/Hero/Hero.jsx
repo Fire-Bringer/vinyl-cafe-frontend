@@ -146,16 +146,23 @@ const Hero = () => {
 
     // Force layout calculation to ensure images are rendered
     if (containerRef.current) {
-      // This will force a reflow
       containerRef.current.getBoundingClientRect()
     }
 
-    const tl = gsap.timeline({ delay: 1 }) // Add a small delay
+    // Check if mobile device
+    const isMobile = window.innerWidth <= 768;
+
+    // Adjust timing based on device
+    const columnDuration = isMobile ? 2 : 3;
+    const zoomDuration = isMobile ? 3 : 4;
+    const initialDelay = isMobile ? 0.5 : 1;
+
+    const tl = gsap.timeline({ delay: initialDelay })
 
     // Moves all columns to the top from the bottom
     tl.to(colRefs.current, {
       top: "0",
-      duration: 3,
+      duration: columnDuration,
       ease: "power4.inOut",
     })
 
@@ -223,8 +230,8 @@ const Hero = () => {
     tl.to(
       containerRef.current,
       {
-        scale: 6,
-        duration: 4,
+        scale: isMobile ? 4 : 6, // Less extreme scale for mobile
+        duration: zoomDuration,
         ease: "power4.inOut",
       },
       "-=2",
@@ -544,6 +551,7 @@ const Hero = () => {
                     className="intro-img current-img"
                     ref={currentImageRef}
                     priority
+                    loading="eager" // Force load main image first
                   />
                   <NextImage
                     src={previewImages[nextImageIndex].src}
