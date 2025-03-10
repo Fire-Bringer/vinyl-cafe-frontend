@@ -98,6 +98,11 @@ const Menu = () => {
   // Animation definition
   useEffect(() => {
 
+    // Check if mobile device
+    const isMobile = window.innerWidth <= 768;
+
+    const initialDelay = isMobile ? 14 : 5;
+
     // Sets the navbar to invisible at start
     gsap.set(navRef.current, {
       opacity: 0,
@@ -108,7 +113,7 @@ const Menu = () => {
       opacity: 1,
       duration: 1,
       ease: 'power3.out',
-      delay: 14, // Delay to match the hero animation
+      delay: initialDelay, // Delay to match the hero animation
     });
 
     let ctx = gsap.context(() => { // Create GSAP context *inside* useEffect
