@@ -230,7 +230,7 @@ const Hero = () => {
     tl.to(
       containerRef.current,
       {
-        scale: isMobile ? 4 : 6, // Less extreme scale for mobile
+        scale: 6, // Less extreme scale for mobile
         duration: zoomDuration,
         ease: "power4.inOut",
       },
