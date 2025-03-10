@@ -101,7 +101,7 @@ const Events = () => {
 
     // Animate flyer out
     tl.to(mainFlyerRef.current, {
-      duration: 0.3,
+      duration: 0.7,
       opacity: 0.3,
       scale: 0.95,
       ease: "power2.out",
@@ -111,7 +111,7 @@ const Events = () => {
     tl.to(
       flyerContentRef.current,
       {
-        duration: 0.3,
+        duration: 0.7,
         x: 50,
         opacity: 0,
         ease: "power2.out",
@@ -124,7 +124,7 @@ const Events = () => {
 
     // Animate flyer in
     tl.to(mainFlyerRef.current, {
-      duration: 0.3,
+      duration: 0.7,
       opacity: 1,
       scale: 1,
       ease: "power2.in",
@@ -134,7 +134,7 @@ const Events = () => {
     tl.to(
       flyerContentRef.current,
       {
-        duration: 0.3,
+        duration: 0.7,
         x: 0,
         opacity: 1,
         ease: "power2.in",
@@ -265,4 +265,3 @@ const Events = () => {
 }
 
 export default Events
-

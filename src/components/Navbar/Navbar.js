@@ -111,7 +111,7 @@ const Menu = () => {
     // Sets animation to reveal navbar after intro animation
     gsap.to(navRef.current, {
       opacity: 1,
-      duration: 1,
+      duration: 2,
       ease: 'power3.out',
       delay: initialDelay, // Delay to match the hero animation
     });
@@ -171,7 +171,7 @@ const Menu = () => {
         <div className="menu-close-icon" onClick={toggleMenu}>
           <p>&#x2715;</p>
         </div>
-        <div className="menu-copy mb-20 md:mb-0">
+        <div className="menu-copy mb-24 md:mb-0">
           <div className="menu-links">
             {navLinks.map((link, index) => (
               <div key={index} className="menu-link-item">
@@ -194,7 +194,7 @@ const Menu = () => {
             </div>
           </div>
         </div>
-        <div className="menu-preview font-body mb-20 md:mb-0">
+        <div className="menu-preview font-body mb-24 md:mb-0">
           <p>Keep it Real</p>
         </div>
       </div>
