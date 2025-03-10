@@ -36,6 +36,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Force browsers to use the new favicon by adding version parameter */}
+        <link rel="icon" href="/vinyl.svg?v=2" type="image/svg+xml" />
+        <link rel="alternate icon" href="/favicon.ico?v=2" />
+        <link rel="apple-touch-icon" href="/apple-icon.png?v=2" />
+      </head>
       <body
         className={`${caprasimo.variable} ${kiwiMaru.variable}`}
       >
