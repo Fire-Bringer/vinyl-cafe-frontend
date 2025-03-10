@@ -147,7 +147,7 @@ const Hero = () => {
         console.log('All images loaded successfully');
         // Longer delay on mobile to ensure rendering completes
         const isMobile = window.innerWidth <= 768;
-        const delay = isMobile ? 2500 : 1500;
+        const delay = isMobile ? 3500 : 1500;
 
         setTimeout(() => {
           setImagesLoaded(true);
@@ -173,9 +173,9 @@ const Hero = () => {
     const isMobile = window.innerWidth <= 768;
 
     // Adjust timing based on device
-    const columnDuration = isMobile ? 3 : 4;
-    const zoomDuration = isMobile ? 4 : 5;
-    const initialDelay = isMobile ? 1 : 1.5;
+    const columnDuration = isMobile ? 3 : 3;
+    const zoomDuration = isMobile ? 4 : 4;
+    const initialDelay = isMobile ? 1 : 1;
 
     const tl = gsap.timeline({ delay: initialDelay })
 
