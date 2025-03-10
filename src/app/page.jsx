@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import Navbar from "@/components/Navbar/Navbar.js"
 import Hero from "@/components/Hero/Hero"
 import Tags from "@/components/Tags/Tags"
@@ -68,7 +69,16 @@ function Homepage() {
         </div>
       ) : (
         <div className="loading-container py-20 flex justify-center items-center">
-          <div className="loading-spinner"></div>
+          <div className="loading-spinner">
+            <Image
+              src="/vinyl.svg"
+              alt="Loading spinner"
+              width={100}
+              height={100}
+              className="animate-spin"
+              style={{ animationDuration: '3s' }}
+            />
+          </div>
         </div>
       )}
     </div>
@@ -76,4 +86,3 @@ function Homepage() {
 }
 
 export default Homepage
-

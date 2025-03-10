@@ -440,7 +440,17 @@ const Hero = () => {
     <section className="hero" id="Home">
       {!imagesLoaded && (
         <div className="loading-overlay">
-          <div className="loading-spinner"></div>
+          <div className="loading-spinner">
+            <NextImage
+              src="/vinyl.svg"
+              alt="Loading spinner"
+              width={100}
+              height={100}
+              className="vinyl-spin"
+              priority
+            />
+          </div>
+          <p className="font-body text-primary">Loading Vinyl Cafe...</p>
         </div>
       )}
 

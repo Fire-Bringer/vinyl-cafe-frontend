@@ -38,16 +38,26 @@ body {
   min-height: 200px;
 }
 
+/* Modified loading-spinner to work with the vinyl.svg image */
 .loading-spinner {
-  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Remove border and size constraints that would conflict with the image */
+  /* width: 40px;
   height: 40px;
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-top: 4px solid #767676;
-  animation: spin 1s linear infinite;
+  border-top: 4px solid #767676; */
 }
 
+/* This animation will be applied via the animate-spin class in Tailwind */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* You can add this custom vinyl spin animation if you want more control */
+.vinyl-spin {
+  animation: spin 3s linear infinite;
 }
