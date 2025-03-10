@@ -18,6 +18,15 @@ const kiwiMaru = Kiwi_Maru({
 export const metadata: Metadata = {
   title: "Vinyl Cafe",
   description: "A practice Next.js website by Rashad DuPaty",
+  icons: {
+    icon: [
+      { url: '/vinyl.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' } // Fallback for browsers that don't support SVG
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }
+    ],
+  },
 };
 
 export default function RootLayout({
