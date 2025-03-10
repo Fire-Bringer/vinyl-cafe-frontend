@@ -12,6 +12,11 @@
   z-index: 1000;
   color: white;
   font-family: sans-serif;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.loading-overlay.fade-out {
+  animation: fadeOut 0.8s ease-in-out forwards;
 }
 
 .loading-spinner {
@@ -19,18 +24,41 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 16px;
-  /* Remove the border styling since we're using an image now */
 }
 
 @keyframes spin {
-  0% {
+  from {
     transform: rotate(0deg);
   }
-  100% {
+  to {
     transform: rotate(360deg);
   }
 }
 
 .vinyl-spin {
-  animation: spin 3s linear infinite;
+  animation: spin 2s infinite linear, fadeIn 0.5s ease-in-out;
+}
+
+.loading-text {
+  animation: fadeIn 0.8s ease-in-out 0.3s both;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }

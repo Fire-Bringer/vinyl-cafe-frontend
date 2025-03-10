@@ -147,8 +147,9 @@ const Hero = ({ onComplete }) => {
         console.log('All images loaded successfully');
         // Longer delay on mobile to ensure rendering completes
         const isMobile = window.innerWidth <= 768;
-        const delay = isMobile ? 5000 : 1500;
+        const delay = isMobile ? 500 : 300;
 
+        // Simply set images loaded, the CSS will handle the fade out
         setTimeout(() => {
           setImagesLoaded(true);
         }, delay);
@@ -480,21 +481,19 @@ const Hero = ({ onComplete }) => {
 
   return (
     <section className="hero" id="Home">
-      {!imagesLoaded && (
-        <div className="loading-overlay">
-          <div className="loading-spinner">
-            <NextImage
-              src="/vinyl.svg"
-              alt="Loading spinner"
-              width={100}
-              height={100}
-              className="vinyl-spin"
-              priority
-            />
-          </div>
-          <p className="font-body text-primary">Loading Vinyl Cafe...</p>
+      <div className={`loading-overlay ${imagesLoaded ? 'fade-out' : ''}`}>
+        <div className="loading-spinner">
+          <NextImage
+            src="/vinyl.svg"
+            alt="Loading spinner"
+            width={100}
+            height={100}
+            className="vinyl-spin"
+            priority
+          />
         </div>
-      )}
+        <p className="font-body text-primary loading-text">Loading Vinyl Cafe...</p>
+      </div>
 
       {imagesLoaded && (
         <>
