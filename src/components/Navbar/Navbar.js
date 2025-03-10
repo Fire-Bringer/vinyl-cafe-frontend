@@ -108,7 +108,7 @@ const Menu = () => {
       opacity: 1,
       duration: 1,
       ease: 'power3.out',
-      delay: 7,
+      delay: 14, // Delay to match the hero animation
     });
 
     let ctx = gsap.context(() => { // Create GSAP context *inside* useEffect
