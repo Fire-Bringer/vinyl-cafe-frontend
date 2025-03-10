@@ -101,7 +101,7 @@ const Menu = () => {
     // Check if mobile device
     const isMobile = window.innerWidth <= 768;
 
-    const initialDelay = isMobile ? 14 : 5;
+    const initialDelay = isMobile ? 13 : 5;
 
     // Sets the navbar to invisible at start
     gsap.set(navRef.current, {

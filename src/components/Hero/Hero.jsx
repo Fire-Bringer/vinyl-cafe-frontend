@@ -517,6 +517,8 @@ const Hero = () => {
                         width={250}
                         height={250}
                         className="intro-img"
+                        priority
+                        loading="eager"
                       />
                     </div>
                   );
