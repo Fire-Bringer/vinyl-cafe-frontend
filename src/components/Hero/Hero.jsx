@@ -65,6 +65,11 @@ const Hero = ({ onComplete }) => {
   const nextImageRef = useRef(null)
   const prevImageRef = useRef(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  // Add state to control auto-slide behavior
+  const [autoSlideActive, setAutoSlideActive] = useState(true)
+  const autoSlideIntervalRef = useRef(null)
+  // Add a state to track if opening animation is complete
+  const [openingAnimationComplete, setOpeningAnimationComplete] = useState(false)
 
   // Array Definitions for Grouped Dom Elements
   const addColRef = (el) => {
@@ -201,6 +206,8 @@ const Hero = ({ onComplete }) => {
     const tl = gsap.timeline({
       delay: initialDelay,
       onComplete: () => {
+        // Set opening animation as complete
+        setOpeningAnimationComplete(true);
         // Call onComplete when the entire animation timeline finishes
         if (typeof onComplete === 'function') {
           onComplete();
@@ -330,6 +337,35 @@ const Hero = ({ onComplete }) => {
     )
   }, [imagesLoaded, onComplete])
 
+  // Add auto-slide functionality
+  useEffect(() => {
+    // Only start auto-sliding when opening animation is complete
+    if (!imagesLoaded || !openingAnimationComplete || !autoSlideActive) return;
+
+    console.log("Starting auto-slide after opening animation completed");
+
+    // Clear any existing interval first
+    if (autoSlideIntervalRef.current) {
+      clearInterval(autoSlideIntervalRef.current);
+    }
+
+    // Set up auto-slide interval (5 seconds)
+    autoSlideIntervalRef.current = setInterval(() => {
+      if (!isTransitioning) {
+        if (nextIconRef.current) {
+          nextIconRef.current.click();
+        }
+      }
+    }, 3000);
+
+    // Cleanup on unmount or when dependencies change
+    return () => {
+      if (autoSlideIntervalRef.current) {
+        clearInterval(autoSlideIntervalRef.current);
+      }
+    };
+  }, [imagesLoaded, currentImageIndex, isTransitioning, previewImages.length, autoSlideActive, openingAnimationComplete]);
+
   // Slider animation
   useEffect(() => {
     if (!imagesLoaded) return
@@ -458,13 +494,23 @@ const Hero = ({ onComplete }) => {
 
     // Define click handlers that we can remove later
     const handlePrevClick = () => {
+      // Temporarily disable auto-slide when user manually navigates
+      setAutoSlideActive(false);
       const newIndex = (currentImageIndex - 1 + previewImages.length) % previewImages.length
       updateImage(newIndex, "prev")
+
+      // Resume auto-slide after a delay
+      setTimeout(() => setAutoSlideActive(true), 10000);
     }
 
     const handleNextClick = () => {
+      // Temporarily disable auto-slide when user manually navigates
+      setAutoSlideActive(false);
       const newIndex = (currentImageIndex + 1) % previewImages.length
       updateImage(newIndex, "next")
+
+      // Resume auto-slide after a delay
+      setTimeout(() => setAutoSlideActive(true), 10000);
     }
 
     // Add event listeners with proper references

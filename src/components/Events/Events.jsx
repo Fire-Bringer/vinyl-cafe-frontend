@@ -25,7 +25,7 @@ const Events = () => {
       title: "Sounds from the Underground",
       time: "OPEN 16:00-22:00",
       details:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        "Sounds from the Underground explodes with raw energy. Dive into a night of electrifying live bands, each unleashing their unique sound. Feel the pulse of the city as DJs spin gritty beats, weaving genres into a sonic tapestry. Discover hidden talent, embrace the vibrant underground scene, and lose yourself in the music's raw power.",
     },
     {
       src: "/choco-party.jpg",
@@ -35,27 +35,27 @@ const Events = () => {
       title: "The Chocolate Party",
       time: "OPEN 19:00-23:00",
       details:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        "Indulge your senses at The Chocolate Party, a feast for the soul and sweet tooth. Witness captivating dancers, mesmerizing visual artists, and soulful musicians intertwine their talents. Savor an endless array of decadent chocolate desserts, a symphony of flavors. Immerse yourself in a world where art and chocolate collide, creating a truly unforgettable experience.",
     },
     {
       src: "/avalanche-10.jpg",
-      alt: "Avalanche 18 event image",
+      alt: "Avalanche 10 event image",
       date: "10/15",
       day: "SUN",
       title: "AVALANCHE X",
       time: "OPEN 17:00-22:00",
       details:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        "AVALANCHE unleashes a torrent of raw rock energy. Brace for a night of thunderous riffs and pounding drums as live bands ignite the stage. Feel the seismic power of their music, a relentless wave of sound. Dive into the heart of rock's resurgence, where every chord reverberates with untamed passion. Join the surge, and let the avalanche sweep you away.",
     },
     {
       src: "/babel-10.jpg",
-      alt: "Chocolate party event image",
+      alt: "Babel event image",
       date: "8/10",
       day: "FRI",
       title: "BABEL X",
       time: "OPEN 18:30-23:00",
       details:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        "Babel unites hip-hop and R&B in a warm, inviting embrace. Feel the smooth rhythms and lyrical flow as artists take the stage. Experience a night of soulful melodies and vibrant energy, where connection thrives. Witness the raw talent of a closing cypher, where artists spontaneously weave words and beats. Join the collective, and find your voice in Babel's harmonious blend.",
     },
   ]
 

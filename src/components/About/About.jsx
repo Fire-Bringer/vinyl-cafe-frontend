@@ -13,7 +13,7 @@ const About = () => {
           <h2 className="text-center lg:text-start font-display text-4xl">About</h2>
 
           <p className="mt-4 font-body text-base font-normal w-4/5 md:w-full lg:w-4/5 self-center lg:self-start">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.<br /><br />Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            アナログレコードとコーヒーを愛する人々のための憩いの場、ビニールカフェへようこそ。温かくメロウな音楽がヴィンテージターンテーブルで流れ、懐かしい魅力で店内を満たします。クラシックロックからソウルフルなジャズまで、厳選されたレコードを眺めながら、丁寧に淹れられたラテをお楽しみください。<br /><br />Our cozy space invites you to unwind and connect. Comfortable seating, soft lighting, and the gentle crackle of vinyl create an atmosphere of relaxed enjoyment. Share stories with friends, discover new artists, or simply savor the moment, surrounded by the timeless beauty of analog sound.
           </p>
 
           <div className="mt-8 border-y-2 border-secondary flex justify-center gap-10 w-1/2 md:w-1/3 lg:w-2/5 self-center lg:self-start mb-10 md:mb-0">

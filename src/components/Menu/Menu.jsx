@@ -196,7 +196,7 @@ const Menu = () => {
 
       {/* Description */}
       <p className="font-body text-base w-4/5 md:w-3/5 xl:w-1/4 mt-4">
-        Menu description with a good number of words which will fill up this text box. It is my hope the this lorem will do its job properly.
+      こだわりのコーヒー、自家製サンドイッチ、美味しい軽食をお楽しみください。淹れたてのコーヒー、風味豊かなお食事、甘いおやつをご用意しております。シンプルな喜びを、完璧な組み合わせでどうぞ。<br /><br />Savor crafted coffees, artisanal sandwiches, and delightful snacks. Enjoy fresh brews, savory bites, and sweet treats. Our menu offers simple pleasures, perfectly paired.
       </p>
 
       {/* Links */}
