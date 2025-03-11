@@ -1,9 +1,27 @@
+/* Contact Section Container */
+.contact-section {
+  position: relative;
+  z-index: 1; /* Base layer */
+  isolation: isolate; /* Create a new stacking context */
+}
+
+/* Contact Form */
 .contact-form {
-  z-index: 5;
+  position: relative;
+  z-index: 2; /* Form sits above the section background */
+}
+
+/* Modal styles can be added here or managed through Tailwind classes */
+.contact-modal-overlay {
+  /* Fixed position overlay that covers the entire screen */
+  z-index: 20; /* High z-index to appear above all content */
+}
+
+.contact-modal {
+  z-index: 21; /* One level higher than the overlay */
   position: relative;
 }
 
-.contact-section {
-  position: relative;
-  z-index: 5; /* Lower than hero */
+.contact-modal-close {
+  z-index: 22; /* Above modal content */
 }
