@@ -14,7 +14,7 @@ const Latest = () => {
 
         <h6 className="mt-2 font-body text-lg font-thin">8/10/2014</h6>
 
-        <h4 className="mt-2 font-body text-base font-normal ">Rashad D / Yosuke I / Koji O / Mickey A / Tomoya</h4>
+        <h4 className="mt-2 font-body text-base font-normal text-center px-4">Rashad D / Yosuke I / Koji O / Mickey A / Tomoya</h4>
 
       </div>
 

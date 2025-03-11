@@ -356,7 +356,7 @@ const Hero = ({ onComplete }) => {
           nextIconRef.current.click();
         }
       }
-    }, 3000);
+    }, 2000);
 
     // Cleanup on unmount or when dependencies change
     return () => {
