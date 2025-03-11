@@ -453,30 +453,30 @@ const Hero = ({ onComplete }) => {
           opacity: 0,
           scale: 0.95,
           x: -30,
-          duration: 1.2
+          duration: 0.8
         })
         // Then start fading in next image with slight delay
         .to(nextImg, {
           opacity: 1,
           scale: 1,
           x: 0,
-          duration: 1.2
-        }, "-=1.2")
+          duration: 0.8
+        }, "0")
       } else {
         // First start fading out current image
         tl.to(currentImg, {
           opacity: 0,
           scale: 0.95,
           x: 30,
-          duration: 1.2
+          duration: 0.8
         })
         // Then start fading in prev image with slight delay
         .to(prevImg, {
           opacity: 1,
           scale: 1,
           x: 0,
-          duration: 1.2
-        }, "-=1.2")
+          duration: 0.8
+        }, "0")
       }
 
       // Update slide number with the same technique
