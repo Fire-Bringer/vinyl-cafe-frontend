@@ -61,3 +61,11 @@ body {
 .vinyl-spin {
   animation: spin 3s linear infinite;
 }
+
+/* In your global CSS or component-specific CSS */
+.contact-modal-wrapper.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

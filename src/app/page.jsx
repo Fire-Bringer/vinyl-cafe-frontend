@@ -14,7 +14,8 @@ import Gallery from "@/components/Gallery/Gallery"
 import Access from "@/components/Access/Access"
 import Footer from "@/components/Footer/Footer"
 
-function Homepage() {
+export default function Homepage() {
+  const [heroAnimationComplete, setHeroAnimationComplete] = useState(false)
   const [showContent, setShowContent] = useState(false)
 
   // Function to control body scroll
@@ -34,6 +35,7 @@ function Homepage() {
   const handleHeroComplete = () => {
     console.log("Hero animation complete!");
     setShowContent(true);
+    setHeroAnimationComplete(true);
     // Enable scrolling after hero animation completes
     setBodyScroll(true);
   }
@@ -84,9 +86,12 @@ function Homepage() {
   }, []);
 
   return (
-    <div>
+    <main>
       <Navbar />
       <Hero onComplete={handleHeroComplete} />
+      <div className={`contact-modal-wrapper ${!heroAnimationComplete ? 'hidden' : ''}`}>
+        <Access />
+      </div>
 
       {showContent ? (
         <div className="content-container">
@@ -98,7 +103,6 @@ function Homepage() {
           <Menu />
           <Break2 />
           <Gallery />
-          <Access />
           <Footer />
         </div>
       ) : (
@@ -115,8 +119,6 @@ function Homepage() {
           </div>
         </div>
       )}
-    </div>
+    </main>
   )
 }
-
-export default Homepage
