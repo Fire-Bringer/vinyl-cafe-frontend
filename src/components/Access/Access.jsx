@@ -29,18 +29,23 @@ const Access = () => {
       duration: 0.4,
       delay: 0.2,
       ease: "power2.in",
-      onComplete: () => setIsModalOpen(false) // Only completely close after animation
+      onComplete: () => {
+        setIsModalOpen(false); // Only completely close after animation
+        // Set negative z-index when closed
+        gsap.set(modalRef.current, { zIndex: -1 });
+      }
     });
   };
 
   // Initialize modal on first render
   useEffect(() => {
     if (modalRef.current && isFirstRender) {
-      // Set initial state with GSAP instead of direct style manipulation
+      // Set initial state with GSAP including negative z-index
       gsap.set(modalRef.current, {
         opacity: 0,
         pointerEvents: "none",
-        display: "flex" // Always have it in the DOM but invisible
+        display: "flex", // Always have it in the DOM but invisible
+        zIndex: -1 // Start with negative z-index
       });
       setIsFirstRender(false);
     }
@@ -51,6 +56,9 @@ const Access = () => {
     if (!modalRef.current || isFirstRender) return;
 
     if (isModalOpen) {
+      // Set positive z-index before showing modal
+      gsap.set(modalRef.current, { zIndex: 50 });
+
       // Show backdrop first
       gsap.to(modalRef.current, {
         opacity: 1,

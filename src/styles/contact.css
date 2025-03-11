@@ -1,0 +1,9 @@
+.contact-form {
+  z-index: 5;
+  position: relative;
+}
+
+.contact-section {
+  position: relative;
+  z-index: 5; /* Lower than hero */
+}
