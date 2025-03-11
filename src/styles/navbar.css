@@ -8,9 +8,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 30; /* Increased from 1 to 30 to be above content but below full overlay */
-  isolation: isolate; /* Create stacking context */
-}
+  z-index: 1;}
 
 .menu-bar a,
 .menu-open p {
@@ -31,8 +29,7 @@
   height: 100vh;
   padding: 2em;
   background: #DCC8AB;
-  z-index: 50; /* Already at highest level - good! */
-  display: flex;
+  z-index: 50; display: flex;
   clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
 }
 
@@ -41,7 +38,6 @@
   display: flex;
   align-items: flex-end;
   cursor: pointer;
-  z-index: 51; /* One level above overlay for interactive elements */
 }
 
 .menu-copy {
@@ -50,7 +46,6 @@
   flex-direction: column;
   justify-content: space-between;
   padding-top: 2em;
-  z-index: 51; /* One level above overlay */
 }
 
 .menu-preview {
@@ -58,7 +53,6 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  z-index: 51; /* One level above overlay */
 }
 
 .menu-close-icon p {
@@ -70,8 +64,6 @@
 .menu-link-item {
   width: max-content;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-  position: relative;
-  z-index: 52; /* Highest level for interactive elements */
 }
 
 .menu-link-item-holder {
@@ -89,7 +81,6 @@
 
 .menu-info {
   display: flex;
-  z-index: 51; /* One level above overlay */
 }
 
 .menu-info-col {
