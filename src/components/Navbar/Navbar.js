@@ -35,6 +35,8 @@ const navLinks = [
 const Menu = () => {
   const container = useRef();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(false);
+  const [heroAnimationComplete, setHeroAnimationComplete] = useState(false);
 
   const navRef = useRef(null);
 
@@ -95,53 +97,58 @@ const Menu = () => {
 
   }, [isMenuOpen]);
 
-  // Animation definition
+  // Animation definition - now responsive to Hero animation completion
   useEffect(() => {
+    // Only process this effect when heroAnimationComplete changes
+    console.log("Hero animation complete status:", heroAnimationComplete);
 
-    // Check if mobile device
-    const isMobile = window.innerWidth <= 768;
+    // Only show navbar if hero animation is complete OR this is a subsequent visit
+    const isSubsequentVisit = sessionStorage.getItem("hasVisitedBefore");
 
-    const initialDelay = isMobile ? 11 : 10;
+    if (heroAnimationComplete || isSubsequentVisit) {
+      // Set the state to show the navbar
+      setShowNavbar(true);
 
-    // Sets the navbar to invisible at start
-    gsap.set(navRef.current, {
-      opacity: 0,
-    });
-
-    // Sets animation to reveal navbar after intro animation
-    gsap.to(navRef.current, {
-      opacity: 1,
-      duration: 2,
-      ease: 'power3.out',
-      delay: initialDelay, // Delay to match the hero animation
-    });
-
-    let ctx = gsap.context(() => { // Create GSAP context *inside* useEffect
-
-      if (navRef.current) { // Check if ref is valid
-
-        gsap.set(navRef.current, { backgroundColor: 'transparent'}); // Presets navbar background color
-
-        gsap.to(navRef.current, {
-          backgroundColor: '#541519', // Sets to new color on scroll
-          duration: 0.5,
-          scrollTrigger: {
-            trigger: navRef.current,
-            start: "top top",
-            end: "top -10", // Set the animation to end as soon as it leaves top of screen
-            toggleActions: "play none none reverse", // onEnter , onLeave, onEnterBack, onLeaveBack
-            markers: false,
-          }
+      // Ensure the ref is available before trying to animate it
+      if (navRef.current) {
+        // Sets the navbar to invisible initially
+        gsap.set(navRef.current, {
+          opacity: 0,
+          pointerEvents: "none", // Prevent interaction during fade-in
         });
 
-      };
+        // Animate navbar in
+        gsap.to(navRef.current, {
+          opacity: 1,
+          duration: 0.8, // Slightly faster animation
+          ease: "power2.out",
+          pointerEvents: "auto", // Re-enable interaction
+          delay: 0.2, // Smaller delay for better responsiveness
+        });
 
-    }, navRef); // Context attached to the ref
+        // Set up scroll-based background color change
+        let ctx = gsap.context(() => {
+          gsap.set(navRef.current, { backgroundColor: 'transparent' });
 
-    return () => {
-      ctx.revert(); // Clean up with context revert
-    };
-  }, []); // Ensures the animation only runs once
+          gsap.to(navRef.current, {
+            backgroundColor: '#541519',
+            duration: 0.5,
+            scrollTrigger: {
+              trigger: navRef.current,
+              start: "top top",
+              end: "top -10",
+              toggleActions: "play none none reverse",
+              markers: false,
+            }
+          });
+        }, navRef);
+
+        return () => {
+          ctx.revert();
+        };
+      }
+    }
+  }, [heroAnimationComplete]); // Only depend on heroAnimationComplete
 
   return (
     <div className="menu-container" ref={container}>
