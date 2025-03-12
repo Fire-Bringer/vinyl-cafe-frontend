@@ -111,7 +111,7 @@ const Access = () => {
           className="bg-background-600 rounded-[20px] overflow-hidden w-4/5 lg:w-2/5"
           onClick={(e) => e.stopPropagation()}
         >
-          {/*<Contact onClose={closeModal} />*/}
+          <Contact onClose={closeModal} />
         </div>
       </div>
     </section>
