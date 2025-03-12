@@ -26,11 +26,12 @@ const Menu = () => {
   // Initialize modal on first render
   useEffect(() => {
     if (modalContactRef.current && isFirstRender) {
-      // Set initial state with GSAP
+      // Set initial state with GSAP including negative z-index to keep it below everything else during load
       gsap.set(modalContactRef.current, {
         opacity: 0,
         pointerEvents: "none",
-        display: "flex" // Always have it in the DOM but invisible
+        display: "flex", // Always have it in the DOM but invisible
+        zIndex: -1 // Start with negative z-index to prevent flash during load
       });
       setIsFirstRender(false);
     }
@@ -60,6 +61,9 @@ const Menu = () => {
     }
 
     if (isModalOpen) {
+      // Set positive z-index before showing modal
+      gsap.set(modalContactRef.current, { zIndex: 50 });
+
       // Show backdrop first
       animationsRef.current.backdrop = gsap.to(modalContactRef.current, {
         opacity: 1,
@@ -92,7 +96,11 @@ const Menu = () => {
         duration: 0.5,
         delay: 0.2,
         pointerEvents: "none",
-        ease: "power2.in"
+        ease: "power2.in",
+        onComplete: () => {
+          // Return to negative z-index after animation completes
+          gsap.set(modalContactRef.current, { zIndex: -1 });
+        }
       });
     }
 
