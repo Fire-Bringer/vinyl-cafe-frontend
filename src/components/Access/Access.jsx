@@ -1,6 +1,6 @@
 'use client';
 import Contact from '@/components/Contact/Contact';
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 
 const Access = () => {
@@ -8,14 +8,38 @@ const Access = () => {
   const modalContentRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [shouldRenderModal, setShouldRenderModal] = useState(false);
 
-  const openModal = () => {
+  // Track animation instances for cleanup
+  const animationsRef = useRef({
+    backdrop: null,
+    content: null
+  });
+
+  // Delay modal rendering to avoid conflicts with hero
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldRenderModal(true);
+    }, 1000); // Delay modal rendering by 1 second
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const openModal = useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
+    // Kill any existing animations
+    if (animationsRef.current.content) {
+      animationsRef.current.content.kill();
+    }
+    if (animationsRef.current.backdrop) {
+      animationsRef.current.backdrop.kill();
+    }
+
     // Animate out content first
-    gsap.to(modalContentRef.current, {
+    animationsRef.current.content = gsap.to(modalContentRef.current, {
       scale: 0.8,
       opacity: 0,
       duration: 0.3,
@@ -23,44 +47,69 @@ const Access = () => {
     });
 
     // Then hide backdrop
-    gsap.to(modalRef.current, {
+    animationsRef.current.backdrop = gsap.to(modalRef.current, {
       opacity: 0,
       pointerEvents: "none",
       duration: 0.4,
       delay: 0.2,
       ease: "power2.in",
       onComplete: () => {
-        setIsModalOpen(false); // Only completely close after animation
         // Set negative z-index when closed
-        gsap.set(modalRef.current, { zIndex: -1 });
+        gsap.set(modalRef.current, {
+          zIndex: -1,
+          visibility: "hidden"
+        });
+        setIsModalOpen(false); // Only completely close after animation
       }
     });
-  };
+  }, []);
 
-  // Initialize modal on first render
+  // Initialize modal once it's rendered
   useEffect(() => {
-    if (modalRef.current && isFirstRender) {
+    if (modalRef.current && shouldRenderModal) {
       // Set initial state with GSAP including negative z-index
       gsap.set(modalRef.current, {
         opacity: 0,
         pointerEvents: "none",
-        display: "flex", // Always have it in the DOM but invisible
-        zIndex: -1 // Start with negative z-index
+        display: "flex",
+        zIndex: -1, // Start with negative z-index
+        visibility: "hidden" // Add visibility property for extra safety
       });
       setIsFirstRender(false);
     }
-  }, [isFirstRender]);
 
-  // Handle modal open/close animations
+    // Cleanup function for component unmount
+    return () => {
+      if (modalRef.current) {
+        gsap.killTweensOf(modalRef.current);
+      }
+      if (modalContentRef.current) {
+        gsap.killTweensOf(modalContentRef.current);
+      }
+    };
+  }, [shouldRenderModal]);
+
+  // Handle modal open animations
   useEffect(() => {
-    if (!modalRef.current || isFirstRender) return;
+    if (!modalRef.current || isFirstRender || !shouldRenderModal) return;
 
     if (isModalOpen) {
+      // Kill any existing animations
+      if (animationsRef.current.backdrop) {
+        animationsRef.current.backdrop.kill();
+      }
+      if (animationsRef.current.content) {
+        animationsRef.current.content.kill();
+      }
+
       // Set positive z-index before showing modal
-      gsap.set(modalRef.current, { zIndex: 50 });
+      gsap.set(modalRef.current, {
+        zIndex: 50,
+        visibility: "visible"
+      });
 
       // Show backdrop first
-      gsap.to(modalRef.current, {
+      animationsRef.current.backdrop = gsap.to(modalRef.current, {
         opacity: 1,
         duration: 0.3,
         ease: "power2.out",
@@ -69,13 +118,24 @@ const Access = () => {
 
       // Then animate in the content
       if (modalContentRef.current) {
-        gsap.fromTo(modalContentRef.current,
+        animationsRef.current.content = gsap.fromTo(
+          modalContentRef.current,
           { scale: 0.8, opacity: 0 },
           { scale: 1, opacity: 1, duration: 0.5, delay: 0.1, ease: "back.out" }
         );
       }
     }
-  }, [isModalOpen, isFirstRender]);
+
+    // Cleanup function
+    return () => {
+      if (animationsRef.current.backdrop) {
+        animationsRef.current.backdrop.kill();
+      }
+      if (animationsRef.current.content) {
+        animationsRef.current.content.kill();
+      }
+    };
+  }, [isModalOpen, isFirstRender, shouldRenderModal]);
 
   return (
     <section id="Access" className="flex flex-col justify-center items-center pt-16">
@@ -96,24 +156,23 @@ const Access = () => {
         Contact
       </button>
 
-      {/* Modal - Always in DOM, visibility controlled by GSAP */}
-      <div
-        ref={modalRef}
-        className="fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center"
-        onClick={(e) => {
-          if (e.target === modalRef.current) {
-            closeModal();
-          }
-        }}
-      >
+      {/* Modal - Only rendered after delay, with CSS-based initial hiding */}
+      {shouldRenderModal && (
         <div
-          ref={modalContentRef}
-          className="bg-background-600 rounded-[20px] overflow-hidden w-4/5 lg:w-2/5"
-          onClick={(e) => e.stopPropagation()}
+          ref={modalRef}
+          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0 invisible"
+          // Initial inline style prevents flash before GSAP initialization
+          style={{ zIndex: -1 }}
         >
-          <Contact onClose={closeModal} />
+          <div
+            ref={modalContentRef}
+            className="bg-background-600 rounded-[20px] overflow-hidden w-4/5 lg:w-2/5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Contact onClose={closeModal} />
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

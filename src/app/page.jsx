@@ -98,7 +98,7 @@ function Homepage() {
           <Menu />
           <Break2 />
           <Gallery />
-          {/*<Access />*/}
+          <Access />
           <Footer />
         </div>
       ) : (
