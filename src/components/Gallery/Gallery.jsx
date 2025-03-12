@@ -82,7 +82,10 @@ const Gallery = () => {
       ease: "power2.in",
       onComplete: () => {
         // Set z-index back to -1 when hidden
-        gsap.set(modalRef.current, { zIndex: -1 });
+        gsap.set(modalRef.current, {
+          zIndex: -1,
+          visibility: "hidden"
+        });
         setModalImage(null); // Only reset the image source after animation
       }
     })
@@ -131,13 +134,14 @@ const Gallery = () => {
 
   // Handle modal open animations - only animate backdrop initially
   useEffect(() => {
-    if (!modalRef.current || isFirstRender) return
+    if (!modalRef.current || isFirstRender || !shouldRenderModal) return;
 
     if (modalImage) {
       // Set proper z-index before showing modal
       gsap.set(modalRef.current, {
         zIndex: 50,
-        visibility: "visible"
+        visibility: "visible",
+        pointerEvents: "auto" // Enable pointer events when showing
       });
 
       // Kill any existing backdrop animation
@@ -149,8 +153,7 @@ const Gallery = () => {
       animationsRef.current.backdrop = gsap.to(modalRef.current, {
         opacity: 1,
         duration: 0.7,
-        ease: "power2.out",
-        pointerEvents: "auto",
+        ease: "power2.out"
       })
 
       // Set initial state for content - will be animated after image loads
@@ -169,26 +172,27 @@ const Gallery = () => {
         animationsRef.current.backdrop.kill()
       }
     }
-  }, [modalImage, isFirstRender])
+  }, [modalImage, isFirstRender, shouldRenderModal])
 
   // Handle modal backdrop click with proper cleanup
   useEffect(() => {
     const modalElement = modalRef.current
-    if (!modalElement) return
+    if (!modalElement || !shouldRenderModal) return
 
     const handleBackdropClick = (e) => {
-      if (e.target === modalElement) {
+      // Only close if clicking directly on backdrop and modal is open
+      if (e.target === modalElement && modalImage) {
         closeModal()
       }
     }
 
     modalElement.addEventListener("click", handleBackdropClick)
 
-    // Clean up event listener when component unmounts
+    // Clean up event listener when component unmounts or dependencies change
     return () => {
       modalElement.removeEventListener("click", handleBackdropClick)
     }
-  }, [closeModal])
+  }, [closeModal, modalImage, shouldRenderModal])
 
   // Handle escape key to close modal
   useEffect(() => {
@@ -230,11 +234,11 @@ const Gallery = () => {
         ))}
       </div>
 
-      {/* Modal - Only rendered when ready, additional CSS safety classes */}
+      {/* Modal - Only rendered when ready, with proper classes for click events */}
       {shouldRenderModal && (
         <div
           ref={modalRef}
-          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0 invisible"
+          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0"
           // Initial inline style prevents flash before GSAP initialization
           style={{ zIndex: -1 }}
         >

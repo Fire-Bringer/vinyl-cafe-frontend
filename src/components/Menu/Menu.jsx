@@ -41,6 +41,7 @@ const Menu = () => {
         opacity: 0,
         pointerEvents: "none",
         display: "flex",
+        zIndex: -1,
         visibility: "hidden" // Start completely hidden
       });
     }
@@ -72,15 +73,15 @@ const Menu = () => {
       // Make visible before animating
       gsap.set(modalContactRef.current, {
         visibility: "visible",
-        zIndex: 50
+        zIndex: 50,
+        pointerEvents: "auto" // Explicitly enable pointer events
       });
 
       // Show backdrop first
       animationsRef.current.backdrop = gsap.to(modalContactRef.current, {
         opacity: 1,
         duration: 0.4,
-        ease: "power2.out",
-        pointerEvents: "auto"
+        ease: "power2.out"
       });
 
       // Then animate in the content
@@ -106,7 +107,7 @@ const Menu = () => {
         opacity: 0,
         duration: 0.4,
         delay: 0.2,
-        pointerEvents: "none",
+        pointerEvents: "none", // Disable pointer events when hiding
         ease: "power2.in",
         onComplete: () => {
           // Hide completely after animation
@@ -128,22 +129,37 @@ const Menu = () => {
     };
   }, [isModalOpen, shouldRenderModal]);
 
-  // Handle click events
+  // Handle backdrop click for closing modal
   useEffect(() => {
-    const modalEl = modalContactRef.current;
-    if (!modalEl) return;
+    if (!modalContactRef.current || !shouldRenderModal) return;
 
     const handleBackdropClick = (e) => {
-      if (e.target === modalEl) {
+      if (e.target === modalContactRef.current && isModalOpen) {
         closeModal();
       }
     };
 
-    modalEl.addEventListener('click', handleBackdropClick);
+    const modalElement = modalContactRef.current;
+    modalElement.addEventListener('click', handleBackdropClick);
+
     return () => {
-      modalEl.removeEventListener('click', handleBackdropClick);
+      modalElement.removeEventListener('click', handleBackdropClick);
     };
-  }, [closeModal]);
+  }, [closeModal, isModalOpen, shouldRenderModal]);
+
+  // Add escape key handler for better accessibility
+  useEffect(() => {
+    const handleEscKey = (e) => {
+      if (e.key === "Escape" && isModalOpen) {
+        closeModal();
+      }
+    };
+
+    window.addEventListener("keydown", handleEscKey);
+    return () => {
+      window.removeEventListener("keydown", handleEscKey);
+    };
+  }, [isModalOpen, closeModal]);
 
   return (
     <section id="Menu" className="flex flex-col justify-center items-center pb-16 md:pt-16">
@@ -231,7 +247,7 @@ const Menu = () => {
       {shouldRenderModal && (
         <div
           ref={modalContactRef}
-          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0 invisible"
+          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0"
           style={{ zIndex: -1 }}
         >
           <div ref={modalContentRef} className="bg-background-600 rounded-[20px] p-4 overflow-hidden">
