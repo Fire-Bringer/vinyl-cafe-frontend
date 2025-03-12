@@ -70,6 +70,8 @@ const Hero = ({ onComplete }) => {
   const autoSlideIntervalRef = useRef(null)
   // Add a state to track if opening animation is complete
   const [openingAnimationComplete, setOpeningAnimationComplete] = useState(false)
+  // Add state to detect hydration completion
+  const [isHydrated, setIsHydrated] = useState(false)
 
   // Array Definitions for Grouped Dom Elements
   const addColRef = (el) => {
@@ -150,21 +152,35 @@ const Hero = ({ onComplete }) => {
     Promise.all(imagePromises)
       .then(() => {
         console.log('All images loaded successfully');
-        // Longer delay on mobile to ensure rendering completes
         const isMobile = window.innerWidth <= 768;
-        const delay = isMobile ? 3000 : 2000;
+        // Increase delay for production only
+        const delay = isMobile ? 4000 : 3000;
 
-        // Simply set images loaded, the CSS will handle the fade out
         setTimeout(() => {
-          setImagesLoaded(true);
+          // Only set images loaded if component is hydrated
+          if (isHydrated) {
+            setImagesLoaded(true);
+          } else {
+            // If not hydrated yet, wait a bit more
+            const hydrationCheckInterval = setInterval(() => {
+              if (isHydrated) {
+                setImagesLoaded(true);
+                clearInterval(hydrationCheckInterval);
+              }
+            }, 500);
+          }
         }, delay);
       })
       .catch((error) => {
         console.error("Error loading images:", error);
-        // Set images as loaded anyway to prevent UI from hanging
         setImagesLoaded(true);
       });
-  }, []); // Empty dependency array since previewImages is defined in the component
+  }, [isHydrated]); // Add isHydrated as dependency
+
+  // Add this effect to detect hydration completion
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   // Add this function to preload the next/prev images
   const preloadAdjacentImages = () => {

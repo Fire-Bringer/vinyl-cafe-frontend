@@ -9,7 +9,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
   color: white;
   font-family: sans-serif;
   animation: fadeIn 1s ease-in-out forwards;
