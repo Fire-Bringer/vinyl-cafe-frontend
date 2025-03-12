@@ -7,6 +7,7 @@ const Gallery = () => {
   const [modalImage, setModalImage] = useState(null)
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [shouldRenderModal, setShouldRenderModal] = useState(false)
   const modalRef = useRef(null)
   const modalContentRef = useRef(null)
   const imageCache = useRef(new Set())
@@ -16,6 +17,15 @@ const Gallery = () => {
     backdrop: null,
     content: null,
   })
+
+  // Delay modal initialization to avoid conflicts with hero
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldRenderModal(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Preload images for smoother modal experience
   useEffect(() => {
@@ -70,7 +80,11 @@ const Gallery = () => {
       duration: 0.8,
       delay: 0.2,
       ease: "power2.in",
-      onComplete: () => setModalImage(null), // Only reset the image source after animation
+      onComplete: () => {
+        // Set z-index back to -1 when hidden
+        gsap.set(modalRef.current, { zIndex: -1 });
+        setModalImage(null); // Only reset the image source after animation
+      }
     })
   }, [])
 
@@ -95,12 +109,14 @@ const Gallery = () => {
 
   // Initialize modal on first render
   useEffect(() => {
-    if (modalRef.current && isFirstRender) {
-      // Set initial state with GSAP
+    if (modalRef.current && shouldRenderModal) {
+      // Set initial state with GSAP - starting with negative z-index
       gsap.set(modalRef.current, {
         opacity: 0,
         pointerEvents: "none",
-        display: "flex", // Always have it in the DOM but invisible
+        display: "flex",
+        zIndex: -1, // Start with negative z-index to prevent flash
+        visibility: "hidden" // Add visibility property for extra safety
       })
       setIsFirstRender(false)
     }
@@ -111,13 +127,19 @@ const Gallery = () => {
       gsap.killTweensOf(modalRef.current)
       gsap.killTweensOf(modalContentRef.current)
     }
-  }, [isFirstRender])
+  }, [shouldRenderModal])
 
   // Handle modal open animations - only animate backdrop initially
   useEffect(() => {
     if (!modalRef.current || isFirstRender) return
 
     if (modalImage) {
+      // Set proper z-index before showing modal
+      gsap.set(modalRef.current, {
+        zIndex: 50,
+        visibility: "visible"
+      });
+
       // Kill any existing backdrop animation
       if (animationsRef.current.backdrop) {
         animationsRef.current.backdrop.kill()
@@ -208,39 +230,43 @@ const Gallery = () => {
         ))}
       </div>
 
-      {/* Modal - Always in DOM, visibility controlled by GSAP */}
-      <div
-        ref={modalRef}
-        className="fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center"
-      >
+      {/* Modal - Only rendered when ready, additional CSS safety classes */}
+      {shouldRenderModal && (
         <div
-          ref={modalContentRef}
-          className="bg-background rounded-[20px] p-4 max-w-[80%] lg:max-w-[60%] xl:max-w-[50%] 2xl:max-w-[30%] max-h-[80%] overflow-hidden relative"
-          onClick={(e) => e.stopPropagation()}
+          ref={modalRef}
+          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0 invisible"
+          // Initial inline style prevents flash before GSAP initialization
+          style={{ zIndex: -1 }}
         >
-          {modalImage && (
-            <>
-              {/* Loading indicator */}
-              {!imageLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+          <div
+            ref={modalContentRef}
+            className="bg-background rounded-[20px] p-4 max-w-[80%] lg:max-w-[60%] xl:max-w-[50%] 2xl:max-w-[30%] max-h-[80%] overflow-hidden relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {modalImage && (
+              <>
+                {/* Loading indicator */}
+                {!imageLoaded && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                  </div>
+                )}
+                <div className={`transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}>
+                  <Image
+                    src={modalImage || "/placeholder.svg"}
+                    alt="Modal Image"
+                    width={900}
+                    height={900}
+                    className="rounded-[20px] object-contain aspect-square"
+                    onLoadingComplete={handleImageLoaded}
+                    priority={true}
+                  />
                 </div>
-              )}
-              <div className={`transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}>
-                <Image
-                  src={modalImage || "/placeholder.svg"}
-                  alt="Modal Image"
-                  width={900}
-                  height={900}
-                  className="rounded-[20px] object-contain aspect-square"
-                  onLoadingComplete={handleImageLoaded}
-                  priority={true}
-                />
-              </div>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   )
 }
