@@ -35,6 +35,8 @@ const navLinks = [
 const Menu = () => {
   const container = useRef();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(false);
+  const [heroAnimationComplete, setHeroAnimationComplete] = useState(false);
 
   const navRef = useRef(null);
 
