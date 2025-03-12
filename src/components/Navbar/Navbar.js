@@ -98,83 +98,62 @@ const Menu = ({ heroAnimationComplete = false }) => {
 
   // Animation definition - now responsive to Hero animation completion
   useEffect(() => {
-    console.log("Hero animation complete status:", heroAnimationComplete);
+    // Only run in browser
+    if (typeof window === 'undefined') return;
 
-    // Only show navbar if hero animation is complete OR this is a subsequent visit
+    console.log("Hero animation complete status:", heroAnimationComplete);
     const isSubsequentVisit = sessionStorage.getItem("hasVisitedBefore");
 
     if (heroAnimationComplete || isSubsequentVisit) {
-      // Set session storage for subsequent visits
+      // Set session storage
       if (!isSubsequentVisit) {
         sessionStorage.setItem("hasVisitedBefore", "true");
       }
 
-      // Set the state to show the navbar
+      // Show navbar immediately
       setShowNavbar(true);
 
-      // Use a small timeout to ensure DOM is ready after state update
-      const navbarTimer = setTimeout(() => {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
         if (navRef.current) {
-          console.log("Setting up navbar animation");
+          console.log("Animating navbar");
 
-          // Kill any existing tweens on this element
+          // Clear any existing animations
           gsap.killTweensOf(navRef.current);
 
-          // Sets the navbar to invisible initially
+          // Set initial state
           gsap.set(navRef.current, {
             opacity: 0,
-            visibility: "hidden",
             pointerEvents: "none"
           });
 
-          // Create a timeline for better control
-          const navTimeline = gsap.timeline();
-
-          // Add the navbar reveal animation
-          navTimeline.to(navRef.current, {
+          // Simple animation without timeline
+          gsap.to(navRef.current, {
             opacity: 1,
-            visibility: "visible",
+            visibility: "visible", // Important!
             duration: 1,
             ease: "power2.out",
             pointerEvents: "auto",
-            delay: 12.5, // Delay to sync with hero animation
-            onStart: () => console.log("Navbar animation starting"),
+            delay: 12.5, // Delay to ensure hero animation is complete
             onComplete: () => console.log("Navbar animation complete!")
           });
 
-          // Set up scroll-based background color change in the same timeline
-          let scrollCtx = gsap.context(() => {
-            gsap.set(navRef.current, { backgroundColor: 'transparent' });
-
+          // Background color change
+          gsap.context(() => {
             ScrollTrigger.create({
               trigger: navRef.current,
               start: "top top",
               end: "top -10",
               onEnter: () => {
-                gsap.to(navRef.current, {
-                  backgroundColor: '#541519',
-                  duration: 0.5
-                });
-                console.log("Navbar background color changing");
+                gsap.to(navRef.current, { backgroundColor: '#541519', duration: 0.5 });
               },
               onLeaveBack: () => {
-                gsap.to(navRef.current, {
-                  backgroundColor: 'transparent',
-                  duration: 0.5
-                });
-                console.log("Navbar background color reverting");
+                gsap.to(navRef.current, { backgroundColor: 'transparent', duration: 0.5 });
               }
             });
           }, navRef);
-
-          return () => {
-            // Clean up
-            scrollCtx.revert();
-            clearTimeout(navbarTimer);
-            navTimeline.kill();
-          };
         }
-      }, 100); // Small delay to ensure DOM is ready
+      }, 100);
     }
   }, [heroAnimationComplete]);
 
