@@ -20,7 +20,7 @@ const Access = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShouldRenderModal(true);
-    }, 1000); // Delay modal rendering by 1 second
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -105,15 +105,15 @@ const Access = () => {
       // Set positive z-index before showing modal
       gsap.set(modalRef.current, {
         zIndex: 50,
-        visibility: "visible"
+        visibility: "visible",
+        pointerEvents: "auto" // Enable pointer events when showing
       });
 
       // Show backdrop first
       animationsRef.current.backdrop = gsap.to(modalRef.current, {
         opacity: 1,
         duration: 0.3,
-        ease: "power2.out",
-        pointerEvents: "auto"
+        ease: "power2.out"
       });
 
       // Then animate in the content
@@ -137,10 +137,29 @@ const Access = () => {
     };
   }, [isModalOpen, isFirstRender, shouldRenderModal]);
 
+  // Handle backdrop click for closing modal
+  useEffect(() => {
+    if (!modalRef.current || !shouldRenderModal) return;
+
+    const handleBackdropClick = (e) => {
+      if (e.target === modalRef.current && isModalOpen) {
+        closeModal();
+      }
+    };
+
+    const modalElement = modalRef.current;
+    modalElement.addEventListener('click', handleBackdropClick);
+
+    return () => {
+      modalElement.removeEventListener('click', handleBackdropClick);
+    };
+  }, [closeModal, isModalOpen, shouldRenderModal]);
+
   return (
     <section id="Access" className="flex flex-col justify-center items-center pt-16">
       <h2 className="font-display text-4xl">Access</h2>
 
+      {/* Map and contact info */}
       <a href="https://www.google.com/maps/place/Kanazawa+Station/@36.5780443,136.6481714,17z/data=!3m1!4b1!4m6!3m5!1s0x5ff8334203bb8605:0x5d5df6011ebba7ea!8m2!3d36.5780443!4d136.6481714!16zL20vMGZ3bnZr?entry=ttu&g_ep=EgoyMDI1MDIwNS4xIKXMDSoASAFQAw%3D%3D" target="_blank" className="mt-4 w-4/5 xl:w-1/2 shadower rounded-[20px]">
         <img src="/map.png" alt="Map image" className="rounded-[20px]"/>
       </a>
@@ -160,8 +179,7 @@ const Access = () => {
       {shouldRenderModal && (
         <div
           ref={modalRef}
-          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0 invisible"
-          // Initial inline style prevents flash before GSAP initialization
+          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0"
           style={{ zIndex: -1 }}
         >
           <div
