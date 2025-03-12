@@ -7,7 +7,7 @@ const Menu = () => {
   const modalContactRef = useRef(null);
   const modalContentRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [shouldRenderModal, setShouldRenderModal] = useState(false);
 
   // Track animation instances for cleanup
   const animationsRef = useRef({
@@ -23,22 +23,30 @@ const Menu = () => {
     setIsModalOpen(false);
   }, []);
 
-  // Initialize modal on first render
+  // Handle initial component mount - delay modal rendering
   useEffect(() => {
-    if (modalContactRef.current && isFirstRender) {
-      // Set initial state with GSAP including negative z-index to keep it below everything else during load
+    // Delay rendering the modal until after critical page content is loaded
+    const timer = setTimeout(() => {
+      setShouldRenderModal(true);
+    }, 1000); // Delay modal rendering by 1 second
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize modal once it's rendered
+  useEffect(() => {
+    if (modalContactRef.current && shouldRenderModal) {
+      // Set initial state with GSAP
       gsap.set(modalContactRef.current, {
         opacity: 0,
         pointerEvents: "none",
-        display: "flex", // Always have it in the DOM but invisible
-        zIndex: -1 // Start with negative z-index to prevent flash during load
+        display: "flex",
+        visibility: "hidden" // Start completely hidden
       });
-      setIsFirstRender(false);
     }
 
-    // Cleanup function to kill any animations when component unmounts
+    // Cleanup function
     return () => {
-      // Kill any animations that might be running
       if (modalContactRef.current) {
         gsap.killTweensOf(modalContactRef.current);
       }
@@ -46,13 +54,13 @@ const Menu = () => {
         gsap.killTweensOf(modalContentRef.current);
       }
     };
-  }, [isFirstRender]);
+  }, [shouldRenderModal]);
 
   // Handle modal open/close animations with proper cleanup
   useEffect(() => {
-    if (!modalContactRef.current || isFirstRender) return;
+    if (!modalContactRef.current || !shouldRenderModal) return;
 
-    // Clean up any existing animations before creating new ones
+    // Clean up existing animations
     if (animationsRef.current.backdrop) {
       animationsRef.current.backdrop.kill();
     }
@@ -61,13 +69,16 @@ const Menu = () => {
     }
 
     if (isModalOpen) {
-      // Set positive z-index before showing modal
-      gsap.set(modalContactRef.current, { zIndex: 50 });
+      // Make visible before animating
+      gsap.set(modalContactRef.current, {
+        visibility: "visible",
+        zIndex: 50
+      });
 
       // Show backdrop first
       animationsRef.current.backdrop = gsap.to(modalContactRef.current, {
         opacity: 1,
-        duration: 0.5, // Slightly faster for better UX
+        duration: 0.4,
         ease: "power2.out",
         pointerEvents: "auto"
       });
@@ -76,7 +87,7 @@ const Menu = () => {
       if (modalContentRef.current) {
         animationsRef.current.content = gsap.fromTo(modalContentRef.current,
           { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.5, delay: 0.1, ease: "back.out" }
+          { scale: 1, opacity: 1, duration: 0.4, delay: 0.1, ease: "back.out" }
         );
       }
     } else {
@@ -85,7 +96,7 @@ const Menu = () => {
         animationsRef.current.content = gsap.to(modalContentRef.current, {
           scale: 0.8,
           opacity: 0,
-          duration: 0.5, // Slightly faster for better UX
+          duration: 0.4,
           ease: "power2.in"
         });
       }
@@ -93,18 +104,20 @@ const Menu = () => {
       // Then hide the backdrop
       animationsRef.current.backdrop = gsap.to(modalContactRef.current, {
         opacity: 0,
-        duration: 0.5,
+        duration: 0.4,
         delay: 0.2,
         pointerEvents: "none",
         ease: "power2.in",
         onComplete: () => {
-          // Return to negative z-index after animation completes
-          gsap.set(modalContactRef.current, { zIndex: -1 });
+          // Hide completely after animation
+          gsap.set(modalContactRef.current, {
+            visibility: "hidden",
+            zIndex: -1
+          });
         }
       });
     }
 
-    // Cleanup function that kills animations when effect re-runs or component unmounts
     return () => {
       if (animationsRef.current.backdrop) {
         animationsRef.current.backdrop.kill();
@@ -113,9 +126,9 @@ const Menu = () => {
         animationsRef.current.content.kill();
       }
     };
-  }, [isModalOpen, isFirstRender]);
+  }, [isModalOpen, shouldRenderModal]);
 
-  // Handle click events on modal backdrop - with cleanup
+  // Handle click events
   useEffect(() => {
     const modalEl = modalContactRef.current;
     if (!modalEl) return;
@@ -127,8 +140,6 @@ const Menu = () => {
     };
 
     modalEl.addEventListener('click', handleBackdropClick);
-
-    // Clean up event listener when component unmounts
     return () => {
       modalEl.removeEventListener('click', handleBackdropClick);
     };
@@ -216,21 +227,24 @@ const Menu = () => {
         <h6>PDF MENU</h6>
       </button>
 
-      {/* Modal - Always in DOM but visibility controlled by GSAP */}
-      <div
-        ref={modalContactRef}
-        className="fixed top-0 left-0 w-full h-full bg-secondary/80 z-50 flex items-center justify-center"
-      >
-        <div ref={modalContentRef} className="bg-background-600 rounded-[20px] p-4 overflow-hidden">
-          <Image
-            onClick={(e) => e.stopPropagation()}
-            src='/menu.png'
-            alt='Menu image'
-            width={500}
-            height={1000}
-          />
+      {/* Modal - Only rendered after delay, with CSS-based initial hiding */}
+      {shouldRenderModal && (
+        <div
+          ref={modalContactRef}
+          className="fixed top-0 left-0 w-full h-full bg-secondary/80 flex items-center justify-center opacity-0 invisible"
+          style={{ zIndex: -1 }}
+        >
+          <div ref={modalContentRef} className="bg-background-600 rounded-[20px] p-4 overflow-hidden">
+            <Image
+              onClick={(e) => e.stopPropagation()}
+              src='/menu.png'
+              alt='Menu image'
+              width={500}
+              height={1000}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };
