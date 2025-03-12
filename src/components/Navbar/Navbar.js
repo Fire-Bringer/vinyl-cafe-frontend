@@ -32,11 +32,12 @@ const navLinks = [
 ];
 
 
-const Menu = ({ heroAnimationComplete }) => {
+const Menu = () => {
   const container = useRef();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showNavbar, setShowNavbar] = useState(false);
+
   const navRef = useRef(null);
+
   const tl = useRef();
 
   const toggleMenu = () => {
@@ -84,136 +85,119 @@ const Menu = ({ heroAnimationComplete }) => {
   );
 
   useEffect(() => {
+
     // Trigger to open and close navbar
     if (isMenuOpen) {
       tl.current.play();
     } else {
       tl.current.reverse();
     }
+
   }, [isMenuOpen]);
 
-  // Check for returning visitors
+  // Animation definition
   useEffect(() => {
-    const isSubsequentVisit = sessionStorage.getItem("hasVisitedBefore");
 
-    if (isSubsequentVisit) {
-      // For returning visitors, show navbar immediately
-      setShowNavbar(true);
-    }
-  }, []);
+    // Check if mobile device
+    const isMobile = window.innerWidth <= 768;
 
-  // Animation definition - now responsive to Hero animation completion
-  useEffect(() => {
-    // Only show navbar if hero animation is complete OR this is a subsequent visit
-    const isSubsequentVisit = sessionStorage.getItem("hasVisitedBefore");
+    const initialDelay = isMobile ? 11 : 10;
 
-    if (heroAnimationComplete || isSubsequentVisit) {
-      setShowNavbar(true);
+    // Sets the navbar to invisible at start
+    gsap.set(navRef.current, {
+      opacity: 0,
+    });
 
-      // Sets the navbar to invisible initially
-      gsap.set(navRef.current, {
-        opacity: 0,
-        pointerEvents: "none", // Prevent interaction during fade-in
-      });
+    // Sets animation to reveal navbar after intro animation
+    gsap.to(navRef.current, {
+      opacity: 1,
+      duration: 2,
+      ease: 'power3.out',
+      delay: initialDelay, // Delay to match the hero animation
+    });
 
-      // Animate navbar in
-      gsap.to(navRef.current, {
-        opacity: 1,
-        duration: 1.5,
-        ease: "power3.out",
-        pointerEvents: "auto", // Re-enable interaction
-        delay: 0.5, // Small delay after hero animation completes
-      });
+    let ctx = gsap.context(() => { // Create GSAP context *inside* useEffect
 
-      // Set up scroll-based background color change
-      let ctx = gsap.context(() => {
-        if (navRef.current) {
-          gsap.set(navRef.current, { backgroundColor: 'transparent' });
+      if (navRef.current) { // Check if ref is valid
 
-          gsap.to(navRef.current, {
-            backgroundColor: '#541519',
-            duration: 0.5,
-            scrollTrigger: {
-              trigger: navRef.current,
-              start: "top top",
-              end: "top -10",
-              toggleActions: "play none none reverse",
-              markers: false,
-            }
-          });
-        }
-      }, navRef);
+        gsap.set(navRef.current, { backgroundColor: 'transparent'}); // Presets navbar background color
 
-      return () => {
-        ctx.revert();
+        gsap.to(navRef.current, {
+          backgroundColor: '#541519', // Sets to new color on scroll
+          duration: 0.5,
+          scrollTrigger: {
+            trigger: navRef.current,
+            start: "top top",
+            end: "top -10", // Set the animation to end as soon as it leaves top of screen
+            toggleActions: "play none none reverse", // onEnter , onLeave, onEnterBack, onLeaveBack
+            markers: false,
+          }
+        });
+
       };
-    }
-  }, [heroAnimationComplete]);
+
+    }, navRef); // Context attached to the ref
+
+    return () => {
+      ctx.revert(); // Clean up with context revert
+    };
+  }, []); // Ensures the animation only runs once
 
   return (
     <div className="menu-container" ref={container}>
-      {/* Only render navbar when ready */}
-      {showNavbar && (
-        <>
-          {/* menu-bar */}
-          <div
-            className="menu-bar h-[90px] border-b-2 border-b-[#423940] nav-shadower"
-            ref={navRef}
-            style={{ opacity: 0 }} // Start invisible with inline style as fallback
-          >
-            <div className="menu-logo">
-              <Link href="/" className="text-primary"><VinylIcon fill="transparent" stroke="#D6D533"/></Link>
-            </div>
-            <div className="menu-open" onClick={toggleMenu}>
-              <p><BurgerIcon/></p>
-            </div>
+      {/* menu-bar */}
+      <div className="menu-bar h-[90px] border-b-2 border-b-[#423940] nav-shadower" ref={navRef}>
+        <div className="menu-logo">
+          <Link href="/" className="text-primary"><VinylIcon fill="transparent" stroke="#D6D533"/></Link>
+        </div>
+        <div className="menu-open" onClick={toggleMenu}>
+          <p><BurgerIcon/></p>
+        </div>
+      </div>
+
+      {/* menu-overlay */}
+      <div className="menu-overlay">
+        {/* menu-overlay-bar */}
+        <div className="menu-overlay-bar h-[90px]">
+          <div className="menu-logo">
+            <Link href="/"><VinylIcon fill="#DCC8AB" stroke="#541519"/></Link>
           </div>
+          <div className="menu-close">
+            <p onClick={toggleMenu} className="font-body text-secondary">Close</p>
+          </div>
+        </div>
 
-          {/* menu-overlay */}
-          <div className="menu-overlay">
-            {/* menu-overlay-bar */}
-            <div className="menu-overlay-bar h-[90px]">
-              <div className="menu-logo">
-                <Link href="/"><VinylIcon fill="#DCC8AB" stroke="#541519"/></Link>
-              </div>
-              <div className="menu-close">
-                <p onClick={toggleMenu} className="font-body text-secondary">Close</p>
-              </div>
-            </div>
-
-            {/* menu overlay items */}
-            <div className="menu-close-icon" onClick={toggleMenu}>
-              <p>&#x2715;</p>
-            </div>
-            <div className="menu-copy mb-24 md:mb-0">
-              <div className="menu-links">
-                {navLinks.map((link, index) => (
-                  <div key={index} className="menu-link-item">
-                    <div className="menu-link-item-holder" onClick={() => handleNavLinkClick(link.targetId, -100)}>
-                      <Link className="menu-link" href={link.path}>
-                        {link.label}
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="menu-info">
-                <div className="menu-info-col">
-                  <a href="#"><IgIcon/></a>
-                  <a href="#"><YtIcon/></a>
-                </div>
-                <div className="menu-info-col font-body ml-6">
-                  <p>cafe@vinyl.com</p>
-                  <p>777-7777-7777</p>
+        {/* menu overlay items */}
+        <div className="menu-close-icon" onClick={toggleMenu}>
+          <p>&#x2715;</p>
+        </div>
+        <div className="menu-copy mb-24 md:mb-0">
+          <div className="menu-links">
+            {navLinks.map((link, index) => (
+              <div key={index} className="menu-link-item">
+                <div className="menu-link-item-holder" onClick={() => handleNavLinkClick(link.targetId, -100)}> {/* Example: 100px above */}
+                  <Link className="menu-link" href={link.path}>
+                    {link.label}
+                  </Link>
                 </div>
               </div>
+            ))}
+          </div>
+          <div className="menu-info">
+            <div className="menu-info-col">
+              <a href="#"><IgIcon/></a>
+              <a href="#"><YtIcon/></a>
             </div>
-            <div className="menu-preview font-body mb-24 md:mb-0">
-              <p>Keep it Real</p>
+            <div className="menu-info-col font-body ml-6">
+              <p>cafe@vinyl.com</p>
+              <p>777-7777-7777</p>
             </div>
           </div>
-        </>
-      )}
+        </div>
+        <div className="menu-preview font-body mb-24 md:mb-0">
+          <p>Keep it Real</p>
+        </div>
+      </div>
     </div>
   );
 };

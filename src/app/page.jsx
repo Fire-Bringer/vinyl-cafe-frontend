@@ -85,7 +85,7 @@ function Homepage() {
 
   return (
     <div>
-      <Navbar heroAnimationComplete={showContent} />
+      <Navbar />
       <Hero onComplete={handleHeroComplete} />
 
       {showContent ? (
