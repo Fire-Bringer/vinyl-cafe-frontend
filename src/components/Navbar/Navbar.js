@@ -32,11 +32,10 @@ const navLinks = [
 ];
 
 
-const Menu = () => {
+const Menu = ({ heroAnimationComplete = false }) => {
   const container = useRef();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(false);
-  const [heroAnimationComplete, setHeroAnimationComplete] = useState(false);
 
   const navRef = useRef(null);
 
@@ -99,69 +98,103 @@ const Menu = () => {
 
   // Animation definition - now responsive to Hero animation completion
   useEffect(() => {
-    // Only process this effect when heroAnimationComplete changes
     console.log("Hero animation complete status:", heroAnimationComplete);
 
     // Only show navbar if hero animation is complete OR this is a subsequent visit
     const isSubsequentVisit = sessionStorage.getItem("hasVisitedBefore");
 
     if (heroAnimationComplete || isSubsequentVisit) {
+      // Set session storage for subsequent visits
+      if (!isSubsequentVisit) {
+        sessionStorage.setItem("hasVisitedBefore", "true");
+      }
+
       // Set the state to show the navbar
       setShowNavbar(true);
 
-      // Ensure the ref is available before trying to animate it
-      if (navRef.current) {
-        // Sets the navbar to invisible initially
-        gsap.set(navRef.current, {
-          opacity: 0,
-          pointerEvents: "none", // Prevent interaction during fade-in
-        });
+      // Use a small timeout to ensure DOM is ready after state update
+      const navbarTimer = setTimeout(() => {
+        if (navRef.current) {
+          console.log("Setting up navbar animation");
 
-        // Animate navbar in
-        gsap.to(navRef.current, {
-          opacity: 1,
-          duration: 1,
-          ease: "power2.out",
-          pointerEvents: "auto", // Re-enable interaction
-          zIndex: 100, // Ensure it's on top
-          delay: 12, // Delay to ensure hero animation is complete
-        });
+          // Kill any existing tweens on this element
+          gsap.killTweensOf(navRef.current);
 
-        // Set up scroll-based background color change
-        let ctx = gsap.context(() => {
-          gsap.set(navRef.current, { backgroundColor: 'transparent' });
+          // Sets the navbar to invisible initially
+          gsap.set(navRef.current, {
+            opacity: 0,
+            visibility: "hidden",
+            pointerEvents: "none"
+          });
 
-          gsap.to(navRef.current, {
-            backgroundColor: '#541519',
-            duration: 0.5,
-            scrollTrigger: {
+          // Create a timeline for better control
+          const navTimeline = gsap.timeline();
+
+          // Add the navbar reveal animation
+          navTimeline.to(navRef.current, {
+            opacity: 1,
+            visibility: "visible",
+            duration: 1,
+            ease: "power2.out",
+            pointerEvents: "auto",
+            delay: 12.5, // Delay to sync with hero animation
+            onStart: () => console.log("Navbar animation starting"),
+            onComplete: () => console.log("Navbar animation complete!")
+          });
+
+          // Set up scroll-based background color change in the same timeline
+          let scrollCtx = gsap.context(() => {
+            gsap.set(navRef.current, { backgroundColor: 'transparent' });
+
+            ScrollTrigger.create({
               trigger: navRef.current,
               start: "top top",
               end: "top -10",
-              toggleActions: "play none none reverse",
-              markers: false,
-            }
-          });
-        }, navRef);
+              onEnter: () => {
+                gsap.to(navRef.current, {
+                  backgroundColor: '#541519',
+                  duration: 0.5
+                });
+                console.log("Navbar background color changing");
+              },
+              onLeaveBack: () => {
+                gsap.to(navRef.current, {
+                  backgroundColor: 'transparent',
+                  duration: 0.5
+                });
+                console.log("Navbar background color reverting");
+              }
+            });
+          }, navRef);
 
-        return () => {
-          ctx.revert();
-        };
-      }
+          return () => {
+            // Clean up
+            scrollCtx.revert();
+            clearTimeout(navbarTimer);
+            navTimeline.kill();
+          };
+        }
+      }, 100); // Small delay to ensure DOM is ready
     }
-  }, [heroAnimationComplete]); // Only depend on heroAnimationComplete
+  }, [heroAnimationComplete]);
 
   return (
     <div className="menu-container" ref={container}>
-      {/* menu-bar */}
-      <div className="menu-bar h-[90px] border-b-2 border-b-[#423940] nav-shadower -z-10" ref={navRef}>
-        <div className="menu-logo">
-          <Link href="/" className="text-primary"><VinylIcon fill="transparent" stroke="#D6D533"/></Link>
+      {/* Add initial styling to keep it invisible until GSAP takes over */}
+      {showNavbar && (
+        <div
+          className="menu-bar h-[90px] border-b-2 border-b-[#423940] nav-shadower"
+          ref={navRef}
+          style={{ opacity: 0, visibility: "hidden" }} // Initial invisible state
+        >
+          <div className="menu-logo">
+            <Link href="/" className="text-primary"><VinylIcon fill="transparent" stroke="#D6D533"/></Link>
+          </div>
+          <div className="menu-open" onClick={toggleMenu}>
+            <p><BurgerIcon/></p>
+          </div>
         </div>
-        <div className="menu-open" onClick={toggleMenu}>
-          <p><BurgerIcon/></p>
-        </div>
-      </div>
+      )}
 
       {/* menu-overlay */}
       <div className="menu-overlay">
