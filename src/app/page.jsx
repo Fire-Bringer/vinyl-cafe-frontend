@@ -97,7 +97,7 @@ function Homepage() {
           <Events />
           {/*<Menu />*/}
           <Break2 />
-          <Gallery />
+          {/*<Gallery />*/}
           {/*<Access />*/}
           <Footer />
         </div>
