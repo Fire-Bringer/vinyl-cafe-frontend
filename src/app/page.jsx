@@ -95,10 +95,10 @@ function Homepage() {
           <Break />
           <About />
           <Events />
-          <Menu />
+          {/*<Menu />*/}
           <Break2 />
           <Gallery />
-          <Access />
+          {/*<Access />*/}
           <Footer />
         </div>
       ) : (

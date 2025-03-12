@@ -154,7 +154,7 @@ const Hero = ({ onComplete }) => {
         console.log('All images loaded successfully');
         const isMobile = window.innerWidth <= 768;
         // Increase delay for production only
-        const delay = isMobile ? 4000 : 3000;
+        const delay = isMobile ? 5000 : 4000;
 
         setTimeout(() => {
           // Only set images loaded if component is hydrated
