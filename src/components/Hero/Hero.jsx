@@ -183,9 +183,9 @@ const Hero = ({ onComplete }) => {
   }, []);
 
   // Add this function to preload the next/prev images
-  const preloadAdjacentImages = () => {
-    const nextIdx = (currentImageIndex + 1) % previewImages.length;
-    const prevIdx = (currentImageIndex - 1 + previewImages.length) % previewImages.length;
+  const preloadAdjacentImages = (idx = currentImageIndex) => {
+    const nextIdx = (idx + 1) % previewImages.length;
+    const prevIdx = (idx - 1 + previewImages.length) % previewImages.length;
 
     // Preload next and previous images
     const nextImage = new Image();
@@ -432,6 +432,22 @@ const Hero = ({ onComplete }) => {
       const prevImageIdx = (newIndex - 1 + previewImages.length) % previewImages.length
       const nextImageIdx = (newIndex + 1) % previewImages.length
 
+      // Pre-set the appropriate src attributes based on the new indices
+      // This ensures images are loaded before animations begin
+      if (direction === "next") {
+        nextImg.src = previewImages[newIndex].src
+
+        // Also preload the next-next image
+        const nextNextImg = new Image()
+        nextNextImg.src = previewImages[nextImageIdx].src
+      } else {
+        prevImg.src = previewImages[newIndex].src
+
+        // Also preload the prev-prev image
+        const prevPrevImg = new Image()
+        prevPrevImg.src = previewImages[prevImageIdx].src
+      }
+
       // Set up initial positions based on direction
       if (direction === "next") {
         // For next transition, position the new image to enter from right
@@ -439,7 +455,7 @@ const Hero = ({ onComplete }) => {
           opacity: 0,
           scale: 0.95,
           x: 30,
-          src: previewImages[newIndex].src
+          visibility: "visible" // Make sure it's visible
         })
       } else {
         // For prev transition, position the new image to enter from left
@@ -447,10 +463,11 @@ const Hero = ({ onComplete }) => {
           opacity: 0,
           scale: 0.95,
           x: -30,
-          src: previewImages[newIndex].src
+          visibility: "visible" // Make sure it's visible
         })
       }
 
+      // Rest of the animation code...
       // Create animation timeline with improved sequencing
       const tl = gsap.timeline({
         defaults: { ease: "power2.inOut" },
@@ -460,6 +477,8 @@ const Hero = ({ onComplete }) => {
           setCurrentImageIndex(newIndex)
           setNextImageIndex(nextImageIdx)
           setIsTransitioning(false)
+          // Preload the next images that might be needed
+          preloadAdjacentImages(newIndex)
         }
       })
 
