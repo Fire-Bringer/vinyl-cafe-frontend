@@ -401,19 +401,16 @@ const Hero = ({ onComplete }) => {
       opacity: 0,
       scale: 0.95,
       x: -10,
-      visibility: "invisible",
     })
     gsap.set(currentImg, {
       opacity: 1,
       scale: 1,
       x: 0,
-      visibility: "visible",
     })
     gsap.set(nextImg, {
       opacity: 0,
       scale: 0.95,
       x: 10,
-      visibility: "invisible",
     })
 
     function updateImage(newIndex, direction = "next") {

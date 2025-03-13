@@ -17,7 +17,7 @@ const kiwiMaru = Kiwi_Maru({
 
 export const metadata: Metadata = {
   title: "Vinyl Cafe",
-  description: "A practice Next.js website by Rashad DuPaty",
+  description: "Next.js demo: An experiment with blended animations that capture the vibe of a music cafe space in Kanazawa. Made by Rashad DuPaty.",
   icons: {
     icon: [
       { url: '/vinyl.svg', type: 'image/svg+xml' },
