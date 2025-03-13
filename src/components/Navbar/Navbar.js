@@ -54,7 +54,7 @@ const Menu = ({ heroAnimationComplete = false }) => {
       const targetY = targetElement.offsetTop + offset; // Calculate adjusted y position
 
       gsap.to(window, {
-        duration: 1,
+        duration: 0.75,
         scrollTo: { y: targetY, autoKill: false },
         ease: "power2.inOut",
       });

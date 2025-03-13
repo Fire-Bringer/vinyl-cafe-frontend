@@ -154,7 +154,6 @@ dd{
 .preview {
   position: absolute;
   bottom: 2em;
-  right: 2em;
   display: flex;
   gap: 0.3em;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);

@@ -679,7 +679,7 @@ const Hero = ({ onComplete }) => {
           </div>
 
           <div className="hero-footer">
-            <div className="preview">
+            <div className="preview flex w-full justify-center md:justify-end md:right-[2em]">
               {previewImages.map((img, index) => (
                 <NextImage
                   key={index}
@@ -693,7 +693,7 @@ const Hero = ({ onComplete }) => {
               ))}
             </div>
 
-            <div className="slide-num">
+            <div className="slide-num hidden md:block">
               <p ref={slideNumRef}>1 &mdash; 5</p>
             </div>
           </div>
