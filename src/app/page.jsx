@@ -16,6 +16,7 @@ import Footer from "@/components/Footer/Footer"
 
 function Homepage() {
   const [showContent, setShowContent] = useState(false)
+  const [heroAnimationComplete, setHeroAnimationComplete] = useState(false)
 
   // Function to control body scroll
   const setBodyScroll = (allowScroll) => {
@@ -85,8 +86,13 @@ function Homepage() {
 
   return (
     <div>
-      <Navbar />
-      <Hero onComplete={handleHeroComplete} />
+      <Navbar heroAnimationComplete={heroAnimationComplete} />
+      <Hero
+        onComplete={() => {
+          console.log("Hero animation has completed!");
+          setHeroAnimationComplete(true);
+        }}
+      />
 
       {showContent ? (
         <div className="content-container">

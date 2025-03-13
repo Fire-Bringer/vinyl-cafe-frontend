@@ -104,67 +104,68 @@ const Menu = ({ heroAnimationComplete = false }) => {
     console.log("Hero animation complete status:", heroAnimationComplete);
     const isSubsequentVisit = sessionStorage.getItem("hasVisitedBefore");
 
-    if (heroAnimationComplete || isSubsequentVisit) {
-      // Set session storage
-      if (!isSubsequentVisit) {
-        sessionStorage.setItem("hasVisitedBefore", "true");
-      }
+    // Always set session storage for future visits
+    if (!isSubsequentVisit) {
+      sessionStorage.setItem("hasVisitedBefore", "true");
+    }
 
-      // Show navbar immediately
-      setShowNavbar(true);
+    // Calculate the appropriate delay based on conditions
+    const animationDelay = heroAnimationComplete ? 0.1 : isSubsequentVisit ? 0.3 : 0;
 
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
-        if (navRef.current) {
-          console.log("Animating navbar");
+    // Set navbar visibility state immediately
+    setShowNavbar(true);
 
-          // Clear any existing animations
-          gsap.killTweensOf(navRef.current);
+    // Use a callback ref pattern to animate once the ref is attached
+    if (navRef.current) {
+      // Clear any existing animations
+      gsap.killTweensOf(navRef.current);
 
-          // Set initial state
-          gsap.set(navRef.current, {
-            opacity: 0,
-            pointerEvents: "none"
-          });
+      // Create a timeline for better sequencing
+      const navTimeline = gsap.timeline();
 
-          // Simple animation without timeline
-          gsap.to(navRef.current, {
-            opacity: 1,
-            visibility: "visible", // Important!
-            duration: 1,
-            ease: "power2.out",
-            pointerEvents: "auto",
-            delay: 12.5, // Delay to ensure hero animation is complete
-            onComplete: () => console.log("Navbar animation complete!")
-          });
+      // First set initial state (immediately)
+      navTimeline.set(navRef.current, {
+        opacity: 0,
+        pointerEvents: "none",
+        visibility: "hidden"
+      });
 
-          // Background color change
-          gsap.context(() => {
-            ScrollTrigger.create({
-              trigger: navRef.current,
-              start: "top top",
-              end: "top -10",
-              onEnter: () => {
-                gsap.to(navRef.current, { backgroundColor: '#541519', duration: 0.5 });
-              },
-              onLeaveBack: () => {
-                gsap.to(navRef.current, { backgroundColor: 'transparent', duration: 0.5 });
-              }
-            });
-          }, navRef);
-        }
-      }, 100);
+      // Then animate in with appropriate delay
+      navTimeline.to(navRef.current, {
+        opacity: 1,
+        visibility: "visible",
+        duration: 1.5,
+        ease: "power2.out",
+        pointerEvents: "auto",
+        delay: animationDelay,
+        onComplete: () => console.log("Navbar animation complete!")
+      });
+
+      // Set up the scroll trigger for background color change
+      gsap.context(() => {
+        ScrollTrigger.create({
+          trigger: navRef.current,
+          start: "top top",
+          end: "top -10",
+          onEnter: () => {
+            gsap.to(navRef.current, { backgroundColor: '#541519', duration: 0.5 });
+          },
+          onLeaveBack: () => {
+            gsap.to(navRef.current, { backgroundColor: 'transparent', duration: 0.5 });
+          }
+        });
+      }, navRef);
     }
   }, [heroAnimationComplete]);
 
   return (
     <div className="menu-container" ref={container}>
-      {/* Add initial styling to keep it invisible until GSAP takes over */}
+      {/* Add initial styling directly to ensure proper initial state */}
       {showNavbar && (
         <div
           className="menu-bar h-[90px] border-b-2 border-b-[#423940] nav-shadower"
           ref={navRef}
-          style={{ opacity: 0, visibility: "hidden" }} // Initial invisible state
+          style={{ opacity: 0, visibility: "hidden", pointerEvents: "none" }}
         >
           <div className="menu-logo">
             <Link href="/" className="text-primary"><VinylIcon fill="transparent" stroke="#D6D533"/></Link>
