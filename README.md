@@ -1,37 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎶 Vinyl Cafe
+A landing page made for a medium-sized vinyl music cafe within Kanazawa in mind. The cafe features a prominence of classic American hip-hop which is reflected within the introductory animation. 
 
-## Getting Started
+### Features
+- An introductory animation which features 20 different vinyl cover arts.
+- A hero slider which transition fades automatically between 5 images.
+- An about section which has an automatically playing video on mute.
+- A menu section which is displayed through an animation on scroll.
+- An Instagram widget and footer.
 
-First, run the development server:
+### Mockup:
+![vinyl_mockup](https://github.com/user-attachments/assets/c6877209-afa9-4db2-a6aa-b974c4f2e8bf)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Project Page: https://vinylcafe-v2.netlify.app/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Built With
+- [Next.js]([https://middlemanapp.com/](https://nextjs.org/)) - Front-end
+- [GSAP](https://gsap.com/) - JavaScript Animations
+- [Photoshop](https://www.adobe.com/products/photoshop.html) - Image Prep
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# vinyl-cafe-frontend
+## Designer / Developer
+- [Rashad Dupaty](https://www.linkedin.com/in/rashaddupaty/)
